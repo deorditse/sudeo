@@ -13,11 +13,12 @@ The first Sudeo implementation had working lazy routes, prerendering, and a dyna
 1. The dependency direction is `app → pages → widgets → shared`. `shared` cannot import upper layers, `widgets` cannot import pages or app, and page slices cannot import other page slices.
 2. Every route slice uses `pages/<slice>/model` for real content contracts/selectors and `pages/<slice>/ui` for its lazy page and private components. The slice root `index.ts` is its public API.
 3. Every route page renders one `widgets/Page` landmark and composes content through `shared/layouts/MainContent`.
-4. Reusable layout, typography, actions, images, links, and section surfaces use `Flex`, `HStack`, `VStack`, `AppText`, `AppButton`, `AppImage`, `AppLink`, `Box`, and `Section` with colocated SCSS modules.
+4. Structural layout uses `Container`, `MainContent`, `AppPadding`, `AppGrid`, `Flex`, `HStack`, `VStack`, `Box`, and `Section`. `Container` owns page width and gutters, `MainContent` delegates to it, `Section` owns reusable vertical rhythm through `AppPadding`, and route pages do not recreate those concerns in page CSS. Typography, actions, images, and links use the corresponding shared primitives; every reusable primitive keeps its styles beside its implementation.
 5. Stateful widgets own their model and dynamic reducer lifecycle. Shared dynamic-loader infrastructure uses a structural reducer-manager contract instead of importing the application store.
 6. The typed route configuration also supplies grouped visitor navigation. The header shows the current destination and an accessible complete route catalog; the mobile menu exposes the same destinations; the footer renders a grouped sitemap. `/success` and `/404` remain routable but are excluded from discovery navigation.
 7. Hover, focus-visible, active, pressed, card-elevation, and restrained entrance effects live with their owning primitive, widget, or page component. Primary content is visible before JavaScript and `prefers-reduced-motion: reduce` removes non-essential movement.
-8. `scripts/check-architecture.mjs` enforces layer imports, page boundaries, async exports, route-page primitive usage, and discovery-route coverage. It runs in the production build.
+8. `scripts/check-architecture.mjs` enforces layer imports, page boundaries, async exports, exactly one route `Page`, an approved shared content shell, the absence of raw page layout containers, structural-spacing ownership, and discovery-route coverage. It runs in the production build.
+9. The home hero's orbit and service marquee remain page-owned components. The orbit cycles the `S`, `AI`, `WEB`, `APP`, and `GROW` identities and moves service markers with transform/opacity-only CSS animations. The marquee uses duplicated visual groups for a seamless right-to-left loop, keeps pointer autoscroll active while a label scales, stops and resets when a keyboard focus enters the ticker, and exposes only one semantic set of service links. Reduced-motion mode removes cycling, orbit travel, duplication, and automatic scrolling while preserving a static `S` and all service destinations.
 
 ## Alternatives considered
 
@@ -27,6 +28,7 @@ The first Sudeo implementation had working lazy routes, prerendering, and a dyna
 - **Use a hover-only page menu:** rejected because keyboard, touch, and mobile visitors need equivalent behavior.
 - **Hide SSR content until an intersection observer runs:** rejected because no-JavaScript content, hydration, and accessibility would regress.
 - **Let shared dynamic infrastructure import app store types:** rejected because `shared → app` violates the declared dependency direction.
+- **Use JavaScript timers or an animation dependency for the hero:** rejected because CSS keyframes provide deterministic decorative motion without hydration state, timer cleanup, or a larger runtime bundle.
 
 ## Consequences
 
@@ -42,7 +44,7 @@ The first Sudeo implementation had working lazy routes, prerendering, and a dyna
 
 - The page tree contains more small files and public APIs than a monolithic landing page.
 - Navigation and route metadata must remain synchronized through the shared route configuration.
-- New primitives and variants require restraint to avoid replacing clear semantic markup with unnecessary abstraction.
+- New primitives and variants require restraint to avoid replacing clear semantic markup with unnecessary abstraction; polymorphic `as` output preserves the intended landmarks.
 
 ## Verification
 
@@ -50,3 +52,5 @@ The first Sudeo implementation had working lazy routes, prerendering, and a dyna
 - `npm run lint`
 - `npm run build`
 - Browser checks for desktop dropdown, mobile catalog, active-route state, Escape/focus restoration, complete footer sitemap, target viewports, reduced motion, and no-JavaScript prerendered content.
+- Cleanup-guaranteed negative architecture fixtures for raw page containers, missing shared shells, and page-owned structural spacing.
+- Browser checks for right-to-left marquee movement, uninterrupted hover scaling, keyboard focus scaling with a visible stationary label, cycling center identities, static reduced-motion fallback, semantic landmarks, and zero page-level overflow at 360, 390, 768, 1024, and 1440 pixels.

@@ -1,16 +1,14 @@
-import type { ComponentPropsWithoutRef, ElementType, ReactNode } from "react";
-import { classNames } from "@shared/lib/classNames";
-import styles from "./MainContent.module.scss";
+import type { ElementType, HTMLAttributes, ReactNode } from "react";
+import { Container, type ContainerWidth } from "@shared/layouts/Container";
 
-export type MainContentWidth = "default" | "narrow" | "wide" | "full";
+export type MainContentWidth = ContainerWidth;
 
-export type MainContentProps<T extends ElementType = "div"> = {
-    as?: T;
+export interface MainContentProps extends HTMLAttributes<HTMLElement> {
+    as?: ElementType;
     children: ReactNode;
     width?: MainContentWidth;
-} & Omit<ComponentPropsWithoutRef<T>, "as" | "children">;
+}
 
-export const MainContent = <T extends ElementType = "div">({ as, children, width = "default", className, ...props }: MainContentProps<T>) => {
-    const Component = as ?? "div";
-    return <Component className={classNames(styles.content, styles[width], className)} {...props}>{children}</Component>;
+export const MainContent = ({ as, children, width = "default", className, ...props }: MainContentProps) => {
+    return <Container as={as} width={width} className={className} {...props}>{children}</Container>;
 };

@@ -1,6 +1,6 @@
 import { selectArticlePageModel } from "@pages/article/model";
 import { MainContent } from "@shared/layouts/MainContent";
-import { AppLink, AppText } from "@shared/ui";
+import { AppLink, AppPadding, AppText, Box, VStack } from "@shared/ui";
 import { Arrow, Breadcrumbs } from "@/shared/ui/SitePrimitives";
 import { Page } from "@widgets/Page";
 import styles from "./ArticlePage.module.scss";
@@ -9,10 +9,10 @@ const ArticlePage = () => {
     const model = selectArticlePageModel();
     return (
         <Page className={styles.page}>
-            <article>
-                <header className={styles.header}><MainContent width="narrow"><Breadcrumbs items={[["Блог", "/blog"], [model.title]]} /><AppText size="xs" weight="bold" uppercase>ИИ и автоматизация</AppText><AppText as="h1" size="2xl" weight="medium">{model.title}</AppText><AppText className={styles.meta}>{model.author} · {model.date} · 8 минут</AppText><AppText className={styles.lead}>{model.intro}</AppText></MainContent></header>
-                <MainContent className={styles.body} width="narrow">{model.sections.map(([title, text]) => <section key={title}><AppText as="h2" size="xl" weight="medium">{title}</AppText><AppText>{text}</AppText></section>)}<aside className={styles.callout}><strong>Главный принцип</strong><AppText>Сначала ограниченный сценарий, данные и критерии. Затем — решение о полной реализации.</AppText><AppLink to="/services/ai-agents">Об ИИ-агентах <Arrow /></AppLink></aside></MainContent>
-            </article>
+            <Box as="article">
+                <AppPadding as="header" pt="190" pb="90" mobilePt="145" mobilePb="75" className={styles.header}><MainContent width="narrow"><Breadcrumbs items={[["Блог", "/blog"], [model.title]]} /><AppText size="xs" weight="bold" uppercase>ИИ и автоматизация</AppText><AppText as="h1" size="2xl" weight="medium">{model.title}</AppText><AppText className={styles.meta}>{model.author} · {model.date} · 8 минут</AppText><AppText className={styles.lead}>{model.intro}</AppText></MainContent></AppPadding>
+                <MainContent width="narrow"><AppPadding py="100" mobilePy="70" className={styles.body}>{model.sections.map(([title, text]) => <AppPadding as={VStack} gap="24" pb="70" key={title}><AppText as="h2" size="xl" weight="medium">{title}</AppText><AppText>{text}</AppText></AppPadding>)}<AppPadding pt="90"><AppPadding as="aside" p="40" mobileP="24" className={styles.callout}><strong>Главный принцип</strong><AppText>Сначала ограниченный сценарий, данные и критерии. Затем — решение о полной реализации.</AppText><AppLink to="/services/ai-agents">Об ИИ-агентах <Arrow /></AppLink></AppPadding></AppPadding></AppPadding></MainContent>
+            </Box>
         </Page>
     );
 };

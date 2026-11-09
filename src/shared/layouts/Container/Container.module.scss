@@ -1,0 +1,24 @@
+.container {
+    width: min(1240px, calc(100% - 64px));
+    margin-inline: auto;
+}
+
+.narrow {
+    width: min(840px, calc(100% - 64px));
+}
+
+.wide {
+    width: min(1440px, calc(100% - 64px));
+}
+
+.full {
+    width: 100%;
+}
+
+@media (max-width: 760px) {
+    .container,
+    .narrow,
+    .wide {
+        width: calc(100% - 36px);
+    }
+}

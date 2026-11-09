@@ -14,7 +14,7 @@
 3. Public content must use verified facts. Demonstrations must be labelled; do not invent clients, metrics, prices, dates, legal details, or integrations.
 4. Material technical decisions require an ADR under `docs/adr/` linked to the governing OpenSpec change.
 5. Keep route pages in `src/pages/`, reusable sections in `src/widgets/`, and shared content/configuration/UI in `src/shared/`.
-6. Enforce `app → pages → widgets → shared`; route slices use real `model/ui` boundaries, `widgets/Page`, `shared/layouts/MainContent`, shared primitives, public `index.ts` APIs, and `.async.tsx` route exports.
+6. Enforce `app → pages → widgets → shared`; route slices use real `model/ui` boundaries, `widgets/Page`, `shared/layouts/MainContent`/`Container`, `AppPadding`, `AppGrid`, stacks and other shared primitives, public `index.ts` APIs, and `.async.tsx` route exports. Page CSS must not own route gutters, section rhythm, structural grids/gaps, or layout-container margins.
 7. Keep interaction feedback accessible: hover states require focus-visible equivalents, current routes use programmatic state, and non-essential motion honors `prefers-reduced-motion` without hiding prerendered content.
 
 ## Quality gates

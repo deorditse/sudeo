@@ -155,6 +155,36 @@ The custom domain is already registered in Pages, but the authoritative REG.RU z
 - Add a JavaScript animation library: rejected because CSS is sufficient and avoids increasing the route shell bundle.
 - Copy the `tec_drive` workflow verbatim and remove Sudeo checks: rejected because the reference proves delivery order, not permission to weaken architecture, lint, prerender, and static-artifact verification.
 
+### 11. Turn the home hero orbit and service strip into reduced-motion-safe continuous compositions
+
+The existing hero orbit remains decorative and page-owned. Its central mark will contain stacked text layers for `S`, `AI`, `WEB`, `APP`, and `GROW`; CSS keyframes will cycle their opacity, scale, and rotation so one identity is legible at a time. The surrounding service markers will travel on independently timed circular paths while the orbit rings breathe and rotate at different speeds. Animation will use transforms and opacity only so it does not reflow the headline or alter the page's semantic reading order.
+
+The service strip will become a seamless marquee composed of two identical presentation groups. The track will start at its natural position and move toward the left, matching the revised right-to-left direction without a visible reset. Each service phrase will be an actual focusable link to its declared service route, so the same scale/emphasis response is available through `:hover` and `:focus-visible`; enlarging one label will use transforms rather than changing track layout.
+
+For `prefers-reduced-motion: reduce`, the center will show the static `S`, orbit paths and marker travel will stop, and the ticker will become a non-animated horizontally scrollable/wrapping service list. The duplicated marquee group will be hidden from assistive technology so service names are not announced twice. No JavaScript timer or animation library will be added.
+
+**Alternatives considered:**
+- JavaScript intervals for changing the center label: rejected because CSS provides deterministic decorative timing without hydration state or timer cleanup.
+- Animate layout properties such as `left`, `width`, or font size: rejected because they trigger layout work and can make the marquee jump when a label is emphasized.
+- Pause the whole marquee on hover: rejected because the requested behavior is continuous autoscroll; only the hovered/focused label is emphasized.
+- Keep the ticker decorative with `aria-hidden`: rejected because focus enlargement would otherwise have no keyboard equivalent and the service labels are useful navigation.
+
+### 12. Enforce shared layout and spacing primitives across every route page
+
+The current implementation satisfies the layer direction and uses `Page`, `MainContent`, and `Section`, but an audit found 43 raw page-layout elements, no stack/box usage in route composition, no `Container` or `AppPadding`, and 102 page-owned `padding`, `margin`, or `gap` declarations. The revision therefore separates structural spacing from component-specific visual styling.
+
+`shared/layouts/Container` will own content widths and responsive horizontal gutters. Existing `MainContent` will compose or delegate to `Container` so the previously approved page contract remains valid without maintaining two independent gutter systems. `shared/ui/AppPadding` will expose a finite responsive spacing scale for block, inline, and side-specific padding. `shared/ui/AppGrid` will cover repeated responsive grid composition that cannot be represented honestly by `HStack` or `VStack`. Existing `Flex`, `HStack`, `VStack`, `Box`, and `Section` remain the canonical primitives for flex composition, semantic wrappers, and section tones.
+
+Route page files and page-owned section components will compose structural layout through these primitives, using polymorphic `as` props for semantic `section`, `article`, `header`, `aside`, and list containers. Page CSS modules may retain typography, color, background, decorative geometry, animation, and truly component-internal spacing such as card insets, but they will not define page gutters, section vertical rhythm, grid gaps, or layout-container margins that belong to the shared spacing system.
+
+Reusable product sections that appear across routes remain in the separate `widgets` layer; generic presentation and spacing remain in `shared`. Widgets will not be moved inside `shared`, because that would erase the established `app → pages → widgets → shared` responsibility boundary. `scripts/check-architecture.mjs` will be expanded to reject raw layout containers in page UI composition, route pages missing the required shared shells, and structural page spacing declarations outside approved component-internal exceptions. A cleanup-guaranteed negative fixture will prove each new rule.
+
+**Alternatives considered:**
+- Move product widgets under `shared`: rejected because shared primitives must remain product-agnostic and cannot own page-level business composition.
+- Replace every local CSS declaration with inline spacing props: rejected because typography, decorative visuals, responsive art direction, and component-internal styling still need colocated CSS modules.
+- Force every grid into `HStack`/`VStack`: rejected because responsive two- and four-column layouts are grid semantics and deserve a reusable `AppGrid` primitive.
+- Keep `MainContent` and add an unrelated `Container`: rejected because two independent gutter systems would drift; `MainContent` must delegate to the canonical container implementation.
+
 ## Risks / Trade-offs
 
 - **[No production contact/legal data is approved]** → Use clearly configurable content and omit copied values; block launch acceptance until verified values are supplied.
@@ -175,6 +205,8 @@ The custom domain is already registered in Pages, but the authoritative REG.RU z
 - **[A Suspense fallback can leak into prerendered HTML]** → Use the React static prerender API, verify generated route H1 content, and reject fallback text, hidden replacement segments, or `$RC` swap scripts in generated documents.
 - **[Continuous loader motion can distract visitors]** → Use low-amplitude transform/opacity motion and provide a static reduced-motion state.
 - **[Custom-domain Pages can be deployed while DNS still serves another host]** → Treat workflow success and domain launch as separate evidence; verify authoritative A records, HTTPS, home content, and a nested route before closing delivery.
+- **[Continuous orbit and marquee motion can distract or consume rendering resources]** → Animate only transforms/opacity, keep timing moderate, stop all continuous motion under reduced-motion preferences, and verify responsive overflow and hover/focus behavior in the browser.
+- **[A strict primitive migration can create abstraction noise or visual drift]** → distinguish structural spacing from component-internal styling, migrate route slices in verified batches, preserve semantic `as` output, and compare target viewports before removing old page layout rules.
 
 ## Migration Plan
 
@@ -189,6 +221,8 @@ The custom domain is already registered in Pages, but the authoritative REG.RU z
 9. Introduce the shared UI kit and common page shells, migrate every page to `model/ui/components` slices, decompose styles by ownership, enforce layer imports, and verify the visual/content contract remains unchanged.
 10. Add route-aware header state, the accessible visitor-route dropdown, the complete footer sitemap, and reusable progressive motion/hover effects; verify keyboard/touch behavior, reduced-motion behavior, no-JavaScript content, and responsive layouts.
 11. Add the branded Suspense fallback, align the Pages workflow with the proven owner repository, migrate REG.RU apex DNS when authorized, and verify the deployed commit, HTTPS, home page, and a nested route on `sudeo.ru`.
+12. Enhance the home hero orbit and right-to-left service marquee, verify pointer/keyboard emphasis, reduced-motion behavior, responsive overflow, static prerender content, and production quality gates before deployment.
+13. Add the canonical container/padding/grid primitives, migrate every route page and page-owned section to the strict shared composition contract, strengthen the architecture checker with a negative path, and verify responsive visual parity before deployment.
 
 Rollback is a revert or redeployment of the last verified commit. Because the deployment is static, no content database migration is involved in this change.
 

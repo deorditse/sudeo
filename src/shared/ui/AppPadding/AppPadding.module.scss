@@ -1,0 +1,15 @@
+.root {
+    padding-top: var(--app-pt, var(--app-py, var(--app-p, 0px)));
+    padding-right: var(--app-pr, var(--app-px, var(--app-p, 0px)));
+    padding-bottom: var(--app-pb, var(--app-py, var(--app-p, 0px)));
+    padding-left: var(--app-pl, var(--app-px, var(--app-p, 0px)));
+}
+
+@media (max-width: 760px) {
+    .root {
+        padding-top: var(--app-mobile-pt, var(--app-mobile-py, var(--app-mobile-p, var(--app-pt, var(--app-py, var(--app-p, 0px))))));
+        padding-right: var(--app-mobile-pr, var(--app-mobile-px, var(--app-mobile-p, var(--app-pr, var(--app-px, var(--app-p, 0px))))));
+        padding-bottom: var(--app-mobile-pb, var(--app-mobile-py, var(--app-mobile-p, var(--app-pb, var(--app-py, var(--app-p, 0px))))));
+        padding-left: var(--app-mobile-pl, var(--app-mobile-px, var(--app-mobile-p, var(--app-pl, var(--app-px, var(--app-p, 0px))))));
+    }
+}

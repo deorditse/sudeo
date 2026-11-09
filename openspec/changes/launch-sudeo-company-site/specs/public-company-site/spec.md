@@ -90,6 +90,25 @@ The public site SHALL provide consistent hover, focus-visible, active, and press
 - **WHEN** a generated route is rendered without executing client JavaScript
 - **THEN** all primary text, links, navigation, and page sections remain visible and usable rather than waiting for an animation trigger
 
+### Requirement: Active home hero service composition
+The home hero SHALL present a continuously animated Sudeo orbit whose central label cycles through the brand and service identities `S`, `AI`, `WEB`, `APP`, and `GROW`, together with a seamless service marquee moving from right to left. The marquee SHALL include `AI AGENTS`, `WEB DEVELOPMENT`, `MOBILE APPS`, and `DIGITAL MARKETING`, SHALL keep moving while an individual label is hovered, and SHALL enlarge the hovered or keyboard-focused label without causing material layout shift or horizontal page overflow. All continuous decorative movement MUST stop or become a static usable alternative when reduced motion is requested.
+
+#### Scenario: Visitor observes the standard hero motion
+- **WHEN** the home page is viewed without a reduced-motion preference
+- **THEN** the center identity changes over time, the surrounding markers follow visibly active paths, and the service labels repeat seamlessly while travelling from right to left
+
+#### Scenario: Visitor emphasizes a service label
+- **WHEN** a visitor hovers or keyboard-focuses one service label in the marquee
+- **THEN** that label visibly enlarges without stopping the marquee, changing its accessible name, obscuring adjacent primary controls, or creating page-level horizontal overflow
+
+#### Scenario: Hero visitor requests reduced motion
+- **WHEN** `prefers-reduced-motion: reduce` is active on the home page
+- **THEN** the central `S`, service identities, and service destinations remain visible and usable while orbit, cycling, and automatic marquee movement stop
+
+#### Scenario: Hero is rendered without client JavaScript
+- **WHEN** the generated home page is opened without executing client JavaScript
+- **THEN** the hero proposition, a static central brand state, and readable service destinations are present in the prerendered document
+
 ### Requirement: Branded lazy-route loading state
 The application SHALL provide a reusable Sudeo-branded fallback for the shared route-level `Suspense` boundary. The fallback SHALL combine the established logo mark and company name, SHALL expose a concise loading status to assistive technology, SHALL avoid introducing an additional page heading, and SHALL disable non-essential motion when reduced motion is requested.
 

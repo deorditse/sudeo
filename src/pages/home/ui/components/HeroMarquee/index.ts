@@ -1,0 +1,1 @@
+export { HeroMarquee } from "./HeroMarquee";

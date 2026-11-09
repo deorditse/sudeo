@@ -1,6 +1,6 @@
-.card { display: grid; grid-template-columns: 1fr auto; align-items: end; min-height: 430px; padding: 42px; color: #11130f; background: white; border-radius: 8px; transition: transform 0.2s ease, box-shadow 0.2s ease; }
+.card { min-height: 430px; padding: 42px; color: #11130f; background: white; border-radius: 8px; transition: transform 0.2s ease, box-shadow 0.2s ease; }
 .card:hover { color: #11130f; transform: translateY(-4px); box-shadow: 0 25px 70px rgba(17, 19, 15, 0.1); }
 .title { max-width: 760px; margin: 25px 0; }
 .description { max-width: 600px; }
-.arrow { display: grid; place-items: center; width: 70px; height: 70px; color: #11130f; background: #b9ff66; border-radius: 50%; font-size: 22px; }
-@media (max-width: 760px) { .card { grid-template-columns: 1fr; min-height: 500px; padding: 26px; } .arrow { margin-top: 40px; } }
+.arrow { display: grid; place-items: center; justify-self: end; width: 70px; height: 70px; color: #11130f; background: #b9ff66; border-radius: 50%; font-size: 22px; }
+@media (max-width: 760px) { .card { min-height: 500px; padding: 26px; } .arrow { justify-self: start; margin-top: 40px; } }

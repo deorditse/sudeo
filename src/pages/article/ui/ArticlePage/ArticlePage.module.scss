@@ -1,11 +1,9 @@
 .page { background: #f3f1ea; }
-.header { padding: 190px 0 90px; color: white; background: #11130f; }
+.header { color: white; background: #11130f; }
 .meta { color: #b9ff66; font-size: 13px; font-weight: 700; }
 .lead { margin-top: 50px; color: rgba(255, 255, 255, 0.7); font-size: 23px; line-height: 1.55; }
-.body { padding-block: 100px; }
-.body section { margin-bottom: 70px; }
-.body h2 { margin: 0 0 24px; font-size: 38px; letter-spacing: -0.045em; }
+.body h2 { font-size: 38px; letter-spacing: -0.045em; }
 .body p { color: #5e6259; font-size: 18px; line-height: 1.75; }
-.callout { margin-top: 90px; padding: 40px; background: #b9ff66; border-radius: 8px; }
+.callout { background: #b9ff66; border-radius: 8px; }
 .callout p { color: #11130f; font-size: 24px; line-height: 1.35; }
-@media (max-width: 760px) { .header { padding: 145px 0 75px; } .body { padding-block: 70px; } .body h2 { font-size: 32px; } .body p { font-size: 16px; } .callout { padding: 25px; } }
+@media (max-width: 760px) { .body h2 { font-size: 32px; } .body p { font-size: 16px; } }

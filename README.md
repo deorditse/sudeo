@@ -57,11 +57,11 @@ npm run preview
 - `src/pages/<page>/model/` — реальные типы, content/view-model selectors и page-specific contracts без пустых API/reducer placeholders.
 - `src/pages/<page>/ui/` — route-level UI, приватные `components/` и `<Page>.async.tsx`; внешний импорт идёт только через slice `index.ts`.
 - `src/widgets/` — самостоятельные составные блоки страниц. Форма обращения хранит UI-состояние в динамически подключаемом reducer.
-- `src/shared/layouts/MainContent` и `src/widgets/Page` — обязательные shells для route content и единственного `main` landmark.
-- `src/shared/ui/` — независимые `Flex`, `HStack`, `VStack`, `AppText`, `AppButton`, `AppImage`, `AppLink`, `Box`, `Section` и повторно используемые presentation primitives с собственными SCSS modules.
+- `src/shared/layouts/Container` задаёт каноническую ширину и адаптивные горизонтальные gutters; `MainContent` делегирует ему размеры route content, а `src/widgets/Page` остаётся единственным `main` landmark.
+- `src/shared/ui/` — независимые `AppPadding`, `AppGrid`, `Flex`, `HStack`, `VStack`, `AppText`, `AppButton`, `AppImage`, `AppLink`, `Box`, `Section` и повторно используемые presentation primitives с собственными SCSS modules. `Section` задаёт общий вертикальный ритм через `AppPadding`; route pages не дублируют page gutters, section rhythm, grid columns или structural gaps в локальном CSS.
 - `src/shared/lib/` — инфраструктурные компоненты, включая app-independent `DynamicModuleLoader`.
 
-Направление зависимостей: `app → pages → widgets → shared`. `shared` не импортирует верхние слои, `widgets` не импортирует `pages/app`, а page slice не импортирует соседнюю page slice. Правила автоматически проверяет `scripts/check-architecture.mjs`.
+Направление зависимостей: `app → pages → widgets → shared`. `shared` не импортирует верхние слои, `widgets` не импортирует `pages/app`, а page slice не импортирует соседнюю page slice. Все route pages используют `Page`, `MainContent` или утверждённый shared shell и polymorphic shared primitives вместо raw layout containers. Правила автоматически проверяет `scripts/check-architecture.mjs`, включая structural spacing ownership.
 
 Маршруты и группы visitor navigation определены в `src/shared/config/routes.ts`. Header показывает текущий route, содержит доступный dropdown всех visitor-facing страниц и эквивалентное мобильное меню; footer выводит полный сгруппированный sitemap. `/success` и `/404` не являются discovery destinations.
 

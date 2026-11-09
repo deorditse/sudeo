@@ -1,0 +1,124 @@
+.marquee {
+    position: absolute;
+    z-index: 4;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    overflow: hidden;
+    color: #11130f;
+    background: #b9ff66;
+}
+
+.track {
+    width: max-content;
+    will-change: transform;
+    animation: marqueeLeft 24s linear infinite;
+}
+
+.group {
+    min-width: 100vw;
+    flex: 0 0 auto;
+    justify-content: space-around;
+    padding: 24px 2vw;
+}
+
+.item {
+    min-width: max-content;
+}
+
+.item i {
+    width: 5px;
+    height: 5px;
+    margin: 0 clamp(22px, 3vw, 54px);
+    background: #11130f;
+    border-radius: 50%;
+}
+
+.link {
+    position: relative;
+    display: inline-block;
+    padding: 8px 4px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 900;
+    letter-spacing: 0.14em;
+    line-height: 1;
+    white-space: nowrap;
+    transform-origin: center;
+    transition: color 180ms ease, background 180ms ease, transform 180ms ease;
+}
+
+.link:hover,
+.link:focus-visible {
+    color: #b9ff66;
+    background: #11130f;
+    outline: none;
+    transform: scale(1.22);
+}
+
+.link:focus-visible {
+    box-shadow: 0 0 0 3px #fff;
+}
+
+.marquee:focus-within .track {
+    animation: none;
+    transform: none;
+}
+
+@keyframes marqueeLeft {
+    from {
+        transform: translate3d(0, 0, 0);
+    }
+
+    to {
+        transform: translate3d(-50%, 0, 0);
+    }
+}
+
+@media (max-width: 760px) {
+    .track {
+        animation-duration: 18s;
+    }
+
+    .group {
+        min-width: max-content;
+        padding-block: 20px;
+    }
+
+    .item i {
+        margin-inline: 24px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .marquee {
+        overflow-x: auto;
+    }
+
+    .track {
+        width: 100%;
+        animation: none;
+        transform: none;
+        will-change: auto;
+    }
+
+    .group {
+        width: 100%;
+        min-width: 100%;
+        flex-wrap: wrap;
+        gap: 8px 18px;
+        justify-content: center;
+    }
+
+    .group[aria-hidden="true"] {
+        display: none;
+    }
+
+    .item i {
+        margin-inline: 14px;
+    }
+
+    .link {
+        transition: none;
+    }
+}

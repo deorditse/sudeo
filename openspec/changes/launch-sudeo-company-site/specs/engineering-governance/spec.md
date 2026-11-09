@@ -44,3 +44,18 @@ Contributors MUST preserve unrelated working-tree changes, MUST NOT claim unveri
 #### Scenario: External deployment dependency is unavailable
 - **WHEN** credentials, DNS, hosted services, or repository settings prevent verification
 - **THEN** the affected task remains open or explicitly blocked and the contributor reports the exact prerequisite instead of fabricating success
+
+### Requirement: Shared page composition and spacing contract
+Every route page SHALL use the common page shell and canonical shared container, padding, grid, stack, section, typography, action, and image primitives for structural composition. Reusable product sections SHALL live in the widgets layer, while product-agnostic layout and spacing primitives SHALL remain in shared. Route and page-section implementations MUST NOT recreate raw layout containers, page gutters, section rhythm, or grid gaps through independent page-owned styling when an approved shared primitive exists.
+
+#### Scenario: Contributor composes a route page
+- **WHEN** a route page or page-owned section introduces structural layout, spacing, responsive columns, or a semantic wrapper
+- **THEN** it composes the structure through the approved shared primitives and polymorphic semantic output rather than raw layout elements with independently styled spacing
+
+#### Scenario: Contributor creates a reusable product section
+- **WHEN** a complete product section is reused across routes or represents a substantial standalone page block
+- **THEN** it is owned by the widgets layer and consumes shared primitives without moving product-specific composition into shared
+
+#### Scenario: Architecture validation checks page composition
+- **WHEN** the repository architecture checker scans page UI files and their CSS modules
+- **THEN** it rejects missing page/container shells, forbidden raw layout containers, and page-owned structural spacing outside documented component-internal exceptions

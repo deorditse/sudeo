@@ -1,6 +1,6 @@
 import { selectNotFoundPageModel } from "@pages/notFound/model";
 import { MainContent } from "@shared/layouts/MainContent";
-import { AppButton, AppText } from "@shared/ui";
+import { AppButton, AppPadding, AppText, VStack } from "@shared/ui";
 import { Arrow } from "@/shared/ui/SitePrimitives";
 import { Page } from "@widgets/Page";
 import styles from "../components/NotFoundMessage.module.scss";
@@ -9,7 +9,42 @@ const NotFoundPage = () => {
     const model = selectNotFoundPageModel();
     return (
         <Page className={styles.root}>
-            <MainContent><AppText className={styles.code}>{model.code}</AppText><AppText className={styles.title} as="h1" size="2xl" weight="medium">{model.title}</AppText><AppText className={styles.description}>{model.description}</AppText><AppButton to="/" addonRight={<Arrow />}>Вернуться на главную</AppButton></MainContent>
+            <AppPadding
+                as={VStack}
+                className={styles.stage}
+                align="stretch"
+                justify="center"
+                pt="190"
+                pb="105"
+                mobilePt="145"
+                mobilePb="75"
+            >
+                <MainContent>
+                    <VStack align="start">
+                        <AppText className={styles.code}>{model.code}</AppText>
+                        <AppPadding pt="18">
+                            <AppText
+                                className={styles.title}
+                                as="h1"
+                                size="2xl"
+                                weight="medium"
+                            >
+                                {model.title}
+                            </AppText>
+                        </AppPadding>
+                        <AppPadding pt="28">
+                            <AppText className={styles.description}>
+                                {model.description}
+                            </AppText>
+                        </AppPadding>
+                        <AppPadding pt="36">
+                            <AppButton to="/" addonRight={<Arrow />}>
+                                Вернуться на главную
+                            </AppButton>
+                        </AppPadding>
+                    </VStack>
+                </MainContent>
+            </AppPadding>
         </Page>
     );
 };
