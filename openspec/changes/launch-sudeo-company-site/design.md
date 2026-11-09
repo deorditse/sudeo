@@ -27,9 +27,9 @@ The implementation will reuse React, TypeScript, React Router, and SCSS modules 
 
 **Alternatives considered:** Rebuild in Next.js or another framework. Rejected for this change because it expands migration scope and deployment complexity before business content, CMS, and backend choices are approved.
 
-### 2. Pre-render declared routes at build time with a small Vite SSR entry
+### 2. Pre-render declared routes at build time with a React static-rendering entry
 
-The application will separate route composition from browser bootstrapping. A server entry will render each declared static route with React DOM server APIs; a post-build script will inject the route markup and route-specific head metadata into `docs/<route>/index.html`. The browser bundle will hydrate or mount the same route tree. This uses existing React/Vite capabilities and avoids a hosted SSR runtime.
+The application will separate route composition from browser bootstrapping. A server entry will render each declared static route with React DOM static APIs; a post-build script will inject the route markup and route-specific head metadata into `docs/<route>/index.html`. The browser bundle will hydrate or mount the same route tree. This uses existing React/Vite capabilities and avoids a hosted SSR runtime.
 
 Generated nested documents satisfy direct GitHub Pages requests without rewrite rules. The route manifest will be the shared source for routing, metadata, sitemap generation, and pre-rendering.
 
@@ -74,13 +74,14 @@ Every route-level page will live in its own `src/pages/<page>/` directory, keep 
 
 Redux Toolkit and React Redux will provide an application store with a reducer manager. `DynamicModuleLoader` in `shared/lib/components` will inject and remove reducers at feature boundaries. The enquiry form will be the first real dynamic module: its values, validation errors, submission status, and user-visible message will move to a dynamically mounted reducer, while request locking and browser-only side effects remain local where they prevent duplicate network activity. State selectors must tolerate the reducer being absent before the loader effect runs.
 
-Route-level lazy imports must not weaken the existing static HTML contract. The server entry will therefore render through an asynchronous React server stream and resolve all lazy route modules before returning HTML. The prerender script will await each route render. A fresh Redux store will be created for each server render, while the browser uses its application store instance. Generated documents must continue to contain route headings and metadata before client JavaScript executes.
+Route-level lazy imports must not weaken the existing static HTML contract. The server entry will therefore use React 19 `prerenderToNodeStream` as a resolution pass, await and consume its prelude, and then call `renderToString` after the lazy modules are cached. This avoids the fallback plus browser swap script that the first pass can retain around React Router lazy routes. A fresh Redux store will be created for each static render pass, while the browser uses its application store instance. Generated documents must contain route headings and metadata before client JavaScript executes and must not depend on inline Suspense replacement scripts.
 
 An ADR will record this application composition, dynamic reducer lifecycle, and SSR/lazy-loading compatibility decision.
 
 **Alternatives considered:**
 - Keep the monolithic `App.tsx`: rejected because it conflicts with the requested reference architecture and makes route ownership, lazy loading, and reusable boundaries unclear.
 - Add lazy wrappers but keep synchronous `renderToString`: rejected because suspended route modules can produce fallback HTML instead of the required route content.
+- Use `renderToPipeableStream` for build-time documents: superseded after verification showed that a branded fallback is serialized ahead of hidden route content and requires an inline browser swap script, violating the no-JavaScript content contract.
 - Add Redux without a real dynamically mounted feature: rejected because an unused infrastructure layer would add complexity without validating the intended lifecycle.
 
 ### 8. Enforce page slices and shared UI composition
@@ -138,6 +139,22 @@ The footer will render a grouped sitemap for every visitor-facing declared page.
 - Hand-maintained navigation arrays unrelated to the route manifest: rejected because labels and paths would drift from routing and SEO generation.
 - JavaScript-only reveal animations that initially hide prerendered content: rejected because they weaken no-JavaScript content and can create hydration or accessibility failures.
 
+### 10. Use a shared branded Suspense fallback and mirror the proven Pages delivery pattern
+
+The application-level `Suspense` boundary will render a shared `AppLoader` from `shared/ui` rather than `null`. The loader will reuse the visual geometry of the Sudeo logo mark and wordmark without wrapping them in a navigation link. It will occupy a stable content-stage area, use a restrained pulse/orbit treatment built with CSS transforms and opacity, expose `role="status"` with a concise visually hidden loading message, and avoid headings or page-specific copy. A reduced-motion query will remove continuous animation while preserving the static brand state.
+
+The build-time rendering contract will use React 19 `prerenderToNodeStream` to resolve route modules followed by `renderToString` for deterministic final markup. Generated documents therefore contain the resolved page without the loader, hidden replacement segments, or inline Suspense swap scripts. Browser verification will deliberately delay a route chunk or otherwise mount the fallback in a controlled preview so the loading state can be inspected without weakening production static content. ADR-0005 will be updated to record why this static two-pass build supersedes the earlier pipeable-stream implementation for generated files.
+
+Delivery will follow the working `deorditse/tec_drive` Pages shape observed during planning: a public repository, `main` push/workflow dispatch triggers, locked install/build, explicit `actions/configure-pages`, upload of `docs/`, deployment through the `github-pages` environment, and `sudeo.ru` as the environment URL. The existing Sudeo verification steps remain stricter than the reference and will not be removed.
+
+The custom domain is already registered in Pages, but the authoritative REG.RU zone still points the apex to `95.163.244.138`. Production activation therefore requires replacing that record with the four GitHub Pages apex A records used by the working `tec-drive.ru` domain. DNS will be changed only through authenticated owner access, then read back before HTTPS is enabled and verified.
+
+**Alternatives considered:**
+- Keep `fallback={null}`: rejected because client navigation can display an unexplained blank content area on a slow chunk.
+- Reuse the linked header `Logo` component directly: rejected because a loading indicator must not introduce a misleading navigation control.
+- Add a JavaScript animation library: rejected because CSS is sufficient and avoids increasing the route shell bundle.
+- Copy the `tec_drive` workflow verbatim and remove Sudeo checks: rejected because the reference proves delivery order, not permission to weaken architecture, lint, prerender, and static-artifact verification.
+
 ## Risks / Trade-offs
 
 - **[No production contact/legal data is approved]** → Use clearly configurable content and omit copied values; block launch acceptance until verified values are supplied.
@@ -155,6 +172,9 @@ The footer will render a grouped sitemap for every visitor-facing declared page.
 - **[Strict page model requirements can create empty boilerplate]** → Put actual page content contracts, selectors, view models, and page-specific constants in `model`; do not create unused API or reducer files.
 - **[Motion can create nausea, layout shift, or hidden prerendered content]** → Keep content visible by default, animate transform/opacity only after enhancement, honor reduced-motion preferences, and verify no-JavaScript output and target viewports.
 - **[A complete route dropdown can become dense]** → Group destinations by purpose, keep success/not-found routes out of discovery UI, expose exact active-state semantics, and verify keyboard, pointer, touch, and escape behavior.
+- **[A Suspense fallback can leak into prerendered HTML]** → Use the React static prerender API, verify generated route H1 content, and reject fallback text, hidden replacement segments, or `$RC` swap scripts in generated documents.
+- **[Continuous loader motion can distract visitors]** → Use low-amplitude transform/opacity motion and provide a static reduced-motion state.
+- **[Custom-domain Pages can be deployed while DNS still serves another host]** → Treat workflow success and domain launch as separate evidence; verify authoritative A records, HTTPS, home content, and a nested route before closing delivery.
 
 ## Migration Plan
 
@@ -168,6 +188,7 @@ The footer will render a grouped sitemap for every visitor-facing declared page.
 8. Refactor application composition to the approved `legal-gr`-style boundaries, migrate routes to lazy page modules, add the dynamic store infrastructure, and preserve prerendered route content through async SSR.
 9. Introduce the shared UI kit and common page shells, migrate every page to `model/ui/components` slices, decompose styles by ownership, enforce layer imports, and verify the visual/content contract remains unchanged.
 10. Add route-aware header state, the accessible visitor-route dropdown, the complete footer sitemap, and reusable progressive motion/hover effects; verify keyboard/touch behavior, reduced-motion behavior, no-JavaScript content, and responsive layouts.
+11. Add the branded Suspense fallback, align the Pages workflow with the proven owner repository, migrate REG.RU apex DNS when authorized, and verify the deployed commit, HTTPS, home page, and a nested route on `sudeo.ru`.
 
 Rollback is a revert or redeployment of the last verified commit. Because the deployment is static, no content database migration is involved in this change.
 

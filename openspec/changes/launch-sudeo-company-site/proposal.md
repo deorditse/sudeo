@@ -19,6 +19,8 @@ The repository contains a copied logistics landing page that does not represent 
 - Refactor the application foundation to follow the proven `legal-gr` composition: route configuration under `app/routes`, application providers under `app/providers`, page modules under `pages`, reusable presentation under `shared`/`widgets`, route-level `*.async.tsx` lazy exports, and Redux reducer injection through `DynamicModuleLoader` for stateful feature modules.
 - Enforce a reusable UI composition contract based on the supplied architecture examples: all route pages use the common `MainContent` and `Page` shells, layout is composed with shared stack primitives, typography/actions/images use `AppText`, `AppButton`, and `AppImage`, and every page slice separates `model` from `ui` with page-specific components and logic encapsulated below `ui/components`.
 - Enhance the shared shell and page sections with restrained motion and hover/focus feedback, route-aware navigation that visibly identifies the current page, an accessible dropdown containing the visitor-facing route catalog, and a footer sitemap containing all visitor-facing pages while excluding transactional success and not-found destinations.
+- Add a reusable branded `Suspense` loader built from the Sudeo mark and wordmark, with an accessible loading announcement, stable layout, and reduced-motion behavior, while preserving fully rendered route HTML during prerender.
+- Align the GitHub Pages workflow and custom-domain setup with the verified `deorditse/tec_drive` pattern: explicit Pages configuration, artifact upload/deploy actions, a `github-pages` environment targeting `sudeo.ru`, and the four apex A records required to replace the current REG.RU placeholder destination.
 
 ## Capabilities
 
@@ -36,7 +38,7 @@ None. The initialized OpenSpec project has no canonical capabilities yet.
 
 ## Impact
 
-- **Application:** React 19, TypeScript, React Router, Redux Toolkit/React Redux, SCSS modules, application providers/store, strict `app → pages → widgets → shared` dependency boundaries, shared UI primitives/layouts, page `model/ui` slices, route composition, lazy page modules, dynamically injected form state, and static assets under `src/` and `public/`.
+- **Application:** React 19, TypeScript, React Router, Redux Toolkit/React Redux, SCSS modules, application providers/store, strict `app → pages → widgets → shared` dependency boundaries, shared UI primitives/layouts, page `model/ui` slices, route composition, branded Suspense fallback, lazy page modules, React static prerendering, dynamically injected form state, and static assets under `src/` and `public/`.
 - **Build and hosting:** Vite production output, GitHub Actions workflows, GitHub Pages configuration, `CNAME`, `sudeo.ru` DNS prerequisites, and deployment documentation.
 - **Documentation:** `docs/adr/`, `rules.md`, consolidated `AGENTS.md`, and README setup/deployment instructions.
 - **External boundaries:** A production lead endpoint/CRM, CMS, analytics vendor, legal texts, verified company contacts, DNS records, and GitHub Pages settings require owner decisions or credentials and will be represented as explicit configuration or follow-up work rather than fabricated implementation.

@@ -24,6 +24,8 @@ for (const route of requiredRoutes) {
     if (!html.includes("<title>")) failures.push(`${route}: missing title`);
     if (!html.includes(`<link rel="canonical" href="https://sudeo.ru${route}"`)) failures.push(`${route}: incorrect canonical`);
     if (!html.includes('<div id="root">') || html.includes('<div id="root"></div>')) failures.push(`${route}: missing pre-rendered markup`);
+    if (html.includes("Загружаем страницу")) failures.push(`${route}: contains the client Suspense loader instead of static-only route markup`);
+    if (html.includes('id="S:') || html.includes("$RC(")) failures.push(`${route}: contains a browser-dependent Suspense replacement segment`);
 }
 
 const cname = (await read(path.join(root, "CNAME"))).trim();
@@ -57,4 +59,4 @@ if (failures.length) {
     process.exit(1);
 }
 
-console.log(`Static site check passed: ${requiredRoutes.length} routes, CNAME, sitemap, robots and brand exclusions.`);
+console.log(`Static site check passed: ${requiredRoutes.length} resolved routes, CNAME, sitemap, robots and brand exclusions.`);

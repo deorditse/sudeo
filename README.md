@@ -67,7 +67,9 @@ npm run preview
 
 Hover/focus/pressed и entrance effects принадлежат соответствующим primitives/widgets/pages. Основной контент не скрывается до JavaScript, а `prefers-reduced-motion: reduce` отключает необязательное движение. Решение описано в `docs/adr/0006-reusable-ui-and-route-aware-interaction.md`.
 
-Клиент загружает страницы отдельными lazy chunks. SSR использует `renderToPipeableStream` и ждёт разрешения lazy-модулей перед записью HTML, поэтому prerendered документы сохраняют основной контент без выполнения JavaScript. Решение описано в `docs/adr/0005-application-composition-and-lazy-modules.md`.
+Клиент загружает страницы отдельными lazy chunks. При медленной клиентской навигации общий `Suspense` показывает брендированный loader из логотипа и названия Sudeo; loader публикует status для assistive technologies и отключает движение при `prefers-reduced-motion: reduce`.
+
+Build-time renderer сначала использует React 19 `prerenderToNodeStream` для разрешения lazy-модулей, затем формирует итоговый HTML через `renderToString`. Поэтому generated documents содержат основной route content без loader, скрытых replacement-сегментов и inline Suspense swap-script. Решение описано в `docs/adr/0005-application-composition-and-lazy-modules.md`.
 
 ## Форма обращения
 
@@ -85,7 +87,7 @@ Endpoint должен принимать JSON и подтверждать сох
 
 Workflow: `.github/workflows/deploy.yml`.
 
-Для pull request и push он запускает `npm ci`, lint и полную сборку. Успешный push в `main` загружает каталог `docs/` и запускает GitHub Pages deployment.
+Для pull request и push workflow запускает `npm ci`, lint и полную сборку. Успешный push в `main` явно конфигурирует Pages, загружает каталог `docs/` и запускает deployment через environment `github-pages`. Последовательность согласована с рабочим репозиторием `deorditse/tec_drive`, при этом Sudeo сохраняет дополнительные architecture и static-artifact проверки.
 
 Владелец репозитория должен отдельно:
 
@@ -96,7 +98,7 @@ Workflow: `.github/workflows/deploy.yml`.
 5. при необходимости настроить `www` как CNAME на Pages-hostname репозитория;
 6. проверить DNS, HTTPS, главную и прямой вложенный маршрут.
 
-На момент начала change GitHub CLI не был авторизован, а `sudeo.ru` не разрешался через DNS, поэтому включение Pages и DNS остаются внешними действиями владельца.
+GitHub Pages для репозитория включён и custom domain `sudeo.ru` зарегистрирован. Авторитетная зона находится в REG.RU (`ns1.reg.ru`, `ns2.reg.ru`), но apex пока указывает на старый `95.163.244.138`. Для завершения публикации нужно удалить конфликтующую запись и установить четыре A-записи GitHub Pages: `185.199.108.153`, `185.199.109.153`, `185.199.110.153`, `185.199.111.153`, затем дождаться проверки домена и включить HTTPS.
 
 Пример проверки после настройки:
 

@@ -1,6 +1,7 @@
 export { AppButton } from "./AppButton";
-export { AppImage } from "./AppImage";
-export { AppLink } from "./AppLink";
+export * from "./AppImage";
+export * from "./AppLoader";
+export * from "./AppLink";
 export { AppText } from "./AppText";
 export { Box } from "./Box";
 export { Section } from "./Section";

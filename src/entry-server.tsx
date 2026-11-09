@@ -1,5 +1,5 @@
-import { Writable } from "node:stream";
-import { renderToPipeableStream } from "react-dom/server";
+import { prerenderToNodeStream } from "react-dom/static";
+import { renderToString } from "react-dom/server";
 import { StaticRouter } from "react-router";
 import App from "@/app/App";
 import { StoreProvider } from "@/app/providers/StoreProvider";
@@ -8,42 +8,29 @@ import { getRouteDefinition, routeManifest } from "@/shared/config/routes";
 
 export { routeManifest };
 
-const renderApplication = (url: string) => new Promise<string>((resolve, reject) => {
-    let html = "";
+const createApplication = (url: string) => (
+    <StaticRouter location={url}>
+        <StoreProvider store={createReduxStore()}>
+            <App />
+        </StoreProvider>
+    </StaticRouter>
+);
+
+const renderApplication = async (url: string) => {
     let renderError: unknown;
-    const destination = new Writable({
-        write(chunk, _encoding, callback) {
-            html += chunk.toString();
-            callback();
-        },
-    });
-
-    destination.on("finish", () => {
-        if (renderError) reject(renderError);
-        else resolve(html);
-    });
-    destination.on("error", reject);
-
-    const store = createReduxStore();
-    const stream = renderToPipeableStream(
-        <StaticRouter location={url}>
-            <StoreProvider store={store}>
-                <App />
-            </StoreProvider>
-        </StaticRouter>,
+    const { prelude } = await prerenderToNodeStream(
+        createApplication(url),
         {
-            onAllReady() {
-                stream.pipe(destination);
-            },
-            onShellError(error) {
-                reject(error);
-            },
             onError(error) {
                 renderError = error;
             },
         },
     );
-});
+
+    for await (const chunk of prelude) void chunk;
+    if (renderError) throw renderError;
+    return renderToString(createApplication(url));
+};
 
 export const render = async (url: string) => {
     const route = getRouteDefinition(url);

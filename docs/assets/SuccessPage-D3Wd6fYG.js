@@ -1,1 +1,0 @@
-import{j as t,P as s}from"./index-DBNNOrsU.js";import{P as o}from"./Page-BLZ6eKOI.js";const c=()=>({code:"ГОТОВО",title:"Заявка отправлена",description:"Мы получили запрос и вернёмся с ответом в течение одного рабочего дня."}),a=()=>{const e=c();return t.jsx(o,{children:t.jsx(s,{eyebrow:e.code,title:e.title,text:e.description})})};export{a as default};

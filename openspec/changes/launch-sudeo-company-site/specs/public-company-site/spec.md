@@ -89,3 +89,18 @@ The public site SHALL provide consistent hover, focus-visible, active, and press
 #### Scenario: Client JavaScript is unavailable
 - **WHEN** a generated route is rendered without executing client JavaScript
 - **THEN** all primary text, links, navigation, and page sections remain visible and usable rather than waiting for an animation trigger
+
+### Requirement: Branded lazy-route loading state
+The application SHALL provide a reusable Sudeo-branded fallback for the shared route-level `Suspense` boundary. The fallback SHALL combine the established logo mark and company name, SHALL expose a concise loading status to assistive technology, SHALL avoid introducing an additional page heading, and SHALL disable non-essential motion when reduced motion is requested.
+
+#### Scenario: A lazy route chunk is pending
+- **WHEN** client-side navigation suspends while a route module is loading
+- **THEN** a stable branded loader is visible within the content area until the route resolves, without replacing the global header/footer or exposing a blank page
+
+#### Scenario: A generated route is prerendered
+- **WHEN** the server render resolves a declared lazy route during build
+- **THEN** the generated HTML contains the route content rather than the loader fallback
+
+#### Scenario: Loader visitor requests reduced motion
+- **WHEN** `prefers-reduced-motion: reduce` is active while the fallback is visible
+- **THEN** continuous decorative movement stops while the Sudeo identity and loading status remain understandable
