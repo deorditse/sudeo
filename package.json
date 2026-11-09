@@ -1,0 +1,40 @@
+{
+    "name": "sudeo",
+    "private": true,
+    "version": "0.0.0",
+    "type": "module",
+    "scripts": {
+        "dev": "vite",
+        "clean:site": "node scripts/prepare-build.mjs",
+        "build:client": "vite build --mode=production",
+        "build:ssr": "vite build --ssr src/entry-server.tsx --outDir .ssr --mode=production",
+        "prerender": "node scripts/prerender.mjs",
+        "check:architecture": "node scripts/check-architecture.mjs",
+        "check:site": "node scripts/check-site.mjs",
+        "build": "npm run clean:site && tsc -b && npm run check:architecture && npm run build:client && npm run build:ssr && npm run prerender && npm run check:site",
+        "lint": "eslint .",
+        "preview": "vite preview --outDir docs"
+    },
+    "dependencies": {
+        "@reduxjs/toolkit": "^2.14.0",
+        "react": "^19.1.0",
+        "react-dom": "^19.1.0",
+        "react-redux": "^9.3.1",
+        "react-router-dom": "^7.6.0"
+    },
+    "devDependencies": {
+        "@eslint/js": "^9.25.0",
+        "@types/node": "^22.15.18",
+        "@types/react": "^19.1.2",
+        "@types/react-dom": "^19.1.2",
+        "@vitejs/plugin-react": "^4.4.1",
+        "eslint": "^9.25.0",
+        "eslint-plugin-react-hooks": "^5.2.0",
+        "eslint-plugin-react-refresh": "^0.4.19",
+        "globals": "^16.0.0",
+        "sass": "^1.89.0",
+        "typescript": "~5.8.3",
+        "typescript-eslint": "^8.30.1",
+        "vite": "^6.3.5"
+    }
+}

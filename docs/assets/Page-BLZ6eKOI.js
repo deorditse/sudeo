@@ -1,0 +1,1 @@
+import{j as t,m as n}from"./index-DBNNOrsU.js";const o="_page_16uie_1",m="_padded_16uie_22",a={page:o,padded:m},i=({children:e,className:s,padded:d=!1,...p})=>t.jsx("main",{id:"main-content",className:n(a.page,d&&a.padded,s),...p,children:e});export{i as P};

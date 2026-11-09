@@ -1,0 +1,8 @@
+.section { padding: 120px 0; }
+.compact { padding-block: 88px; }
+.light { color: #11130f; background: #f5f3ed; }
+.dark { color: #f7f6f0; background: #161814; }
+.feature { color: #f7f6f0; background: #242820; }
+.form { color: #f7f6f0; background: #1b1e18; }
+.accent { color: #11130f; background: #b9ff66; }
+@media (max-width: 760px) { .section { padding: 78px 0; } .compact { padding-block: 64px; } }

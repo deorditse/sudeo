@@ -1,0 +1,47 @@
+.logo { display: inline-flex; gap: 11px; align-items: center; width: fit-content; color: inherit; font-size: 19px; font-weight: 800; letter-spacing: 0.18em; transition: color 160ms ease; }
+.logo:hover, .logo:focus-visible { color: #b9ff66; }
+.logoMark { display: flex; gap: 3px; align-items: end; width: 27px; height: 27px; transform: rotate(-12deg); }
+.logoMark i { display: block; width: 7px; background: #b9ff66; border-radius: 20px; }
+.logoMark i:nth-child(1) { height: 13px; }
+.logoMark i:nth-child(2) { height: 24px; }
+.logoMark i:nth-child(3) { height: 18px; }
+.eyebrow { display: flex; gap: 9px; align-items: center; margin: 0 0 16px; font-size: 12px; font-weight: 800; line-height: 1.2; letter-spacing: 0.17em; text-transform: uppercase; }
+.eyebrow::before { content: ""; width: 7px; height: 7px; background: #b9ff66; border-radius: 50%; }
+.sectionHeading { max-width: 760px; margin-bottom: 62px; }
+.sectionTitle { max-width: 760px; }
+.sectionIntro { max-width: 620px; margin-top: 24px; }
+.breadcrumbs { display: flex; gap: 12px; margin-bottom: 46px; color: rgba(255, 255, 255, 0.58); font-size: 12px; }
+.breadcrumbItem { display: flex; gap: 12px; }
+.breadcrumbItem::before { content: "/"; opacity: 0.45; }
+.serviceCard { --card-accent: #b9ff66; min-height: 410px; padding: 34px; color: #11130f; background: var(--card-accent); border-radius: 8px; transition: transform 200ms ease, box-shadow 200ms ease; }
+.serviceCard:hover { transform: translateY(-7px); box-shadow: 0 28px 70px rgba(17, 19, 15, 0.16); }
+.serviceCard:nth-child(even) { background: #f0eee7; }
+.serviceCardTitle { max-width: 460px; margin-top: 80px; }
+.serviceCardText { max-width: 510px; color: rgba(17, 19, 15, 0.68); }
+.cardTop { width: 100%; font-size: 12px; font-weight: 800; }
+.cardDot { width: 11px; height: 11px; background: #11130f; border-radius: 50%; }
+.cardLink { display: flex; justify-content: space-between; width: 100%; margin-top: auto; padding-top: 30px; color: #11130f; font-size: 14px; font-weight: 800; border-top: 1px solid rgba(17, 19, 15, 0.22); transition: gap 160ms ease; }
+.cardLink:hover, .cardLink:focus-visible { gap: 20px; }
+.faqList details { border-top: 1px solid rgba(17, 19, 15, 0.2); }
+.faqList details:last-child { border-bottom: 1px solid rgba(17, 19, 15, 0.2); }
+.faqList summary { display: flex; justify-content: space-between; gap: 30px; padding: 25px 0; cursor: pointer; font-size: 20px; font-weight: 700; list-style: none; }
+.faqList summary::-webkit-details-marker { display: none; }
+.faqList summary span { color: #777b72; font-size: 30px; font-weight: 300; transition: transform 0.2s ease; }
+.faqList details[open] summary span { transform: rotate(45deg); }
+.faqList details p { max-width: 680px; padding: 0 0 28px; color: #696c63; line-height: 1.65; }
+.pageHero { padding: 190px 0 105px; color: #f7f6f0; background: #11130f; }
+.pageTitle { max-width: 1000px; margin: 18px 0 28px; }
+.pageIntro { max-width: 720px; color: rgba(255, 255, 255, 0.65); }
+.bulletPanel { padding: 36px; background: white; border-radius: 8px; transition: transform 180ms ease, box-shadow 180ms ease; }
+.bulletPanel:hover { transform: translateY(-5px); box-shadow: 0 24px 60px rgba(17, 19, 15, 0.1); }
+.bulletPanel ul { display: grid; gap: 0; margin: 0; padding: 0; }
+.bulletPanel li { display: grid; grid-template-columns: 24px 1fr; gap: 10px; padding: 17px 0; border-top: 1px solid rgba(17, 19, 15, 0.2); line-height: 1.45; }
+.bulletPanel li span { color: #719e3e; }
+@media (max-width: 760px) {
+    .sectionHeading { margin-bottom: 42px; }
+    .serviceCard { min-height: 360px; padding: 25px; }
+    .serviceCardTitle { margin-top: 65px; }
+    .pageHero { padding: 145px 0 75px; }
+}
+@media (max-width: 420px) { .logo { font-size: 16px; } }
+@media (prefers-reduced-motion: reduce) { .logo, .serviceCard, .cardLink, .bulletPanel { transition: none; } .serviceCard:hover, .bulletPanel:hover { transform: none; } }
