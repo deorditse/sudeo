@@ -5,8 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { services, contactStatus } from "@/shared/content/siteContent";
 import { DynamicModuleLoader, type DynamicReducersList } from "@/shared/lib/components";
 import { emitSafeEvent } from "@/shared/lib/analytics";
-import { AppButton, AppLink, AppText } from "@shared/ui";
-import { Arrow } from "@/shared/ui/SitePrimitives";
+import { AppButton, AppLink, AppText, Arrow } from "@shared/ui";
 import { enquiryFormActions, enquiryFormReducer, selectEnquiryForm, validateEnquiryForm, type EnquiryFormValues } from "./model";
 import styles from "./EnquiryForm.module.scss";
 

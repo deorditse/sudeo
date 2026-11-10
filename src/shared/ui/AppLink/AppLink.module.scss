@@ -3,3 +3,23 @@
 .default { color: inherit; }
 .muted { color: #696c63; }
 .accent { color: #78d924; }
+.action {
+    display: inline-flex;
+    gap: 12px;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 44px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid currentcolor;
+    font-size: 14px;
+    font-weight: 800;
+    transition: color 160ms ease, gap 160ms ease;
+}
+.action:hover,
+.action:focus-visible {
+    gap: 18px;
+    color: #719e3e;
+}
+@media (prefers-reduced-motion: reduce) {
+    .action { transition: none; }
+}

@@ -1,0 +1,30 @@
+.breadcrumbs {
+    display: flex;
+    gap: 10px;
+    margin: 0 0 34px;
+    padding: 0;
+    color: rgba(255, 255, 255, 0.58);
+    font-size: 12px;
+    list-style: none;
+}
+
+.breadcrumbItem {
+    display: flex;
+    gap: 10px;
+}
+
+.breadcrumbItem::before {
+    content: "/";
+    opacity: 0.45;
+}
+
+@media (min-width: 451px) {
+    .breadcrumbs {
+        gap: 12px;
+        margin-bottom: 40px;
+    }
+
+    .breadcrumbItem {
+        gap: 12px;
+    }
+}

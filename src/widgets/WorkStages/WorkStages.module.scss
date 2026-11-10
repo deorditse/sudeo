@@ -1,0 +1,31 @@
+.list {
+    margin: 0;
+    padding: 0;
+    border-top: 1px solid rgba(17, 19, 15, 0.16);
+    list-style: none;
+    counter-reset: work-stage;
+}
+
+.item {
+    border-bottom: 1px solid rgba(17, 19, 15, 0.16);
+    counter-increment: work-stage;
+}
+
+.number {
+    color: #92968c;
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.description {
+    grid-column: 2;
+    max-width: 520px;
+}
+
+@media (min-width: 451px) {
+    .description {
+        grid-column: auto;
+    }
+}
+
+

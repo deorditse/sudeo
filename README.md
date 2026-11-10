@@ -56,9 +56,9 @@ npm run preview
 - `src/app/store/` — Redux Toolkit store, типизированная схема состояния и reducer manager.
 - `src/pages/<page>/model/` — реальные типы, content/view-model selectors и page-specific contracts без пустых API/reducer placeholders.
 - `src/pages/<page>/ui/` — route-level UI, приватные `components/` и `<Page>.async.tsx`; внешний импорт идёт только через slice `index.ts`.
-- `src/widgets/` — самостоятельные составные блоки страниц. Форма обращения хранит UI-состояние в динамически подключаемом reducer.
+- `src/widgets/` — самостоятельные продуктовые композиции: `PageHero`, `DetailHero`, `ServiceCatalog`, `WorkStages`, `Faq`, route `Page` и форма обращения. Форма хранит UI-состояние в динамически подключаемом reducer; остальные статические widgets не получают фиктивные reducers.
 - `src/shared/layouts/Container` задаёт каноническую ширину и адаптивные горизонтальные gutters; `MainContent` делегирует ему размеры route content, а `src/widgets/Page` остаётся единственным `main` landmark.
-- `src/shared/ui/` — независимые `AppPadding`, `AppGrid`, `Flex`, `HStack`, `VStack`, `AppText`, `AppButton`, `AppImage`, `AppLink`, `Box`, `Section` и повторно используемые presentation primitives с собственными SCSS modules. `Section` задаёт общий вертикальный ритм через `AppPadding`; route pages не дублируют page gutters, section rhythm, grid columns или structural gaps в локальном CSS.
+- `src/shared/ui/` — независимые `AppPadding`, `AppGrid`, `Flex`, `HStack`, `VStack`, `AppText`, `AppButton`, `AppImage`, `AppLink`, `Box`, `Section`, `Eyebrow`, `Badge`, `Card`/`LinkCard` и `Prose` с собственными SCSS modules. `shared` не знает service slugs или route composition. `Section` задаёт общий вертикальный ритм через `AppPadding`; route pages не дублируют page gutters, section rhythm, grid columns, generic card surfaces, badges, eyebrows, prose или structural gaps в локальном CSS.
 - Responsive-стили строятся mobile-first: правила без media query рассчитаны на телефоны до 450px, tablet-изменения применяются только через `@media (min-width: 451px)`, desktop-изменения — только через `@media (min-width: 960px)`. Базовые props `AppPadding` и `AppGrid.columns` относятся к телефону; расширения задаются через `tablet*`/`desktop*`, `tabletColumns`/`desktopColumns`. Architecture checker запрещает width-based `max-width` и другие width breakpoints.
 - `src/shared/lib/` — инфраструктурные компоненты, включая app-independent `DynamicModuleLoader`.
 
@@ -68,9 +68,13 @@ npm run preview
 
 Hover/focus/pressed и entrance effects принадлежат соответствующим primitives/widgets/pages. Основной контент не скрывается до JavaScript, а `prefers-reduced-motion: reduce` отключает необязательное движение. Решение описано в `docs/adr/0006-reusable-ui-and-route-aware-interaction.md`.
 
+Семантика является частью UI API: breadcrumbs используют `nav > ol > li`, нумерованные процессы — `ol > li`, роли и компетенции — `ul > li`, а reusable card/widget принимает корректный heading level от страницы. Generated route должен содержать ровно один `main`, один `h1` и логичную иерархию последующих заголовков.
+
+Начальная загрузка сохраняет геометрию prerendered content: bootstrap loader находится поверх страницы вне потока и исчезает только через opacity/visibility, route sections не получают load-time translate/scale/stagger, а `AppImage` требует intrinsic width/height или явный aspect ratio. Стабильность проверяется при выключенном кеше через `PerformanceObserver` и сравнением координат header, H1, primary action и первой секции до/после hydration.
+
 Клиент загружает страницы отдельными lazy chunks. При медленной клиентской навигации общий `Suspense` показывает брендированный loader из логотипа и названия Sudeo; loader публикует status для assistive technologies и отключает движение при `prefers-reduced-motion: reduce`.
 
-Build-time renderer сначала использует React 19 `prerenderToNodeStream` для разрешения lazy-модулей, затем формирует итоговый HTML через `renderToString`. Поэтому generated documents содержат основной route content без loader, скрытых replacement-сегментов и inline Suspense swap-script. Решение описано в `docs/adr/0005-application-composition-and-lazy-modules.md`.
+Build-time renderer сначала использует React 19 `prerenderToNodeStream` для разрешения lazy-модулей, затем формирует итоговый HTML через `renderToString`. Клиентская сборка также создаёт Vite manifest; `routeManifest.clientEntry` указывает lazy entry каждой страницы, а prerender рекурсивно добавляет в `<head>` CSS страницы и импортированных widgets/shared chunks. Поэтому generated documents содержат основной route content уже в финальной геометрии — без ожидания JavaScript, loader, скрытых replacement-сегментов и inline Suspense swap-script. Решение описано в `docs/adr/0005-application-composition-and-lazy-modules.md`.
 
 ## Форма обращения
 

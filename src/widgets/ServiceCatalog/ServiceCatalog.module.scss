@@ -1,0 +1,97 @@
+.catalog {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.item {
+    min-width: 0;
+}
+
+.card {
+    min-height: 360px;
+    background: var(--card-accent, #b9ff66);
+    transition: transform 200ms ease, box-shadow 200ms ease;
+}
+
+.item:nth-child(even) .card {
+    background: #f0eee7;
+}
+
+.card:hover,
+.card:focus-within {
+    box-shadow: 0 28px 70px rgba(17, 19, 15, 0.16);
+    transform: translateY(-7px);
+}
+
+.content {
+    min-height: 100%;
+}
+
+.top {
+    width: 100%;
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.dot {
+    width: 11px;
+    height: 11px;
+    background: #11130f;
+    border-radius: 50%;
+}
+
+.title {
+    max-width: 460px;
+    margin-top: 65px;
+}
+
+.description {
+    max-width: 510px;
+    color: rgba(17, 19, 15, 0.68);
+}
+
+.link {
+    width: 100%;
+    margin-top: auto;
+    padding-top: 30px;
+    color: #11130f;
+    border-top: 1px solid rgba(17, 19, 15, 0.22);
+    border-bottom: 0;
+}
+
+.link:hover,
+.link:focus-visible {
+    color: #11130f;
+}
+
+@media (min-width: 451px) {
+    .card {
+        min-height: 390px;
+    }
+
+    .title {
+        margin-top: 72px;
+    }
+}
+
+@media (min-width: 960px) {
+    .card {
+        min-height: 410px;
+    }
+
+    .title {
+        margin-top: 80px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .card {
+        transition: none;
+    }
+
+    .card:hover,
+    .card:focus-within {
+        transform: none;
+    }
+}

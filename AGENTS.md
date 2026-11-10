@@ -14,7 +14,7 @@ Read `rules.md`, `openspec/config.yaml`, the relevant active change, and accepte
 
 ## Project Structure & Module Organization
 
-This is a React 19 and TypeScript application built with Vite. Application bootstrap and global styles live in `src/app/`; route-level slices use `src/pages/<page>/{model,ui}`; reusable product sections live in `src/widgets/`; and generic UI/layout/configuration belongs in `src/shared/`. Preserve `app → pages → widgets → shared`, compose every route through `widgets/Page`, `shared/layouts/MainContent`/`Container`, and shared `AppPadding`, `AppGrid`, stack, `Box`, and `Section` primitives instead of raw page layout containers or page-owned structural spacing. Keep route exports lazy through `.async.tsx`. Use the `@app`, `@pages`, `@widgets`, and `@shared` aliases; `@/` remains a compatibility alias. Static files copied without bundling go in `public/`. Production output is generated in `docs/` for static hosting.
+This is a React 19 and TypeScript application built with Vite. Application bootstrap and global styles live in `src/app/`; route-level slices use `src/pages/<page>/{model,ui}`; reusable product sections live in `src/widgets/`; and generic UI/layout/configuration belongs in `src/shared/`. Preserve `app → pages → widgets → shared`, compose every route through `widgets/Page`, `shared/layouts/MainContent`/`Container`, and shared `AppPadding`, `AppGrid`, stack, `Box`, and `Section` primitives instead of raw page layout containers or page-owned structural spacing. Keep route exports lazy through `.async.tsx`, and keep each `routeManifest.clientEntry` synchronized with the corresponding lazy page source so prerender can inject its complete manifest-derived CSS graph. Use the `@app`, `@pages`, `@widgets`, and `@shared` aliases; `@/` remains a compatibility alias. Static files copied without bundling go in `public/`. Production output is generated in `docs/` for static hosting.
 
 Keep feature files close together. A component should normally have its `.tsx` file beside its `.module.scss`, with public exports exposed through a nearby `index.ts` where that pattern already exists.
 
@@ -24,7 +24,7 @@ Keep feature files close together. A component should normally have its `.tsx` f
 - `npm run dev` starts the Vite development server with hot reload.
 - `npm run build` type-checks, builds client and SSR entries, pre-renders public routes into `docs/`, and runs artifact checks.
 - `npm run check:architecture` verifies FSD imports, page boundaries, lazy exports, route shells, shared structural layout/spacing ownership, and visitor navigation coverage.
-- `npm run check:site` verifies generated routes, metadata, crawl controls, domain, and copied-brand exclusions.
+- `npm run check:site` verifies generated routes, semantics, manifest-derived route CSS, loader/Suspense exclusions, metadata, crawl controls, domain, and copied-brand exclusions.
 - `npm run preview` serves the production bundle locally for verification.
 - `npm run lint` runs ESLint across the repository.
 

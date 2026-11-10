@@ -1,64 +1,9 @@
-.serviceHero {
-    --service-accent: #b9ff66;
-
-    color: white;
-    background:
-        radial-gradient(
-            circle at 80% 50%,
-            color-mix(in srgb, var(--service-accent) 25%, transparent),
-            transparent 28%
-        ),
-        #11130f;
-}
-
-.serviceHero h1 {
-    max-width: 1000px;
-    margin: 0;
-    font-size: 42px;
-    font-weight: 500;
-    line-height: 1.02;
-    letter-spacing: -0.045em;
-}
-
-.serviceLead {
-    max-width: 720px;
-    margin: 0;
-    color: rgba(255, 255, 255, 0.65);
-    font-size: 16px;
-    line-height: 1.55;
-}
-
-.eyebrow {
-    display: flex;
-    gap: 9px;
-    align-items: center;
-    margin: 0;
-    font-size: 12px;
-    font-weight: 800;
-    letter-spacing: 0.17em;
-    text-transform: uppercase;
-}
-
-.eyebrow::before {
-    content: "";
-    width: 7px;
-    height: 7px;
-    background: #b9ff66;
-    border-radius: 50%;
-}
-
 .serviceGlyph {
     display: none;
     place-items: center;
     aspect-ratio: 1;
     border: 1px solid rgba(255, 255, 255, 0.18);
     border-radius: 50%;
-    transition: transform 300ms ease, border-color 300ms ease;
-}
-
-.serviceGlyph:hover {
-    border-color: var(--service-accent);
-    transform: rotate(8deg) scale(1.03);
 }
 
 .serviceGlyph span {
@@ -67,11 +12,16 @@
     width: 48%;
     aspect-ratio: 1;
     color: #11130f;
-    background: var(--service-accent);
+    background: var(--detail-hero-accent);
     border-radius: 36% 64% 48% 52%;
     font-size: 50px;
     font-weight: 800;
     transform: rotate(-8deg);
+}
+
+.stepsGrid,
+.controlsGrid {
+    list-style: none;
 }
 
 .stepsGrid {
@@ -82,13 +32,6 @@
     min-height: 160px;
     padding: 20px;
     background: #161814;
-    transition: background 180ms ease, transform 180ms ease;
-}
-
-.stepItem:hover {
-    z-index: 1;
-    background: #242820;
-    transform: translateY(-6px);
 }
 
 .stepItem span {
@@ -106,12 +49,6 @@
 .controlItem {
     padding: 20px;
     border-top: 1px solid rgba(17, 19, 15, 0.4);
-    transition: background 180ms ease, transform 180ms ease;
-}
-
-.controlItem:hover {
-    background: rgba(255, 255, 255, 0.2);
-    transform: translateY(-4px);
 }
 
 .controlItem span {
@@ -137,30 +74,7 @@
     justify-self: start;
 }
 
-.tag {
-    display: inline-flex;
-    padding: 8px 12px;
-    color: #11130f;
-    background: #b9ff66;
-    border-radius: 100px;
-    font-size: 10px;
-    font-weight: 900;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-}
-
 @media (min-width: 451px) {
-    .serviceHero h1 {
-        font-size: 58px;
-        line-height: 0.98;
-        letter-spacing: -0.055em;
-    }
-
-    .serviceLead {
-        font-size: 18px;
-        line-height: 1.6;
-    }
-
     .stepItem {
         min-height: 190px;
         padding: 22px;
@@ -188,16 +102,6 @@
 }
 
 @media (min-width: 960px) {
-    .serviceHero h1 {
-        font-size: clamp(55px, 7vw, 104px);
-        line-height: 0.97;
-        letter-spacing: -0.065em;
-    }
-
-    .serviceLead {
-        font-size: 19px;
-    }
-
     .serviceGlyph {
         display: grid;
     }
@@ -227,19 +131,5 @@
 
     .relatedCaseAction {
         justify-self: end;
-    }
-}
-
-@media (prefers-reduced-motion: reduce) {
-    .serviceGlyph,
-    .stepItem,
-    .controlItem {
-        transition: none;
-    }
-
-    .serviceGlyph:hover,
-    .stepItem:hover,
-    .controlItem:hover {
-        transform: none;
     }
 }

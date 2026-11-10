@@ -2,8 +2,7 @@ import { useEffect, useRef, useState, type ReactNode } from "react";
 import { useLocation } from "react-router-dom";
 import { getNavigationItem, isNavigationPathActive, navigationGroups, normalizePathname } from "@shared/config/routes";
 import { MainContent } from "@shared/layouts/MainContent";
-import { AppButton, AppLink, AppText } from "@shared/ui";
-import { Arrow, Logo } from "@shared/ui/SitePrimitives";
+import { AppButton, AppLink, AppText, Arrow, Logo } from "@shared/ui";
 import styles from "./MainLayout.module.scss";
 
 const primaryNavigation = [
@@ -19,7 +18,7 @@ const NavigationCatalog = ({ onNavigate }: { onNavigate?: () => void }) => {
     return (
         <div className={styles.catalogGrid}>
             {navigationGroups.map((group) => (
-                <section className={styles.catalogGroup} key={group.label}>
+                <div className={styles.catalogGroup} key={group.label}>
                     <AppText className={styles.catalogLabel} size="xs" weight="bold" uppercase>{group.label}</AppText>
                     <div className={styles.catalogLinks}>
                         {group.items.map((item) => {
@@ -27,7 +26,7 @@ const NavigationCatalog = ({ onNavigate }: { onNavigate?: () => void }) => {
                             return <AppLink className={current ? styles.currentCatalogLink : undefined} key={item.path} to={item.path} aria-current={current ? "page" : undefined} onClick={onNavigate}>{item.label}{current && <span aria-hidden="true">●</span>}</AppLink>;
                         })}
                     </div>
-                </section>
+                </div>
             ))}
         </div>
     );
@@ -116,10 +115,10 @@ const Footer = () => {
             </MainContent>
             <MainContent className={styles.footerSitemap}>
                 {navigationGroups.map((group) => (
-                    <section key={group.label}>
+                    <div key={group.label}>
                         <AppText className={styles.footerGroupTitle} size="xs" weight="bold" uppercase>{group.label}</AppText>
                         <div className={styles.footerGroupLinks}>{group.items.map((item) => <AppLink key={item.path} to={item.path} aria-current={currentPath === item.path ? "page" : undefined}>{item.label}</AppLink>)}</div>
-                    </section>
+                    </div>
                 ))}
             </MainContent>
             <MainContent className={styles.footerBottom}>

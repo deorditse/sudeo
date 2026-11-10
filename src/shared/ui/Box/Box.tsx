@@ -1,11 +1,13 @@
-import type { ComponentPropsWithoutRef, ElementType, ReactNode } from "react";
+import type { ElementType, ReactNode } from "react";
+import type { PolymorphicProps } from "@shared/lib/polymorphic";
 
-export type BoxProps<T extends ElementType = "div"> = {
-    as?: T;
+type BoxOwnProps = {
     children?: ReactNode;
-} & Omit<ComponentPropsWithoutRef<T>, "as" | "children">;
+};
 
-export const Box = <T extends ElementType = "div">({ as, children, ...props }: BoxProps<T>) => {
+export type BoxProps<T extends ElementType = "div"> = PolymorphicProps<T, BoxOwnProps>;
+
+export const Box = <T extends ElementType = "div">({ as, children, ref, ...props }: BoxProps<T>) => {
     const Component = as ?? "div";
-    return <Component {...props}>{children}</Component>;
+    return <Component ref={ref} {...props}>{children}</Component>;
 };

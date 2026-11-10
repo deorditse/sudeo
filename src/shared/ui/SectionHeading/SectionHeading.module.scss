@@ -1,0 +1,49 @@
+.sectionHeading {
+    max-width: 760px;
+    margin-bottom: 42px;
+}
+
+.eyebrow {
+    display: flex;
+    gap: 9px;
+    align-items: center;
+    margin: 0 0 16px;
+    font-size: 12px;
+    font-weight: 800;
+    line-height: 1.2;
+    letter-spacing: 0.17em;
+    text-transform: uppercase;
+}
+
+.eyebrow::before {
+    width: 7px;
+    height: 7px;
+    background: #b9ff66;
+    border-radius: 50%;
+    content: "";
+}
+
+.sectionTitle {
+    max-width: 760px;
+}
+
+.sectionIntro {
+    max-width: 620px;
+    margin-top: 20px;
+}
+
+@media (min-width: 451px) {
+    .sectionHeading {
+        margin-bottom: 52px;
+    }
+
+    .sectionIntro {
+        margin-top: 24px;
+    }
+}
+
+@media (min-width: 960px) {
+    .sectionHeading {
+        margin-bottom: 62px;
+    }
+}

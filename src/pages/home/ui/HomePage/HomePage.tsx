@@ -5,25 +5,30 @@ import {
     AppGrid,
     AppLink,
     AppPadding,
+    AppText,
+    Arrow,
+    Badge,
     Box,
+    Eyebrow,
     HStack,
     Section,
+    SectionHeading,
     VStack,
 } from "@shared/ui";
-import {
-    Arrow,
-    Faq,
-    SectionHeading,
-    ServiceCard,
-} from "@/shared/ui/SitePrimitives";
 import { EnquiryForm } from "@widgets/EnquiryForm";
+import { Faq } from "@widgets/Faq";
 import { Page } from "@widgets/Page";
+import { ServiceCatalog } from "@widgets/ServiceCatalog";
+import { WorkStages, type WorkStage } from "@widgets/WorkStages";
 import { HeroMarquee } from "../components/HeroMarquee";
 import { HeroOrbit } from "../components/HeroOrbit";
 import * as cls from "./HomePage.module.scss";
 
 const HomePage = () => {
     const model = selectHomePageModel();
+    const stages = model.stages.map(
+        ([number, title, description]): WorkStage => [number, title, description],
+    );
 
     return (
         <Page>
@@ -38,7 +43,7 @@ const HomePage = () => {
                 <Box className={cls.heroGlow} aria-hidden="true" />
                 <MainContent className={cls.heroContent}>
                     <VStack gap="24">
-                        <p className={cls.eyebrow}>Цифровые решения для бизнеса</p>
+                        <Eyebrow tone="inverse">Цифровые решения для бизнеса</Eyebrow>
                         <h1>
                             Создаём продукты.
                             <br />
@@ -46,18 +51,22 @@ const HomePage = () => {
                             <br />
                             Помогаем расти.
                         </h1>
-                        <p className={cls.heroText}>
+                        <AppText className={cls.heroText} tone="inverse">
                             От сайта и мобильного приложения до ИИ-агента и
                             продвижения — исследуем задачу, запускаем решение и
                             развиваем его по данным.
-                        </p>
+                        </AppText>
                     </VStack>
                     <AppPadding pt="42">
                         <HStack className={cls.heroActions} gap="32" align="center">
                             <AppButton to="/contacts" addonRight={<Arrow />}>
                                 Обсудить проект
                             </AppButton>
-                            <AppLink className={cls.textLink} to="/services">
+                            <AppLink
+                                className={cls.heroSecondaryLink}
+                                to="/services"
+                                variant="action"
+                            >
                                 Смотреть услуги <span aria-hidden="true">↓</span>
                             </AppLink>
                         </HStack>
@@ -74,11 +83,22 @@ const HomePage = () => {
                         title="Не продаём технологии ради технологий"
                         text="Начинаем с бизнес-задачи и выбираем подходящий формат решения."
                     />
-                    <AppGrid columns={1} tabletColumns={2} desktopColumns={4} className={cls.taskGrid}>
+                    <AppGrid
+                        as="ul"
+                        columns={1}
+                        tabletColumns={2}
+                        desktopColumns={4}
+                        className={cls.taskGrid}
+                        style={{ margin: 0, padding: 0 }}
+                    >
                         {model.tasks.map((task, index) => (
-                            <Box as="article" className={cls.taskItem} key={task}>
-                                <span>0{index + 1}</span>
-                                <h3>{task}</h3>
+                            <Box as="li" className={cls.taskItem} key={task}>
+                                <AppText as="span" size="xs" tone="muted" weight="bold">
+                                    0{index + 1}
+                                </AppText>
+                                <AppText as="h3" size="l" weight="medium">
+                                    {task}
+                                </AppText>
                             </Box>
                         ))}
                     </AppGrid>
@@ -92,11 +112,7 @@ const HomePage = () => {
                         title="Одна команда — четыре компетенции"
                         text="Закажите отдельную услугу или соберите полный цикл под задачу."
                     />
-                    <AppGrid columns={1} tabletColumns={2} desktopColumns={2} gap="18">
-                        {model.services.map((service) => (
-                            <ServiceCard key={service.slug} service={service} />
-                        ))}
-                    </AppGrid>
+                    <ServiceCatalog services={model.services} />
                 </MainContent>
             </Section>
 
@@ -111,15 +127,20 @@ const HomePage = () => {
                         align="center"
                     >
                         <VStack gap="24" align="start">
-                            <p className={cls.tag}>Демонстрационный проект</p>
-                            <h2 className={cls.caseTitle}>
+                            <Badge tone="accent">Демонстрационный проект</Badge>
+                            <AppText
+                                as="h2"
+                                className={cls.caseTitle}
+                                size="2xl"
+                                weight="medium"
+                            >
                                 Агент, который отвечает по базе знаний — и
                                 знает, когда остановиться
-                            </h2>
-                            <p className={cls.caseText}>
+                            </AppText>
+                            <AppText className={cls.caseText} tone="inverse">
                                 {model.demo.task} Без вымышленных клиентских
                                 результатов.
-                            </p>
+                            </AppText>
                             <AppButton
                                 variant="secondary"
                                 to="/cases/knowledge-agent-demo"
@@ -150,29 +171,7 @@ const HomePage = () => {
                         eyebrow="Процесс"
                         title="Понятный маршрут от идеи до запуска"
                     />
-                    <VStack className={cls.stageList}>
-                        {model.stages.map(([number, title, text]) => (
-                            <AppPadding
-                                as="article"
-                                className={cls.stageItem}
-                                py="30"
-                                key={number}
-                            >
-                                <AppGrid
-                                    className={cls.stageGrid}
-                                    columns={2}
-                                    tabletColumns={3}
-                                    desktopColumns={3}
-                                    gap="30"
-                                    align="start"
-                                >
-                                    <span>{number}</span>
-                                    <h3>{title}</h3>
-                                    <p>{text}</p>
-                                </AppGrid>
-                            </AppPadding>
-                        ))}
-                    </VStack>
+                    <WorkStages stages={stages} />
                 </MainContent>
             </Section>
 
@@ -185,19 +184,28 @@ const HomePage = () => {
                             text="Руководитель проекта, технический ответственный, дизайнер и маркетолог работают в одном контуре. До старта назначаем владельца каждого результата и проверяем загрузку."
                         />
                         <AppPadding pt="40">
-                            <VStack className={cls.competencyList}>
+                            <VStack
+                                as="ul"
+                                className={cls.competencyList}
+                                style={{ margin: 0, padding: 0 }}
+                            >
                                 {model.competencies.map((item) => (
-                                    <HStack className={cls.competencyItem} gap="24" key={item}>
-                                        <span>+</span>
+                                    <HStack
+                                        as="li"
+                                        className={cls.competencyItem}
+                                        gap="24"
+                                        key={item}
+                                    >
+                                        <span aria-hidden="true">+</span>
                                         {item}
                                     </HStack>
                                 ))}
-                                <AppPadding pt="40">
-                                    <AppLink className={cls.textLink} to="/about">
-                                        Как мы работаем <Arrow />
-                                    </AppLink>
-                                </AppPadding>
                             </VStack>
+                            <AppPadding pt="40">
+                                <AppLink to="/about" variant="action">
+                                    Как мы работаем <Arrow />
+                                </AppLink>
+                            </AppPadding>
                         </AppPadding>
                     </AppGrid>
                 </MainContent>
@@ -209,7 +217,7 @@ const HomePage = () => {
                         eyebrow="FAQ"
                         title="Вопросы перед стартом"
                     />
-                    <Faq items={[...model.faq]} />
+                    <Faq items={model.faq} />
                 </MainContent>
             </Section>
 

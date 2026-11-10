@@ -46,26 +46,6 @@
     color: #b9ff66;
 }
 
-.eyebrow {
-    display: flex;
-    gap: 8px;
-    align-items: center;
-    margin: 0;
-    font-size: 10px;
-    font-weight: 800;
-    letter-spacing: 0.13em;
-    text-transform: uppercase;
-}
-
-.eyebrow::before {
-    content: "";
-    flex: 0 0 auto;
-    width: 7px;
-    height: 7px;
-    background: #b9ff66;
-    border-radius: 50%;
-}
-
 .heroText {
     max-width: 34rem;
     color: rgba(255, 255, 255, 0.74);
@@ -87,33 +67,22 @@
     flex-direction: column;
 }
 
-.heroActions .textLink {
+.heroActions .heroSecondaryLink {
     transform: translateY(-16px);
 }
 
-.textLink {
-    display: inline-flex;
-    gap: 12px;
-    align-items: center;
-    min-height: 44px;
-    padding-bottom: 4px;
+.heroSecondaryLink {
     color: inherit;
-    border-bottom: 1px solid currentColor;
-    font-size: 14px;
-    font-weight: 700;
-    transition:
-        color 160ms ease,
-        gap 160ms ease;
 }
 
-.textLink:hover,
-.textLink:focus-visible {
-    gap: 18px;
+.heroSecondaryLink:hover,
+.heroSecondaryLink:focus-visible {
     color: #b9ff66;
 }
 
 .taskGrid {
     border-top: 1px solid rgba(17, 19, 15, 0.16);
+    list-style: none;
 }
 
 .taskItem,
@@ -122,31 +91,16 @@
     padding: 18px 0;
     border-top: 1px solid rgba(17, 19, 15, 0.16);
     border-right: 0;
-    transition:
-        background 180ms ease,
-        padding 180ms ease;
 }
 
 .taskItem:first-child {
     border-top: 0;
 }
 
-.taskItem:hover {
-    background: rgba(185, 255, 102, 0.2);
-}
-
-.taskItem span {
-    color: #969a90;
-    font-size: 12px;
-    font-weight: 800;
-}
 
 .taskItem h3 {
     max-width: 260px;
     margin: 32px 0 0;
-    font-size: 22px;
-    line-height: 1.15;
-    letter-spacing: -0.035em;
 }
 
 .caseTitle {
@@ -166,18 +120,6 @@
     line-height: 1.55;
 }
 
-.tag {
-    display: inline-flex;
-    padding: 8px 12px;
-    color: #11130f;
-    background: #b9ff66;
-    border-radius: 100px;
-    font-size: 10px;
-    font-weight: 900;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-}
-
 .demoVisual {
     min-height: 320px;
     padding: 28px 18px;
@@ -190,14 +132,6 @@
         #30362b;
     border-radius: 9px;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.22);
-    transition:
-        transform 240ms ease,
-        box-shadow 240ms ease;
-}
-
-.demoVisual:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 26px 72px rgba(0, 0, 0, 0.28);
 }
 
 .chatBubble,
@@ -247,44 +181,9 @@
     border-radius: 50%;
 }
 
-.stageList {
-    border-top: 1px solid rgba(17, 19, 15, 0.16);
-}
-
-.stageItem {
-    border-bottom: 1px solid rgba(17, 19, 15, 0.16);
-    transition: background 180ms ease;
-}
-
-.stageItem:hover {
-    background: rgba(185, 255, 102, 0.16);
-}
-
-.stageGrid p {
-    grid-column: 2;
-    margin-top: 0;
-}
-
-.stageList span {
-    color: #92968c;
-    font-size: 12px;
-    font-weight: 800;
-}
-
-.stageList h3 {
-    margin: 0;
-    font-size: 22px;
-    letter-spacing: -0.035em;
-}
-
-.stageList p {
-    max-width: 520px;
-    color: #73776d;
-    line-height: 1.5;
-}
-
 .competencyList {
     width: 100%;
+    list-style: none;
 }
 
 .competencyItem {
@@ -292,14 +191,6 @@
     padding: 18px 0;
     border-bottom: 1px solid rgba(255, 255, 255, 0.17);
     font-size: 18px;
-    transition:
-        color 160ms ease,
-        padding 160ms ease;
-}
-
-.competencyItem:hover {
-    padding-left: 8px;
-    color: #b9ff66;
 }
 
 .competencyItem span {
@@ -336,11 +227,6 @@
         letter-spacing: -0.06em;
     }
 
-    .eyebrow {
-        gap: 9px;
-        font-size: 12px;
-        letter-spacing: 0.17em;
-    }
 
     .heroText {
         font-size: 17px;
@@ -360,7 +246,7 @@
         align-items: center;
     }
 
-    .heroActions .textLink {
+    .heroActions .heroSecondaryLink {
         transform: none;
     }
 
@@ -424,13 +310,6 @@
         font-size: 12px;
     }
 
-    .stageGrid p {
-        grid-column: auto;
-    }
-
-    .stageList h3 {
-        font-size: 25px;
-    }
 
     .competencyItem {
         padding-block: 20px;
@@ -513,10 +392,6 @@
         box-shadow: 0 30px 100px rgba(0, 0, 0, 0.24);
     }
 
-    .demoVisual:hover {
-        transform: translateY(-8px) rotate(0.5deg);
-        box-shadow: 0 38px 110px rgba(0, 0, 0, 0.32);
-    }
 
     .chatBubble {
         width: 72%;
@@ -535,34 +410,9 @@
     }
 
 
-    .stageList h3 {
-        font-size: 27px;
-    }
-
-    .stageList p {
-        line-height: 1.55;
-    }
-
     .competencyItem {
         padding-block: 22px;
         font-size: 21px;
     }
 
-    .competencyItem:hover {
-        padding-left: 12px;
-    }
-}
-
-@media (prefers-reduced-motion: reduce) {
-    .textLink,
-    .taskItem,
-    .demoVisual,
-    .stageItem,
-    .competencyItem {
-        transition: none;
-    }
-
-    .demoVisual:hover {
-        transform: none;
-    }
 }

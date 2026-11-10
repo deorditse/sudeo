@@ -1,1 +1,0 @@
-import{j as p,f as t}from"./index-bIVuDz8a.js";const n="_page_mxllm_1",o="_padded_mxllm_22",a={page:n,padded:o},c=({children:s,className:e,padded:d=!1,...m})=>p.jsx("main",{id:"main-content",className:t(a.page,d&&a.padded,e),...m,children:s});export{c as P};

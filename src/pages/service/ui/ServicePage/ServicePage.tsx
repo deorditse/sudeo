@@ -1,4 +1,4 @@
-import { useEffect, type CSSProperties } from "react";
+import { useEffect } from "react";
 import { Navigate, useParams } from "react-router-dom";
 import { selectServiceBySlug } from "@pages/service/model";
 import { MainContent } from "@shared/layouts/MainContent";
@@ -7,18 +7,19 @@ import {
     AppButton,
     AppGrid,
     AppPadding,
-    Box,
-    Section,
-    VStack,
-} from "@shared/ui";
-import {
+    AppText,
     Arrow,
+    Badge,
+    Box,
     Breadcrumbs,
     BulletPanel,
-    Faq,
+    Section,
     SectionHeading,
-} from "@shared/ui/SitePrimitives";
+    VStack,
+} from "@shared/ui";
+import { DetailHero } from "@widgets/DetailHero";
 import { EnquiryForm } from "@widgets/EnquiryForm";
+import { Faq } from "@widgets/Faq";
 import { Page } from "@widgets/Page";
 import * as cls from "./ServicePage.module.scss";
 
@@ -45,41 +46,23 @@ const ServicePage = () => {
 
     return (
         <Page>
-            <AppPadding
-                as="section"
-                className={cls.serviceHero}
-                style={{ "--service-accent": service.accent } as CSSProperties}
-                pt="145"
-                pb="75"
-                tabletPt="190"
-                tabletPb="105"
-                desktopPt="190"
-                desktopPb="105"
-            >
-                <MainContent>
-                    <Breadcrumbs items={[["Услуги", "/services"], [service.title]]} />
-                    <AppGrid
-                        columns={1}
-                        tabletColumns={2}
-                        desktopColumns={2}
-                        template="serviceHero"
-                        gap="78"
-                        align="center"
-                    >
-                        <VStack gap="24" align="start">
-                            <p className={cls.eyebrow}>Направление {service.number}</p>
-                            <h1>{service.title}</h1>
-                            <p className={cls.serviceLead}>{service.short}</p>
-                            <AppButton to="/contacts" addonRight={<Arrow />}>
-                                Обсудить задачу
-                            </AppButton>
-                        </VStack>
-                        <Box className={cls.serviceGlyph} aria-hidden="true">
-                            <span>{service.number}</span>
-                        </Box>
-                    </AppGrid>
-                </MainContent>
-            </AppPadding>
+            <DetailHero
+                accent={service.accent}
+                before={<Breadcrumbs items={[["Услуги", "/services"], [service.title]]} />}
+                eyebrow={`Направление ${service.number}`}
+                title={service.title}
+                description={service.short}
+                actions={(
+                    <AppButton to="/contacts" addonRight={<Arrow />}>
+                        Обсудить задачу
+                    </AppButton>
+                )}
+                visual={(
+                    <Box className={cls.serviceGlyph} aria-hidden="true">
+                        <span>{service.number}</span>
+                    </Box>
+                )}
+            />
 
             <Section>
                 <MainContent>
@@ -100,11 +83,19 @@ const ServicePage = () => {
             <Section tone="dark">
                 <MainContent>
                     <SectionHeading eyebrow="Состав" title="Что входит в работу" />
-                    <AppGrid columns={1} tabletColumns={3} desktopColumns={5} gap="0" className={cls.stepsGrid}>
+                    <AppGrid
+                        as="ol"
+                        columns={1}
+                        tabletColumns={3}
+                        desktopColumns={5}
+                        gap="0"
+                        className={cls.stepsGrid}
+                        style={{ margin: 0, padding: 0 }}
+                    >
                         {service.scope.map((item, index) => (
-                            <Box as="article" className={cls.stepItem} key={item}>
+                            <Box as="li" className={cls.stepItem} key={item}>
                                 <span>0{index + 1}</span>
-                                <h3>{item}</h3>
+                                <AppText as="h3" size="l" weight="semibold">{item}</AppText>
                             </Box>
                         ))}
                     </AppGrid>
@@ -113,13 +104,19 @@ const ServicePage = () => {
 
             <Section>
                 <MainContent>
-                    <AppGrid columns={1} tabletColumns={2} desktopColumns={2} gap="90" align="start">
-                        <BulletPanel title="Что передаём" items={service.deliverables} />
-                        <BulletPanel
-                            title="Что потребуется от клиента"
-                            items={service.inputs}
-                        />
-                    </AppGrid>
+                    <SectionHeading
+                        eyebrow="Результат"
+                        title="Что передаём и что потребуется для старта"
+                    />
+                    <AppPadding pt="40">
+                        <AppGrid columns={1} tabletColumns={2} desktopColumns={2} gap="90" align="start">
+                            <BulletPanel title="Что передаём" items={service.deliverables} />
+                            <BulletPanel
+                                title="Что потребуется от клиента"
+                                items={service.inputs}
+                            />
+                        </AppGrid>
+                    </AppPadding>
                 </MainContent>
             </Section>
 
@@ -130,11 +127,19 @@ const ServicePage = () => {
                             eyebrow="Контроль ИИ"
                             title="Автоматизация с ограничениями по умолчанию"
                         />
-                        <AppGrid columns={1} tabletColumns={2} desktopColumns={4} gap="20">
+                        <AppGrid
+                            as="ol"
+                            columns={1}
+                            tabletColumns={2}
+                            desktopColumns={4}
+                            gap="20"
+                            className={cls.controlsGrid}
+                            style={{ margin: 0, padding: 0 }}
+                        >
                             {service.aiControls.map((item, index) => (
-                                <Box as="article" className={cls.controlItem} key={item}>
+                                <Box as="li" className={cls.controlItem} key={item}>
                                     <span>{index + 1}</span>
-                                    <p>{item}</p>
+                                    <AppText>{item}</AppText>
                                 </Box>
                             ))}
                         </AppGrid>
@@ -159,8 +164,10 @@ const ServicePage = () => {
                 <MainContent>
                     <AppGrid columns={1} tabletColumns={2} desktopColumns={2} gap="40" align="end">
                         <VStack gap="24" align="start">
-                            <p className={cls.tag}>Связанный материал</p>
-                            <h2 className={cls.relatedCaseTitle}>{relatedCaseTitle}</h2>
+                            <Badge tone="accent">Связанный материал</Badge>
+                            <AppText className={cls.relatedCaseTitle} as="h2" size="xl" weight="medium">
+                                {relatedCaseTitle}
+                            </AppText>
                         </VStack>
                         <Box className={cls.relatedCaseAction}>
                             <AppButton

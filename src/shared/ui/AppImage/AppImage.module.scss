@@ -1,3 +1,5 @@
 .wrapper { position: relative; display: inline-flex; max-width: 100%; }
 .image { display: block; max-width: 100%; }
 .pending { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
+.ratio { display: inline-grid; overflow: hidden; }
+.ratio > .image { width: 100%; height: 100%; object-fit: cover; }

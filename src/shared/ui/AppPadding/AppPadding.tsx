@@ -1,5 +1,6 @@
-import type { ComponentPropsWithRef, CSSProperties, ElementType, ReactNode } from "react";
+import type { CSSProperties, ElementType, ReactNode } from "react";
 import { classNames } from "@shared/lib/classNames";
+import type { PolymorphicProps } from "@shared/lib/polymorphic";
 import styles from "./AppPadding.module.scss";
 
 const spacingValues = {
@@ -66,10 +67,11 @@ type PaddingProps = {
     desktopPl?: AppSpacing;
 };
 
-export type AppPaddingProps<T extends ElementType = "div"> = PaddingProps & {
-    as?: T;
+type AppPaddingOwnProps = PaddingProps & {
     children?: ReactNode;
-} & Omit<ComponentPropsWithRef<T>, keyof PaddingProps | "as" | "children">;
+};
+
+export type AppPaddingProps<T extends ElementType = "div"> = PolymorphicProps<T, AppPaddingOwnProps>;
 
 const toValue = (value?: AppSpacing) => value === undefined ? undefined : spacingValues[value];
 
@@ -77,6 +79,7 @@ export const AppPadding = <T extends ElementType = "div">({
     as,
     children,
     className,
+    ref,
     style,
     p,
     px,
@@ -128,7 +131,7 @@ export const AppPadding = <T extends ElementType = "div">({
     } as CSSProperties;
 
     return (
-        <Component className={classNames(styles.root, className)} style={spacingStyle} {...props}>
+        <Component className={classNames(styles.root, className)} ref={ref} style={spacingStyle} {...props}>
             {children}
         </Component>
     );

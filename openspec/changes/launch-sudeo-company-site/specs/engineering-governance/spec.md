@@ -59,3 +59,33 @@ Every route page SHALL use the common page shell and canonical shared container,
 #### Scenario: Architecture validation checks page composition
 - **WHEN** the repository architecture checker scans page UI files and their CSS modules
 - **THEN** it rejects missing page/container shells, forbidden raw layout containers, and page-owned structural spacing outside documented component-internal exceptions
+
+### Requirement: UI-kit ownership and route-page composition
+Generic reusable presentation SHALL be owned by focused shared primitives, and substantial reusable product composition SHALL be owned by widgets. Route pages SHALL compose these public APIs and MUST NOT recreate cross-route typography systems, card surfaces, badges, eyebrows, action-link treatments, prose styling, FAQs, service catalogs, route heroes, or process sections in page-owned code when the pattern is reusable. Genuinely route-specific branded visuals and semantic content structures MAY remain page-owned.
+
+#### Scenario: A presentation pattern repeats across routes
+- **WHEN** the same visual behavior or styling contract is used by more than one route without product-specific composition
+- **THEN** it is implemented as a focused shared primitive or variant with a public API and colocated styles
+
+#### Scenario: A product section repeats across routes
+- **WHEN** a complete service catalog, FAQ, process-stage, or route-hero composition is reused or represents a substantial standalone block
+- **THEN** it is owned by the widgets layer and consumes shared primitives without importing page slices
+
+#### Scenario: A route contains unique branded presentation
+- **WHEN** a visual such as the home orbit/marquee, demonstration chat, service glyph, case facts/result, article callout, privacy structure, or branded not-found stage is specific to one route contract
+- **THEN** it remains local to that page while delegating any repeated generic surface, typography, action, and spacing concerns to the UI kit
+
+#### Scenario: Architecture validation checks UI ownership
+- **WHEN** architecture checks scan shared UI, widgets, route pages, and page styles
+- **THEN** they reject product-aware components in generic shared UI, route pages bypassing required widget APIs, and duplicated generic presentation that has an approved shared primitive while permitting explicit semantic list markup and documented page-specific visuals
+
+### Requirement: Deterministic lazy-route presentation contracts
+Every declared route client entry SHALL correspond to an actual implementation imported by a page `.async.tsx` entry. Generated route documents SHALL contain the exact ordered and deduplicated Vite-manifest CSS graph for that client entry after excluding the global entry graph. Polymorphic shared/widget APIs SHALL preserve native ref support, and non-focusable informational surfaces MUST NOT expose pointer-only feedback that has no keyboard equivalent.
+
+#### Scenario: Static checks validate a generated route
+- **WHEN** route HTML and the Vite client manifest are available after the production build
+- **THEN** the checker recomputes and exactly compares the expected route stylesheet sequence, rejects missing/duplicate/unrelated/reordered links, and verifies every manifest client entry maps to a lazy page implementation
+
+#### Scenario: Contributor adds polymorphic or informational UI
+- **WHEN** a reusable API renders a caller-selected native element or an informational surface receives interaction styling
+- **THEN** native refs remain supported and hover feedback is paired with focus from a real interactive/focusable target or is omitted

@@ -1,9 +1,10 @@
 import { selectServicesPageModel } from "@pages/services/model";
 import { MainContent } from "@shared/layouts/MainContent";
-import { AppGrid, Section } from "@shared/ui";
-import { PageHero, ServiceCard } from "@shared/ui/SitePrimitives";
+import { Section, SectionHeading } from "@shared/ui";
 import { EnquiryForm } from "@widgets/EnquiryForm";
 import { Page } from "@widgets/Page";
+import { PageHero } from "@widgets/PageHero";
+import { ServiceCatalog } from "@widgets/ServiceCatalog";
 
 const ServicesPage = () => {
     const model = selectServicesPageModel();
@@ -17,11 +18,11 @@ const ServicesPage = () => {
             />
             <Section>
                 <MainContent>
-                    <AppGrid columns={1} tabletColumns={2} desktopColumns={2} gap="18">
-                        {model.services.map((service) => (
-                            <ServiceCard key={service.slug} service={service} />
-                        ))}
-                    </AppGrid>
+                    <SectionHeading
+                        eyebrow="Каталог"
+                        title="Направления работы"
+                    />
+                    <ServiceCatalog services={model.services} headingLevel="h3" />
                 </MainContent>
             </Section>
             <Section tone="form">

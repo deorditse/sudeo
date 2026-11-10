@@ -226,6 +226,46 @@ The architecture checker will reject width-based `max-width` media queries in ap
 - Break `Автоматизируем` inside the word: rejected because Russian headline readability is better preserved by phone-safe type sizing and width composition.
 - Reduce every spacing value globally by the same factor: rejected because controls, readable card insets, and desktop rhythm have different responsibilities; the shared responsive primitives should own intentional values per tier.
 
+### 16. Complete semantic structure and UI-kit ownership without hiding page-specific presentation
+
+The semantic/UI ownership audit found that the route shell, one-main/one-H1 contract, action primitives, form labels, prerendered content, and shared layout composition are sound, but several patterns remain below the approved standard. `/services` skips from H1 to service-card H3 headings; standalone service-detail sections begin with H3 headings; breadcrumbs and numbered process sequences are not exposed as ordered lists; navigation/footer groups use unheaded sectioning elements; and visually grouped roles/competencies lack list semantics.
+
+The UI ownership audit also found product-aware `ServiceCard`, `Faq`, and `PageHero` compositions inside the aggregate `shared/ui/SitePrimitives` module, duplicated work-stage sections on Home/About, near-identical linked catalog cards on Blog/Cases, and repeated eyebrow, badge, card-surface, action-link, and prose styling. Route pages still recreate responsive typography and some component spacing despite having `AppText` and structural spacing primitives.
+
+Product-agnostic presentation will move into focused shared primitives with colocated APIs and styles: `Eyebrow`, `Badge`, a narrowly scoped `Card`/`LinkCard` surface, and `Prose`; generic action-link presentation will become an `AppLink` variant. Substantial cross-route product compositions will move to `widgets`: service catalog/cards, work stages, FAQ, and route/detail hero composition. These widgets will consume shared primitives and content contracts without importing page slices. The existing aggregate `SitePrimitives` module will be reduced to truly atomic shared pieces or removed after all public imports migrate.
+
+Route pages will render semantic ordered/unordered lists through polymorphic primitives or explicit `ol`/`ul` and `li` elements without recreating their layout. Heading levels will describe section hierarchy, including an H2 for service collections and top-level deliverable/input sections. Breadcrumbs will use `nav > ol > li`; navigation/footer groups will either have real headings or use non-sectioning containers. Visible page typography will use `AppText` variants unless the rule is inseparable from a page-specific branded composition; page CSS may retain unique art direction such as the home orbit/marquee, demonstration chat, service glyph, case facts/result, article callout, privacy document structure, and branded 404 stage.
+
+Architecture validation will add deterministic ownership guards rather than banning useful semantic HTML indiscriminately. It will reject product/content imports from generic shared UI, product-aware components remaining in shared, raw route-page heading/paragraph typography where an approved text primitive is required, duplicated generic page-card/eyebrow/badge patterns after migration, and route pages bypassing widget public APIs. Static artifact checks will validate heading progression and the required semantic list/breadcrumb structures on representative generated routes. Cleanup-guaranteed negative fixtures will prove the new rules.
+
+**Alternatives considered:**
+- Ban all raw semantic HTML in pages: rejected because `ol`, `ul`, `li`, `details`, and genuinely page-specific semantic structures remain clearer than abstractions that only rename HTML.
+- Move every visual section into `shared`: rejected because service catalogs, FAQ blocks, process sections, and route heroes are substantial product composition and belong in `widgets`.
+- Generalize the home orbit, marquee, demonstration chat, and branded 404: rejected because they are intentionally route-specific and a generic API would obscure their meaning.
+- Keep the aggregate `SitePrimitives` module and document exceptions: rejected because it currently mixes atomic icons/logo/heading helpers with product-aware cards, accordions, and route-level hero composition.
+
+### 17. Keep prerendered geometry stable through bootstrap and hydration
+
+Direct-load measurement currently reports a zero browser Layout Instability score on the generated home route, but the page shell intentionally applies a `translateY(14px)` entrance animation to top-level sections. That transform does not count as CLS because it does not reflow layout, yet it still makes the content visibly move when the bootstrap loader disappears. The requested stability contract therefore covers perceived movement as well as the browser's layout-shift metric.
+
+Primary route sections will render in their final position from the first frame. The generic `Page` shell will not apply load-time translation, scaling, delayed entrance, or geometry-changing animation to route content. Interactive hover/focus feedback and page-specific decorative motion may remain because they begin after interaction or do not reposition primary content. The bootstrap loader will continue to cover intact prerendered markup and exit only through opacity/visibility without changing document flow.
+
+Shared shells, heroes, cards, accordions, form status regions, and future media primitives will reserve deterministic geometry before asynchronous state resolves. The fixed header height and route hero/loader dimensions will remain stable across hydration. Images introduced through `AppImage` must provide intrinsic dimensions or an explicit aspect-ratio container so loading cannot move following content. Font use will remain on the current deterministic local/system stack unless a future self-hosted font change defines preload and metric-compatible fallback behavior in a separate approved revision.
+
+Verification will instrument direct loads with `PerformanceObserver` for `layout-shift`, sample stable element rectangles before and after loader cleanup, emulate cache-disabled phone/tablet/desktop loads, and inspect route navigation where a lazy chunk displays `AppLoader`. Acceptance requires no change-owned CLS and no visible translation or resize of the header, H1, primary action, or first content section during bootstrap completion.
+
+The direct no-JavaScript geometry comparison exposed a second root cause after the transform removal: Vite's base document links only the entry stylesheet, while each lazy route owns additional CSS chunks that the browser normally discovers from JavaScript. Prerendered HTML therefore contains complete semantic markup but initially paints it without route/widget CSS; hydration then loads those chunks and changes H1, hero, action, and section geometry even though `PerformanceObserver` still reports zero CLS while the loader overlay is present. The client build will emit a Vite manifest, each route definition will identify its lazy client entry, and the prerender step will recursively collect that entry's CSS plus imported widget/shared CSS and inject deduplicated route stylesheet links into the generated document head. Static and hydrated documents will consequently use the same CSS graph from the first render.
+
+Independent review requires these contracts to be mechanically exact rather than presence-based. Architecture validation will derive the implementation paths exported by every `.async.tsx` page entry and require the unique `routeManifest.clientEntry` set to match them. Static-site validation will recompute the ordered CSS graph for each route from the generated client manifest, remove the global entry graph, and compare the result exactly with the route's `data-route-style` links so omissions, duplicates, reordering, and unrelated assets fail. New polymorphic primitives and heroes will preserve the native rendered element's `ref` contract, while informational surfaces that are not keyboard-focusable will not expose pointer-only hover movement or emphasis. Intrinsic-image validation will reject explicit missing/empty geometry and defer typed JSX spreads to TypeScript instead of treating every spread as an automatic failure.
+
+**Alternatives considered:**
+- Accept transform-only movement because CLS is zero: rejected because the visitor still perceives the page as jumping when the overlay disappears.
+- Hide or remove prerendered content until hydration completes: rejected because it weakens SEO, no-JavaScript access, and the established hydration contract.
+- Add a fixed minimum loader duration to mask movement: rejected because it delays usable content without correcting unstable geometry.
+- Merge every lazy route stylesheet into the global entry CSS: rejected because it removes route-level CSS splitting and increases every page's initial payload; manifest-driven route links preserve splitting while making prerendered geometry deterministic.
+- Accept any one existing route stylesheet as sufficient evidence: rejected because a partial or wrong CSS graph can still pass while recreating the original geometry change.
+- Add `tabIndex` to decorative informational cards only to preserve hover movement: rejected because non-interactive content should not create unnecessary keyboard stops; remove pointer-only feedback or use focus from a real descendant control.
+
 ## Risks / Trade-offs
 
 - **[No production contact/legal data is approved]** → Use clearly configurable content and omit copied values; block launch acceptance until verified values are supplied.
@@ -253,6 +293,11 @@ The architecture checker will reject width-based `max-width` media queries in ap
 - **[A fixed header can cover anchors, focus targets, or mobile content]** → define shared header-height tokens and document scroll offset, keep the mobile panel below the header, and verify anchors, keyboard focus, menus, and primary controls at all acceptance widths.
 - **[A global breakpoint inversion can silently alter every route]** → migrate shared primitives first, update all call sites mechanically, enforce the breakpoint contract, and compare every route at phone/tablet/desktop widths before delivery.
 - **[Smaller phone spacing can make controls cramped]** → reduce structural section rhythm and decorative gaps while retaining minimum touch targets, form label separation, card insets, and visible focus clearance.
+- **[UI-kit completion can over-abstract simple semantic markup]** → extract only demonstrated cross-route presentation or product composition, keep ordered/unordered list markup explicit, and preserve named page-specific visual components locally.
+- **[Heading/list corrections can alter visual styling]** → preserve current appearance through polymorphic `as` output and shared variants, then compare generated heading outlines and representative screenshots before deleting page rules.
+- **[Moving product blocks across FSD layers can introduce upward imports]** → expose widget public APIs, keep content contracts below pages, and run architecture checks after each ownership batch.
+- **[Removing entrance motion can make route transitions feel less animated]** → retain interaction feedback and decorative page-specific motion while prioritizing stable primary content on initial load.
+- **[Future images or webfonts can reintroduce layout movement]** → enforce intrinsic media geometry and require a separately verified font-loading strategy before adding downloadable fonts.
 
 ## Migration Plan
 
@@ -272,6 +317,8 @@ The architecture checker will reject width-based `max-width` media queries in ap
 14. Add the temporary client-bootstrap loader overlay, signal and clean it up after the first application commit, preserve generated route markup, and run a complete mobile direct-load audit before deployment.
 15. Make the shared header fixed with an opaque dark site surface, preserve desktop/mobile route navigation behavior, and verify content, anchors, and controls are not obscured at any acceptance viewport.
 16. Convert shared primitives and all component styles to the approved mobile-first 451/960 cascade, retune phone typography and spacing, enforce the breakpoint contract, and verify every route before deployment.
+17. Correct semantic heading/list/breadcrumb/navigation structures, extract focused shared presentation primitives, move reusable product sections to widgets, migrate route pages away from duplicated generic typography/card patterns, strengthen negative architecture/static checks, and verify all generated routes before deployment.
+18. Remove initial-load primary-content movement, preserve deterministic loader/header/hero/media geometry through hydration, measure layout shifts and element rectangles on direct loads and lazy navigation, and verify stable presentation before deployment.
 
 Rollback is a revert or redeployment of the last verified commit. Because the deployment is static, no content database migration is involved in this change.
 

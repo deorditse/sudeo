@@ -1,5 +1,9 @@
+import type { ElementType } from "react";
 import { Flex, type FlexProps } from "../Flex/Flex";
 
-export type HStackProps = Omit<FlexProps, "direction">;
+export type HStackProps<T extends ElementType = "div"> = Omit<FlexProps<T>, "direction">;
 
-export const HStack = (props: HStackProps) => <Flex direction="row" {...props} />;
+export const HStack = <T extends ElementType = "div">(props: HStackProps<T>) => {
+    const flexProps = { ...props, direction: "row" } as FlexProps<T>;
+    return <Flex<T> {...flexProps} />;
+};

@@ -1,0 +1,43 @@
+.bulletPanel {
+    padding: 26px;
+    background: white;
+    border-radius: 8px;
+}
+
+.bulletPanel ul {
+    display: grid;
+    gap: 0;
+    margin: 0;
+    padding: 0;
+}
+
+.bulletPanel li {
+    display: grid;
+    grid-template-columns: 24px 1fr;
+    gap: 10px;
+    padding: 15px 0;
+    border-top: 1px solid rgba(17, 19, 15, 0.2);
+    line-height: 1.45;
+}
+
+.bulletPanel li span {
+    color: #719e3e;
+}
+
+@media (min-width: 451px) {
+    .bulletPanel {
+        padding: 32px;
+    }
+
+    .bulletPanel li {
+        padding: 17px 0;
+    }
+}
+
+@media (min-width: 960px) {
+    .bulletPanel {
+        padding: 36px;
+    }
+}
+
+

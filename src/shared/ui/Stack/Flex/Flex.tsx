@@ -1,13 +1,13 @@
-import type { ElementType, HTMLAttributes, ReactNode } from "react";
+import type { ElementType, ReactNode } from "react";
 import { classNames } from "@shared/lib/classNames";
+import type { PolymorphicProps } from "@shared/lib/polymorphic";
 import styles from "./Flex.module.scss";
 
 export type FlexGap = "4" | "8" | "12" | "16" | "24" | "32" | "48" | "64";
 export type FlexAlign = "start" | "center" | "end" | "stretch";
 export type FlexJustify = "start" | "center" | "end" | "between";
 
-export interface FlexProps extends Omit<HTMLAttributes<HTMLElement>, "children"> {
-    as?: ElementType;
+type FlexOwnProps = {
     children?: ReactNode;
     direction?: "row" | "column";
     align?: FlexAlign;
@@ -15,9 +15,11 @@ export interface FlexProps extends Omit<HTMLAttributes<HTMLElement>, "children">
     gap?: FlexGap;
     wrap?: boolean;
     max?: boolean;
-}
+};
 
-export const Flex = ({
+export type FlexProps<T extends ElementType = "div"> = PolymorphicProps<T, FlexOwnProps>;
+
+export const Flex = <T extends ElementType = "div">({
     as,
     children,
     direction = "row",
@@ -27,8 +29,9 @@ export const Flex = ({
     wrap = false,
     max = false,
     className,
+    ref,
     ...props
-}: FlexProps) => {
+}: FlexProps<T>) => {
     const Component = as ?? "div";
     return (
         <Component
@@ -42,6 +45,7 @@ export const Flex = ({
                 max && styles.max,
                 className,
             )}
+            ref={ref}
             {...props}
         >
             {children}

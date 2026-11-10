@@ -169,3 +169,53 @@ The application SHALL reuse the Sudeo `AppLoader` during the first browser boots
 #### Scenario: Visitor opens a route on a mobile viewport
 - **WHEN** any declared route is loaded directly at 360, 390, or 768 pixels
 - **THEN** the loader and resolved route fit the viewport without page-level horizontal overflow, clipped primary controls, duplicate main landmarks, or an inaccessible mobile navigation state
+
+### Requirement: Semantic document structure
+Every public route SHALL expose one main landmark and one page H1, SHALL use heading levels that represent section hierarchy without skipping a required collection or top-level section heading, SHALL expose ordered processes and breadcrumbs as ordered lists, SHALL expose unordered role/competency collections as lists, and SHALL avoid unnamed sectioning regions. Semantic corrections MUST preserve the visible design, route content, keyboard behavior, and prerendered HTML contract.
+
+#### Scenario: Visitor reviews the services overview
+- **WHEN** the services route renders its service collection
+- **THEN** the collection has an H2-level heading and its card headings follow that hierarchy rather than skipping directly from H1 to H3
+
+#### Scenario: Visitor reviews a service detail section
+- **WHEN** deliverables and required-client-input content appears in a standalone section
+- **THEN** the section has an H2-level name and any nested panel headings are subordinate to it
+
+#### Scenario: Visitor uses breadcrumbs
+- **WHEN** a route displays a breadcrumb trail
+- **THEN** it is exposed as a labelled navigation landmark containing an ordered list whose current item is programmatically identified
+
+#### Scenario: Visitor reviews a numbered process
+- **WHEN** the home, company, or service route displays ordered stages or controls
+- **THEN** the items are exposed as an ordered list while retaining their existing visual numbering and responsive layout
+
+#### Scenario: Visitor reviews roles or competencies
+- **WHEN** a route displays a collection of roles or competencies
+- **THEN** the collection is exposed as an unordered list rather than unrelated generic containers
+
+#### Scenario: Visitor navigates grouped destinations
+- **WHEN** the header catalog or footer sitemap groups destination links
+- **THEN** each sectioning group has a semantic heading or uses a non-sectioning container so no unnamed section landmark is introduced
+
+### Requirement: Stable initial layout
+The prerendered route content SHALL remain in its final document position while browser bootstrap, hydration, loader dismissal, lazy-route resolution, and asynchronous media state complete. Primary content MUST NOT use load-time translation, scaling, delayed entrance, or geometry-changing animation that creates visible jumping after the loader exits. Shared shells and media SHALL reserve deterministic geometry, and loader exit MUST NOT alter document flow.
+
+#### Scenario: Visitor directly loads a generated route
+- **WHEN** the route hydrates and the initial branded loader is removed
+- **THEN** the fixed header, H1, primary action, and first content section retain their positions and dimensions without visible translation, resize, or change-owned layout shift
+
+#### Scenario: Visitor navigates to a lazy route
+- **WHEN** the route-level loader is shown while a page chunk resolves
+- **THEN** the content-stage geometry remains reserved and the resolved route replaces the fallback without moving the surrounding global shell
+
+#### Scenario: Asynchronous media is introduced
+- **WHEN** an image or equivalent media resource loads after the initial document
+- **THEN** intrinsic dimensions or an explicit aspect-ratio container reserve its final space before the resource becomes visible
+
+#### Scenario: Layout stability is measured
+- **WHEN** direct loads are tested with cache disabled at representative phone, tablet, and desktop widths
+- **THEN** `PerformanceObserver` reports no change-owned layout-shift entries and sampled primary element rectangles remain stable through loader cleanup
+
+#### Scenario: A prerendered lazy route paints before JavaScript
+- **WHEN** a generated route document is loaded with JavaScript disabled or before its client entry executes
+- **THEN** its head already links the complete deduplicated CSS graph for the route page and imported widgets/shared primitives so H1, hero, action, and first-section geometry matches the hydrated document

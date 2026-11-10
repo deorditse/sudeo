@@ -1,0 +1,51 @@
+.hero {
+    padding: 145px 0 75px;
+    color: #f7f6f0;
+    background:
+        radial-gradient(
+            circle at 80% 50%,
+            color-mix(in srgb, var(--detail-hero-accent) 25%, transparent),
+            transparent 28%
+        ),
+        #11130f;
+}
+
+.grid {
+    width: 100%;
+}
+
+.content {
+    max-width: 1000px;
+}
+
+.title {
+    max-width: 1000px;
+}
+
+.description {
+    max-width: 720px;
+    color: rgba(255, 255, 255, 0.65);
+}
+
+.actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    align-items: center;
+}
+
+.visual {
+    min-width: 0;
+}
+
+@media (min-width: 451px) {
+    .hero {
+        padding: 165px 0 90px;
+    }
+}
+
+@media (min-width: 960px) {
+    .hero {
+        padding: 190px 0 105px;
+    }
+}

@@ -19,6 +19,7 @@ The first implementation placed routing, layouts, pages, reusable UI, analytics,
 - Create a fresh Redux store for each server render and use the browser store instance through `StoreProvider`.
 - Use React 19 `prerenderToNodeStream` as a build-time resolution pass for route-level lazy modules, consume its prelude, and then render the resolved tree with `renderToString`. This two-pass static build emits the page directly without a serialized Suspense fallback, hidden replacement segment, or browser-only swap script. Each pass creates a fresh Redux store.
 - During browser bootstrap, mount the shared `AppLoader` in a temporary React root outside the prerendered `#root`. `App` emits an idempotent readiness event from its first client effect; the browser entry waits for the committed application to paint, fades and unmounts the temporary loader, and removes its host. An eight-second maximum safety timeout performs the same cleanup if the readiness signal is lost. The initial route-level fallback suppresses its duplicate status announcement until the bootstrap overlay exits, while later client navigations retain the normal polite loading status. The route markup inside `#root` is never deleted or replaced.
+- Emit the Vite client manifest and keep each route definition's `clientEntry` synchronized with its lazy page implementation. During prerender, recursively resolve that manifest entry's imported chunks and CSS, then inject deduplicated `data-route-style` stylesheet links into the generated route head. This preserves route-level code/CSS splitting while ensuring complete prerendered markup uses the same CSS graph before JavaScript and after hydration.
 
 ## Alternatives
 
@@ -28,6 +29,8 @@ The first implementation placed routing, layouts, pages, reusable UI, analytics,
 - **Use a static Redux store without reducer injection:** rejected because it does not implement the required module lifecycle and would leave `DynamicModuleLoader` as unused infrastructure.
 - **Move request locks into Redux:** rejected because promises and request locks are ephemeral, non-serializable browser concerns.
 - **Serialize or inject the initial loader inside `#root`:** rejected because it would replace resolved route content, weaken no-JavaScript behavior, or create a hydration mismatch.
+- **Rely on JavaScript to discover lazy route CSS:** rejected because complete prerendered markup paints with only the global entry CSS and visibly changes geometry when lazy CSS arrives.
+- **Merge all route CSS into the global stylesheet:** rejected because every visitor would download every page's CSS; manifest-derived links keep the initial document stable without abandoning route splitting.
 
 ## Consequences
 
@@ -37,3 +40,4 @@ The first implementation placed routing, layouts, pages, reusable UI, analytics,
 - Removing a dynamic feature removes its reducer state by default; long-lived state must explicitly set `removeAfterUnmount={false}` and document why.
 - New pages must follow the async entry-point convention and be added to the route configuration and route manifest where applicable.
 - The initial loader is a client-only overlay and must remain absent from generated route documents; route-level loading continues to use the same component through the existing `Suspense` boundary.
+- Every generated route includes at least one manifest-derived route stylesheet link, and the static-site checker verifies that each referenced asset exists.

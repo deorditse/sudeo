@@ -1,5 +1,6 @@
-import type { ComponentPropsWithRef, CSSProperties, ElementType, ReactNode } from "react";
+import type { CSSProperties, ElementType, ReactNode } from "react";
 import { classNames } from "@shared/lib/classNames";
+import type { PolymorphicProps } from "@shared/lib/polymorphic";
 import type { AppSpacing } from "../AppPadding";
 import styles from "./AppGrid.module.scss";
 
@@ -11,6 +12,7 @@ export type AppGridColumns = 1 | 2 | 3 | 4 | 5;
 export type AppGridTemplate = "equal" | "hero" | "serviceHero" | "contentAside";
 
 type GridOwnProps = {
+    children?: ReactNode;
     columns?: AppGridColumns;
     tabletColumns?: AppGridColumns;
     desktopColumns?: AppGridColumns;
@@ -21,15 +23,13 @@ type GridOwnProps = {
     align?: "start" | "center" | "end" | "stretch";
 };
 
-export type AppGridProps<T extends ElementType = "div"> = GridOwnProps & {
-    as?: T;
-    children?: ReactNode;
-} & Omit<ComponentPropsWithRef<T>, keyof GridOwnProps | "as" | "children">;
+export type AppGridProps<T extends ElementType = "div"> = PolymorphicProps<T, GridOwnProps>;
 
 export const AppGrid = <T extends ElementType = "div">({
     as,
     children,
     className,
+    ref,
     style,
     columns = 1,
     tabletColumns,
@@ -55,6 +55,7 @@ export const AppGrid = <T extends ElementType = "div">({
     return (
         <Component
             className={classNames(styles.grid, styles[template], styles[`align-${align}`], className)}
+            ref={ref}
             style={gridStyle}
             {...props}
         >

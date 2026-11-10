@@ -1,5 +1,6 @@
 export interface RouteDefinition {
     path: string;
+    clientEntry: string;
     title: string;
     description: string;
     indexable: boolean;
@@ -11,6 +12,7 @@ export const siteUrl = "https://sudeo.ru";
 export const routeManifest: RouteDefinition[] = [
     {
         path: "/",
+        clientEntry: "src/pages/home/ui/HomePage/HomePage.tsx",
         title: "Sudeo — цифровые продукты и автоматизация для бизнеса",
         description: "Разрабатываем ИИ-агентов, сайты, мобильные приложения и digital-маркетинг для компаний и предпринимателей.",
         indexable: true,
@@ -18,6 +20,7 @@ export const routeManifest: RouteDefinition[] = [
     },
     {
         path: "/services",
+        clientEntry: "src/pages/services/ui/ServicesPage/ServicesPage.tsx",
         title: "Услуги — Sudeo",
         description: "Четыре направления: ИИ-агенты, веб-разработка, мобильные приложения и digital-маркетинг.",
         indexable: true,
@@ -25,6 +28,7 @@ export const routeManifest: RouteDefinition[] = [
     },
     {
         path: "/services/ai-agents",
+        clientEntry: "src/pages/service/ui/ServicePage/ServicePage.tsx",
         title: "ИИ-агенты и автоматизация — Sudeo",
         description: "Агенты для баз знаний, обработки обращений, документов, поиска информации и действий через API.",
         indexable: true,
@@ -32,6 +36,7 @@ export const routeManifest: RouteDefinition[] = [
     },
     {
         path: "/services/web-development",
+        clientEntry: "src/pages/service/ui/ServicePage/ServicePage.tsx",
         title: "Разработка сайтов — Sudeo",
         description: "Посадочные страницы, корпоративные сайты, каталоги, интернет-магазины и веб-сервисы.",
         indexable: true,
@@ -39,6 +44,7 @@ export const routeManifest: RouteDefinition[] = [
     },
     {
         path: "/services/mobile-apps",
+        clientEntry: "src/pages/service/ui/ServicePage/ServicePage.tsx",
         title: "Разработка мобильных приложений — Sudeo",
         description: "Приложения для iOS и Android, клиентские кабинеты и корпоративные мобильные продукты.",
         indexable: true,
@@ -46,6 +52,7 @@ export const routeManifest: RouteDefinition[] = [
     },
     {
         path: "/services/digital-marketing",
+        clientEntry: "src/pages/service/ui/ServicePage/ServicePage.tsx",
         title: "Digital-маркетинг — Sudeo",
         description: "Исследование аудитории, стратегия, SEO, реклама, контент, посадочные страницы и аналитика.",
         indexable: true,
@@ -53,6 +60,7 @@ export const routeManifest: RouteDefinition[] = [
     },
     {
         path: "/cases",
+        clientEntry: "src/pages/cases/ui/CasesPage/CasesPage.tsx",
         title: "Демонстрации и кейсы — Sudeo",
         description: "Демонстрационные проекты и будущие подтверждённые кейсы команды Sudeo.",
         indexable: true,
@@ -60,6 +68,7 @@ export const routeManifest: RouteDefinition[] = [
     },
     {
         path: "/cases/knowledge-agent-demo",
+        clientEntry: "src/pages/case/ui/CasePage/CasePage.tsx",
         title: "Демонстрация агента по базе знаний — Sudeo",
         description: "Учебный сценарий ИИ-агента с источниками, цитированием, передачей человеку и журналированием.",
         indexable: true,
@@ -67,6 +76,7 @@ export const routeManifest: RouteDefinition[] = [
     },
     {
         path: "/about",
+        clientEntry: "src/pages/about/ui/AboutPage/AboutPage.tsx",
         title: "О компании — Sudeo",
         description: "Компетенции, роли и прозрачный процесс работы над цифровыми продуктами.",
         indexable: true,
@@ -74,6 +84,7 @@ export const routeManifest: RouteDefinition[] = [
     },
     {
         path: "/blog",
+        clientEntry: "src/pages/blog/ui/BlogPage/BlogPage.tsx",
         title: "Блог — Sudeo",
         description: "Практические материалы об автоматизации, разработке цифровых продуктов и продвижении.",
         indexable: true,
@@ -81,6 +92,7 @@ export const routeManifest: RouteDefinition[] = [
     },
     {
         path: "/blog/how-to-start-ai-pilot",
+        clientEntry: "src/pages/article/ui/ArticlePage/ArticlePage.tsx",
         title: "Как начать пилот ИИ-агента — Sudeo",
         description: "Как выбрать сценарий, проверить данные и определить критерии успешного пилота ИИ-агента.",
         indexable: true,
@@ -88,6 +100,7 @@ export const routeManifest: RouteDefinition[] = [
     },
     {
         path: "/contacts",
+        clientEntry: "src/pages/contacts/ui/ContactsPage/ContactsPage.tsx",
         title: "Контакты — Sudeo",
         description: "Обсудите задачу и выберите подходящее направление цифрового проекта.",
         indexable: true,
@@ -95,6 +108,7 @@ export const routeManifest: RouteDefinition[] = [
     },
     {
         path: "/privacy",
+        clientEntry: "src/pages/privacy/ui/PrivacyPage/PrivacyPage.tsx",
         title: "Обработка данных — Sudeo",
         description: "Статус правовых документов и правила обработки данных формы обращения.",
         indexable: true,
@@ -102,12 +116,14 @@ export const routeManifest: RouteDefinition[] = [
     },
     {
         path: "/success",
+        clientEntry: "src/pages/success/ui/SuccessPage/SuccessPage.tsx",
         title: "Обращение принято — Sudeo",
         description: "Подтверждение надёжно принятого обращения.",
         indexable: false,
     },
     {
         path: "/404",
+        clientEntry: "src/pages/notFound/ui/NotFoundPage/NotFoundPage.tsx",
         title: "Страница не найдена — Sudeo",
         description: "Запрошенная страница не найдена.",
         indexable: false,

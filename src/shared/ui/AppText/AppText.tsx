@@ -1,20 +1,22 @@
-import type { ComponentPropsWithoutRef, ElementType, ReactNode } from "react";
+import type { ElementType, ReactNode } from "react";
 import { classNames } from "@shared/lib/classNames";
+import type { PolymorphicProps } from "@shared/lib/polymorphic";
 import styles from "./AppText.module.scss";
 
 export type AppTextSize = "xs" | "s" | "m" | "l" | "xl" | "2xl" | "hero";
 export type AppTextTone = "primary" | "muted" | "accent" | "inverse" | "error";
 export type AppTextWeight = "regular" | "medium" | "semibold" | "bold";
 
-export type AppTextProps<T extends ElementType = "p"> = {
-    as?: T;
+type AppTextOwnProps = {
     children: ReactNode;
     size?: AppTextSize;
     tone?: AppTextTone;
     weight?: AppTextWeight;
     align?: "left" | "center" | "right";
     uppercase?: boolean;
-} & Omit<ComponentPropsWithoutRef<T>, "as" | "children">;
+};
+
+export type AppTextProps<T extends ElementType = "p"> = PolymorphicProps<T, AppTextOwnProps>;
 
 export const AppText = <T extends ElementType = "p">({
     as,
@@ -25,6 +27,7 @@ export const AppText = <T extends ElementType = "p">({
     align = "left",
     uppercase = false,
     className,
+    ref,
     ...props
 }: AppTextProps<T>) => {
     const Component = as ?? "p";
@@ -39,6 +42,7 @@ export const AppText = <T extends ElementType = "p">({
                 uppercase && styles.uppercase,
                 className,
             )}
+            ref={ref}
             {...props}
         >
             {children}

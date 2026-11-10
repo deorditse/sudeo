@@ -44,7 +44,7 @@ for (const file of scssFiles) {
 }
 
 const rawLayoutTags = new Set(["div", "section", "article", "header", "aside"]);
-const approvedContentShells = new Set(["MainContent", "PageHero"]);
+const approvedContentShells = new Set(["MainContent", "PageHero", "DetailHero"]);
 const layoutPrimitiveCategories = new Map([
     ["Page", new Set(["grid", "spacing"])],
     ["MainContent", new Set(["grid", "spacing"])],
@@ -64,6 +64,25 @@ const structuralClassTokens = new Set([
 const decorativeClassTokens = new Set([
     "answer", "badge", "bubble", "callout", "card", "chip", "glow", "glyph", "icon",
     "illustration", "image", "logo", "marquee", "media", "orbit", "tile", "visual",
+]);
+const genericPageUiClassPatterns = [
+    /^(?:eyebrow|badge|tag|chip)$/i,
+    /^(?:linkCard|cardLink|actionLink)$/i,
+    /^prose(?:Root|Body|Content)?$/i,
+    /^faq(?:List|Item|Question|Answer|Icon)?$/i,
+    /^serviceCard(?:Title|Text|Link|Top|Dot)?$/i,
+    /^(?:work)?stage(?:s|List|Grid|Item|Card|Number|Title|Text)?$/i,
+    /^pageHero(?:Title|Intro|Body|Actions)?$/i,
+];
+const documentedPageVisuals = new Map([
+    ["pages/home/ui/components/HeroOrbit/HeroOrbit.module.scss", /.*/],
+    ["pages/home/ui/components/HeroMarquee/HeroMarquee.module.scss", /.*/],
+    ["pages/home/ui/HomePage/HomePage.module.scss", /^(?:demo|hero)/],
+    ["pages/service/ui/ServicePage/ServicePage.module.scss", /^serviceGlyph/],
+    ["pages/case/ui/CasePage/CasePage.module.scss", /^(?:facts?|role|result)/],
+    ["pages/article/ui/ArticlePage/ArticlePage.module.scss", /^callout/],
+    ["pages/privacy/ui/PrivacyPage/PrivacyPage.module.scss", /.*/],
+    ["pages/notFound/ui/components/NotFoundMessage.module.scss", /.*/],
 ]);
 const cssClassUsage = new Map();
 const cssClassComponents = new Map();
@@ -137,6 +156,23 @@ for (const file of sourceFiles) {
     const content = await readFile(file, "utf8");
     const imports = [...content.matchAll(importPattern)].map((match) => match[1]);
 
+    if (/\bSitePrimitives\b/.test(content)) {
+        addFailure(`${rel}: aggregate SitePrimitives imports/references are forbidden; use focused shared primitives or widget public APIs`);
+    }
+
+    if (rel.startsWith("shared/ui/")) {
+        const productImports = imports.filter((value) => (
+            /^@(?:\/)?shared\/(?:content|config\/routes)(?:\/|$)/.test(value)
+            || /(?:^|\/)(?:content\/siteContent|config\/routes)$/.test(value)
+        ));
+        if (productImports.length) {
+            addFailure(`${rel}: generic shared UI imports product routing/content: ${productImports.join(", ")}`);
+        }
+        if (/(["'`])\/services(?:\/|\1)/.test(content)) {
+            addFailure(`${rel}: generic shared UI contains product-aware /services routing; move service composition to a widget`);
+        }
+    }
+
     if (rel.startsWith("shared/")) {
         const invalid = imports.filter((value) => /^@(?:\/)?(?:app|pages|widgets)\//.test(value));
         if (invalid.length) addFailure(`${rel}: shared imports upper layers: ${invalid.join(", ")}`);
@@ -159,6 +195,61 @@ for (const file of sourceFiles) {
         if (/\/ui\/[^/]+\/[^/]+Page\.tsx$/.test(`/${rel}`) && /<(button|img)\b/.test(content)) {
             addFailure(`${rel}: route page uses raw button/img instead of shared primitives`);
         }
+    }
+
+    if (rel.endsWith(".tsx")) {
+        const jsxSourceFile = ts.createSourceFile(file, content, ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
+        const visitImages = (node) => {
+            const tagName = (ts.isJsxOpeningElement(node) || ts.isJsxSelfClosingElement(node))
+                ? getJsxTagName(node, jsxSourceFile)
+                : "";
+            if ((tagName === "AppImage" || tagName.endsWith(".AppImage"))) {
+                const attributes = new Map(node.attributes.properties
+                    .filter(ts.isJsxAttribute)
+                    .map((attribute) => [attribute.name.getText(jsxSourceFile), attribute]));
+                const hasTypedSpread = node.attributes.properties.some(ts.isJsxSpreadAttribute);
+                const hasUsableStringValue = (rawValue) => {
+                    const value = rawValue.trim();
+                    if (!value || value === "auto") return false;
+                    const numericRatio = value.match(/^(?:auto\s+)?([+-]?(?:\d+(?:\.\d*)?|\.\d+))(?:\s*\/\s*([+-]?(?:\d+(?:\.\d*)?|\.\d+)))?$/);
+                    return numericRatio
+                        ? Number(numericRatio[1]) > 0 && (!numericRatio[2] || Number(numericRatio[2]) > 0)
+                        : true;
+                };
+                const hasUsableValue = (attribute) => {
+                    if (!attribute?.initializer) return false;
+                    if (ts.isStringLiteral(attribute.initializer)) return hasUsableStringValue(attribute.initializer.text);
+                    if (!ts.isJsxExpression(attribute.initializer)) return false;
+                    const expression = attribute.initializer.expression;
+                    if (!expression) return false;
+                    if (ts.isStringLiteral(expression) || ts.isNoSubstitutionTemplateLiteral(expression)) {
+                        return hasUsableStringValue(expression.text);
+                    }
+                    if (ts.isNumericLiteral(expression)) return Number(expression.text) > 0;
+                    if (ts.isPrefixUnaryExpression(expression)
+                        && (expression.operator === ts.SyntaxKind.MinusToken || expression.operator === ts.SyntaxKind.PlusToken)
+                        && ts.isNumericLiteral(expression.operand)) {
+                        const value = Number(expression.operand.text) * (expression.operator === ts.SyntaxKind.MinusToken ? -1 : 1);
+                        return value > 0;
+                    }
+                    return !(expression.kind === ts.SyntaxKind.NullKeyword
+                        || expression.kind === ts.SyntaxKind.FalseKeyword
+                        || (ts.isIdentifier(expression) && expression.text === "undefined"));
+                };
+                const hasExplicitGeometry = attributes.has("aspectRatio")
+                    || attributes.has("width")
+                    || attributes.has("height");
+                const hasRatio = hasUsableValue(attributes.get("aspectRatio"));
+                const hasIntrinsicSize = hasUsableValue(attributes.get("width"))
+                    && hasUsableValue(attributes.get("height"));
+                if ((hasExplicitGeometry || !hasTypedSpread) && !hasRatio && !hasIntrinsicSize) {
+                    const line = jsxSourceFile.getLineAndCharacterOfPosition(node.getStart(jsxSourceFile)).line + 1;
+                    addFailure(`${rel}:${line}: AppImage requires both width and height or an explicit aspectRatio`);
+                }
+            }
+            ts.forEachChild(node, visitImages);
+        };
+        visitImages(jsxSourceFile);
     }
 
     if (!rel.startsWith("pages/") || !rel.includes("/ui/") || !rel.endsWith(".tsx") || rel.endsWith(".async.tsx")) continue;
@@ -248,6 +339,15 @@ for (const file of cssFiles) {
     const content = rawContent.replace(/\/\*[\s\S]*?\*\//g, (comment) => " ".repeat(comment.length));
     const rules = parseCssRules(content);
 
+    const allowedVisualPattern = documentedPageVisuals.get(rel);
+    for (const match of content.matchAll(/\.([_a-zA-Z][\w-]*)/g)) {
+        const className = match[1];
+        if (!genericPageUiClassPatterns.some((pattern) => pattern.test(className))) continue;
+        if (allowedVisualPattern?.test(className)) continue;
+        const line = content.slice(0, match.index).split("\n").length;
+        addFailure(`${rel}:${line}: .${className} recreates a reusable UI/widget pattern; use the focused shared primitive or widget public API`);
+    }
+
     for (const rule of rules) {
         const declarations = [...rule.body.matchAll(/(?:^|;)\s*([a-z-]+)\s*:\s*([^;{}]+)/g)]
             .map((match) => ({ property: match[1], value: match[2].trim(), index: rule.index + match.index }));
@@ -300,7 +400,18 @@ for (const file of cssFiles) {
     }
 }
 
+const pageShellStyles = join(srcRoot, "widgets/Page/ui/Page/Page.module.scss");
+const pageShellContent = await readFile(pageShellStyles, "utf8");
+for (const rule of parseCssRules(pageShellContent)) {
+    if (!/(?:^|[>+~\s,])(?:section|article)(?=$|[.#:[>+~\s,])/.test(rule.selector)) continue;
+    for (const declaration of rule.body.matchAll(/(?:^|;)\s*(transform|animation(?:-[a-z-]+)?)\s*:\s*([^;{}]+)/g)) {
+        const line = pageShellContent.slice(0, rule.index + declaration.index).split("\n").length;
+        addFailure(`widgets/Page/ui/Page/Page.module.scss:${line}: generic ${declaration[1]} on route section/article content is forbidden; render primary content in its final position`);
+    }
+}
+
 const pagesRoot = join(srcRoot, "pages");
+const lazyImplementationEntries = new Set();
 const pageEntries = (await readdir(pagesRoot, { withFileTypes: true }))
     .filter((entry) => entry.isDirectory())
     .sort((left, right) => left.name.localeCompare(right.name));
@@ -316,6 +427,21 @@ for (const entry of pageEntries) {
     const uiFiles = await walk(join(pageRoot, "ui"));
     const asyncFiles = uiFiles.filter((file) => file.endsWith(".async.tsx"));
     if (asyncFiles.length !== 1) addFailure(`pages/${entry.name}: expected one .async.tsx file, found ${asyncFiles.length}`);
+    for (const asyncFile of asyncFiles) {
+        const asyncContent = await readFile(asyncFile, "utf8");
+        const importMatch = asyncContent.match(/\bimport\(\s*["'](.+?)["']\s*\)/);
+        if (!importMatch) {
+            addFailure(`${toRelativePath(asyncFile)}: lazy implementation import is missing`);
+            continue;
+        }
+        const implementationFile = resolve(dirname(asyncFile), `${importMatch[1]}.tsx`);
+        try {
+            if (!(await stat(implementationFile)).isFile()) throw new Error();
+            lazyImplementationEntries.add(`src/${toRelativePath(implementationFile)}`);
+        } catch {
+            addFailure(`${toRelativePath(asyncFile)}: lazy implementation does not exist: ${importMatch[1]}.tsx`);
+        }
+    }
     const indexPath = join(pageRoot, "index.ts");
     const indexContent = await readFile(indexPath, "utf8").catch(() => "");
     if (!indexContent.includes(".async")) addFailure(`pages/${entry.name}/index.ts: lazy async export is missing`);
@@ -324,7 +450,58 @@ for (const entry of pageEntries) {
 }
 
 const routesSource = await readFile(join(srcRoot, "shared/config/routes.ts"), "utf8");
-const manifestPaths = [...routesSource.matchAll(/path:\s*"([^"]+)"/g)].map((match) => match[1]);
+const routeManifestSection = routesSource.slice(routesSource.indexOf("export const routeManifest"), routesSource.indexOf("export interface NavigationItem"));
+const routesSourceFile = ts.createSourceFile("routes.ts", routesSource, ts.ScriptTarget.Latest, true, ts.ScriptKind.TS);
+const manifestDefinitions = [];
+for (const statement of routesSourceFile.statements) {
+    if (!ts.isVariableStatement(statement)) continue;
+    for (const declaration of statement.declarationList.declarations) {
+        if (!ts.isIdentifier(declaration.name) || declaration.name.text !== "routeManifest" || !declaration.initializer) continue;
+        const initializer = ts.isAsExpression(declaration.initializer) ? declaration.initializer.expression : declaration.initializer;
+        if (!ts.isArrayLiteralExpression(initializer)) continue;
+        for (const element of initializer.elements) {
+            if (!ts.isObjectLiteralExpression(element)) continue;
+            const values = new Map(element.properties.filter(ts.isPropertyAssignment).map((property) => [
+                property.name.getText(routesSourceFile).replace(/["']/g, ""),
+                ts.isStringLiteral(property.initializer) ? property.initializer.text : undefined,
+            ]));
+            const pathValue = values.get("path");
+            const clientEntryValue = values.get("clientEntry");
+            if (pathValue && clientEntryValue) manifestDefinitions.push({ path: pathValue, clientEntry: clientEntryValue });
+            else addFailure("routeManifest: every route object requires string path and clientEntry properties");
+        }
+    }
+}
+const manifestPaths = manifestDefinitions.map((route) => route.path);
+const manifestClientEntries = manifestDefinitions.map((route) => route.clientEntry);
+const uniqueManifestClientEntries = new Set(manifestClientEntries);
+for (const clientEntry of uniqueManifestClientEntries) {
+    if (!lazyImplementationEntries.has(clientEntry)) addFailure(`routeManifest.clientEntry does not match a lazy page implementation: ${clientEntry}`);
+}
+for (const implementationEntry of lazyImplementationEntries) {
+    if (!uniqueManifestClientEntries.has(implementationEntry)) addFailure(`routeManifest is missing lazy page implementation: ${implementationEntry}`);
+}
+if (manifestClientEntries.length !== manifestPaths.length) {
+    addFailure(`routeManifest: expected one clientEntry per route, found ${manifestClientEntries.length} for ${manifestPaths.length} routes`);
+}
+const manifestEntriesByPath = new Map(manifestDefinitions.map((route) => [route.path, route.clientEntry]));
+const publicRoutesSource = await readFile(join(srcRoot, "app/routes/config/public.tsx"), "utf8");
+const pageSliceByComponent = new Map([...publicRoutesSource.matchAll(/import\s+\{\s*(\w+)\s*\}\s+from\s+["']@\/pages\/([^"']+)["']/g)]
+    .map((match) => [match[1], match[2]]));
+const publicRouteComponents = [...publicRoutesSource.matchAll(/\{\s*path:\s*"([^"]+)",\s*element:\s*<(\w+)\s*\/>\s*\}/g)]
+    .map((match) => ({ path: match[1], component: match[2] }));
+const matchesRoutePattern = (pattern, routePath) => {
+    const expression = pattern.split("/").map((part) => part.startsWith(":" ) ? "[^/]+" : part.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).join("/");
+    return new RegExp(`^${expression}$`).test(routePath);
+};
+for (const [routePath, clientEntry] of manifestEntriesByPath) {
+    const publicRoute = publicRouteComponents.find((candidate) => candidate.path === routePath)
+        ?? publicRouteComponents.find((candidate) => matchesRoutePattern(candidate.path, routePath));
+    const pageSlice = publicRoute ? pageSliceByComponent.get(publicRoute.component) : undefined;
+    const expectedEntry = pageSlice ? [...lazyImplementationEntries].find((entry) => entry.startsWith(`src/pages/${pageSlice}/`)) : undefined;
+    if (!expectedEntry) addFailure(`routeManifest: cannot resolve lazy page implementation for ${routePath}`);
+    else if (clientEntry !== expectedEntry) addFailure(`routeManifest: ${routePath} must use ${expectedEntry}, received ${clientEntry}`);
+}
 const navigationSection = routesSource.slice(routesSource.indexOf("export const navigationGroups"), routesSource.indexOf("export const visitorNavigationItems"));
 const navigationPaths = [...navigationSection.matchAll(/path:\s*"([^"]+)"/g)].map((match) => match[1]);
 const expectedNavigationPaths = manifestPaths.filter((path) => !["/success", "/404"].includes(path));
@@ -343,4 +520,4 @@ if (sortedFailures.length) {
     process.exit(1);
 }
 
-console.log(`Architecture check passed: ${pageEntries.length} page slices, layer imports, lazy exports, shared page composition, structural spacing, approved SCSS breakpoints and ${navigationPaths.length} discovery routes.`);
+console.log(`Architecture check passed: ${pageEntries.length} page slices, layer/UI ownership, lazy exports, shared page composition, intrinsic image geometry, stable Page content, structural spacing, approved SCSS breakpoints and ${navigationPaths.length} discovery routes.`);

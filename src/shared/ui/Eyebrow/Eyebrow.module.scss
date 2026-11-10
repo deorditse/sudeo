@@ -1,0 +1,33 @@
+.eyebrow {
+    display: inline-flex;
+    gap: 9px;
+    align-items: center;
+    margin: 0;
+    color: inherit;
+    font-size: 12px;
+    font-weight: 800;
+    line-height: 1.2;
+    letter-spacing: 0.17em;
+    text-transform: uppercase;
+}
+
+.eyebrow::before {
+    flex: 0 0 auto;
+    width: 7px;
+    height: 7px;
+    background: #b9ff66;
+    border-radius: 50%;
+    content: "";
+}
+
+.default {
+    color: #11130f;
+}
+
+.inverse {
+    color: #f7f6f0;
+}
+
+.accent {
+    color: #78d924;
+}

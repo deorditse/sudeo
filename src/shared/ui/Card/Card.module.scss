@@ -1,0 +1,89 @@
+.card {
+    display: block;
+    color: #11130f;
+    border-radius: 8px;
+}
+
+.light {
+    background: #fff;
+}
+
+.accent {
+    background: #b9ff66;
+}
+
+.dark {
+    color: #f7f6f0;
+    background: #161814;
+}
+
+.muted {
+    background: #f0eee7;
+}
+
+.padding-compact {
+    padding: 20px;
+}
+
+.padding-default {
+    padding: 22px;
+}
+
+.padding-spacious {
+    padding: 26px;
+}
+
+.linkCard {
+    text-decoration: none;
+}
+
+.interactive {
+    transition: transform 200ms ease, box-shadow 200ms ease;
+}
+
+.interactive:hover,
+.interactive:focus-visible,
+.interactive:focus-within {
+    box-shadow: 0 25px 70px rgba(17, 19, 15, 0.11);
+    transform: translateY(-4px);
+}
+
+@media (min-width: 451px) {
+    .padding-compact {
+        padding: 22px;
+    }
+
+    .padding-default {
+        padding: 30px;
+    }
+
+    .padding-spacious {
+        padding: 34px;
+    }
+}
+
+@media (min-width: 960px) {
+    .padding-compact {
+        padding: 24px;
+    }
+
+    .padding-default {
+        padding: 34px;
+    }
+
+    .padding-spacious {
+        padding: 42px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .interactive {
+        transition: none;
+    }
+
+    .interactive:hover,
+    .interactive:focus-visible,
+    .interactive:focus-within {
+        transform: none;
+    }
+}

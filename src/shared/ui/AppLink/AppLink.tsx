@@ -3,10 +3,10 @@ import { Link } from "react-router-dom";
 import { classNames } from "@shared/lib/classNames";
 import styles from "./AppLink.module.scss";
 
-interface AppLinkProps extends Omit<AnchorHTMLAttributes<HTMLAnchorElement>, "href"> {
+export interface AppLinkProps extends Omit<AnchorHTMLAttributes<HTMLAnchorElement>, "href"> {
     to: string;
     children: ReactNode;
-    variant?: "default" | "muted" | "accent";
+    variant?: "default" | "muted" | "accent" | "action";
 }
 
 export const AppLink = ({ to, children, className, variant = "default", ...props }: AppLinkProps) => {

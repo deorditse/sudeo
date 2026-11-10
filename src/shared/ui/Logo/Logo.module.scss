@@ -1,0 +1,56 @@
+.logo {
+    display: inline-flex;
+    gap: 11px;
+    align-items: center;
+    width: fit-content;
+    color: inherit;
+    font-size: 16px;
+    font-weight: 800;
+    letter-spacing: 0.18em;
+    transition: color 160ms ease;
+}
+
+.logo:hover,
+.logo:focus-visible {
+    color: #b9ff66;
+}
+
+.logoMark {
+    display: flex;
+    gap: 3px;
+    align-items: end;
+    width: 27px;
+    height: 27px;
+    transform: rotate(-12deg);
+}
+
+.logoMark i {
+    display: block;
+    width: 7px;
+    background: #b9ff66;
+    border-radius: 20px;
+}
+
+.logoMark i:nth-child(1) {
+    height: 13px;
+}
+
+.logoMark i:nth-child(2) {
+    height: 24px;
+}
+
+.logoMark i:nth-child(3) {
+    height: 18px;
+}
+
+@media (min-width: 451px) {
+    .logo {
+        font-size: 19px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .logo {
+        transition: none;
+    }
+}

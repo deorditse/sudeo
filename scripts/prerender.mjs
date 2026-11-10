@@ -6,9 +6,19 @@ const output = path.resolve("docs");
 const serverEntry = path.resolve(".ssr/entry-server.js");
 const { render, routeManifest } = await import(pathToFileURL(serverEntry).href);
 const template = await readFile(path.join(output, "index.html"), "utf8");
+const clientManifest = JSON.parse(await readFile(path.join(output, ".vite/manifest.json"), "utf8"));
 
 const replaceTag = (html, expression, value) => html.replace(expression, value);
 const escapeXml = (value) => value.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;");
+const collectCss = (entryKey, visited = new Set()) => {
+    if (visited.has(entryKey)) return [];
+    visited.add(entryKey);
+    const entry = clientManifest[entryKey];
+    if (!entry) throw new Error(`Client manifest entry is missing: ${entryKey}`);
+    const importedCss = (entry.imports ?? []).flatMap((importKey) => collectCss(importKey, visited));
+    return [...importedCss, ...(entry.css ?? [])];
+};
+const templateCss = new Set([...template.matchAll(/<link[^>]+href="\/([^\"]+\.css)"/g)].map((match) => match[1]));
 
 for (const route of routeManifest) {
     const rendered = await render(route.path);
@@ -17,6 +27,13 @@ for (const route of routeManifest) {
     html = replaceTag(html, /<meta name="description" content=".*?"\s*\/>/s, `<meta name="description" content="${escapeXml(route.description)}" />`);
     html = replaceTag(html, /<meta name="robots" content=".*?"\s*\/>/s, `<meta name="robots" content="${route.indexable ? "index,follow" : "noindex,nofollow"}" />`);
     html = replaceTag(html, /<link rel="canonical" href=".*?"\s*\/>/s, `<link rel="canonical" href="https://sudeo.ru${route.path}" />`);
+    const routeCss = [...new Set(collectCss(route.clientEntry))]
+        .filter((asset) => !templateCss.has(asset));
+    const routeStyleLinks = routeCss
+        .map((asset) => `        <link rel="stylesheet" crossorigin href="/${asset}" data-route-style />`)
+        .join("\n");
+    if (!routeStyleLinks) throw new Error(`No route CSS graph was resolved for ${route.path}`);
+    html = html.replace("    </head>", `${routeStyleLinks}\n    </head>`);
 
     const target = route.path === "/" ? path.join(output, "index.html") : path.join(output, route.path.slice(1), "index.html");
     await mkdir(path.dirname(target), { recursive: true });

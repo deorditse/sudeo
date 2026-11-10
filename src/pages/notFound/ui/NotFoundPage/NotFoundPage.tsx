@@ -1,12 +1,12 @@
 import { selectNotFoundPageModel } from "@pages/notFound/model";
 import { MainContent } from "@shared/layouts/MainContent";
 import { AppButton, AppPadding, AppText, VStack } from "@shared/ui";
-import { Arrow } from "@/shared/ui/SitePrimitives";
 import { Page } from "@widgets/Page";
 import styles from "../components/NotFoundMessage.module.scss";
 
 const NotFoundPage = () => {
     const model = selectNotFoundPageModel();
+
     return (
         <Page className={styles.root}>
             <AppPadding
@@ -40,7 +40,7 @@ const NotFoundPage = () => {
                             </AppText>
                         </AppPadding>
                         <AppPadding pt="36">
-                            <AppButton to="/" addonRight={<Arrow />}>
+                            <AppButton to="/" addonRight={<span aria-hidden="true">↗</span>}>
                                 Вернуться на главную
                             </AppButton>
                         </AppPadding>

@@ -1,0 +1,127 @@
+.prose {
+    max-width: 760px;
+}
+
+.prose > :first-child {
+    margin-top: 0;
+}
+
+.prose > :last-child {
+    margin-bottom: 0;
+}
+
+.prose h2,
+.prose h3 {
+    margin: 0 0 18px;
+    font-weight: 500;
+    line-height: 1.12;
+    letter-spacing: -0.035em;
+}
+
+.prose h2 {
+    font-size: 28px;
+}
+
+.prose h3 {
+    font-size: 22px;
+}
+
+.prose p,
+.prose li {
+    font-size: 16px;
+    line-height: 1.65;
+}
+
+.prose p {
+    margin: 0 0 24px;
+}
+
+.prose ul,
+.prose ol {
+    display: grid;
+    gap: 12px;
+    margin: 0 0 28px;
+    padding-left: 1.4em;
+}
+
+.prose a {
+    color: inherit;
+    text-decoration: underline;
+    text-decoration-color: #78d924;
+    text-underline-offset: 0.2em;
+}
+
+.prose a:hover,
+.prose a:focus-visible {
+    color: #719e3e;
+}
+
+.size-lead p,
+.size-lead li {
+    font-size: 18px;
+    line-height: 1.55;
+}
+
+.tone-default {
+    color: #5e6259;
+}
+
+.tone-default h2,
+.tone-default h3,
+.tone-default strong {
+    color: #11130f;
+}
+
+.tone-inverse {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.tone-inverse h2,
+.tone-inverse h3,
+.tone-inverse strong {
+    color: #f7f6f0;
+}
+
+@media (min-width: 451px) {
+    .prose h2 {
+        font-size: 34px;
+        letter-spacing: -0.04em;
+    }
+
+    .prose h3 {
+        font-size: 25px;
+    }
+
+    .prose p,
+    .prose li {
+        font-size: 17px;
+        line-height: 1.7;
+    }
+
+    .size-lead p,
+    .size-lead li {
+        font-size: 20px;
+    }
+}
+
+@media (min-width: 960px) {
+    .prose h2 {
+        font-size: 38px;
+        letter-spacing: -0.045em;
+    }
+
+    .prose h3 {
+        font-size: 27px;
+    }
+
+    .prose p,
+    .prose li {
+        font-size: 18px;
+        line-height: 1.75;
+    }
+
+    .size-lead p,
+    .size-lead li {
+        font-size: 23px;
+    }
+}
