@@ -9,8 +9,9 @@ export interface SectionProps extends HTMLAttributes<HTMLElement> { children: Re
 export const Section = ({ children, tone = "light", compact = false, className, ...props }: SectionProps) => (
     <AppPadding
         as="section"
-        py={compact ? "88" : "120"}
-        mobilePy={compact ? "64" : "78"}
+        py={compact ? "48" : "56"}
+        tabletPy={compact ? "64" : "78"}
+        desktopPy={compact ? "88" : "120"}
         className={classNames(styles.section, styles[tone], className)}
         {...props}
     >

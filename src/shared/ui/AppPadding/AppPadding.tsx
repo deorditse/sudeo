@@ -20,6 +20,7 @@ const spacingValues = {
     "45": "45px",
     "48": "48px",
     "55": "55px",
+    "56": "56px",
     "60": "60px",
     "64": "64px",
     "68": "68px",
@@ -49,13 +50,20 @@ type PaddingProps = {
     pr?: AppSpacing;
     pb?: AppSpacing;
     pl?: AppSpacing;
-    mobileP?: AppSpacing;
-    mobilePx?: AppSpacing;
-    mobilePy?: AppSpacing;
-    mobilePt?: AppSpacing;
-    mobilePr?: AppSpacing;
-    mobilePb?: AppSpacing;
-    mobilePl?: AppSpacing;
+    tabletP?: AppSpacing;
+    tabletPx?: AppSpacing;
+    tabletPy?: AppSpacing;
+    tabletPt?: AppSpacing;
+    tabletPr?: AppSpacing;
+    tabletPb?: AppSpacing;
+    tabletPl?: AppSpacing;
+    desktopP?: AppSpacing;
+    desktopPx?: AppSpacing;
+    desktopPy?: AppSpacing;
+    desktopPt?: AppSpacing;
+    desktopPr?: AppSpacing;
+    desktopPb?: AppSpacing;
+    desktopPl?: AppSpacing;
 };
 
 export type AppPaddingProps<T extends ElementType = "div"> = PaddingProps & {
@@ -77,13 +85,20 @@ export const AppPadding = <T extends ElementType = "div">({
     pr,
     pb,
     pl,
-    mobileP,
-    mobilePx,
-    mobilePy,
-    mobilePt,
-    mobilePr,
-    mobilePb,
-    mobilePl,
+    tabletP,
+    tabletPx,
+    tabletPy,
+    tabletPt,
+    tabletPr,
+    tabletPb,
+    tabletPl,
+    desktopP,
+    desktopPx,
+    desktopPy,
+    desktopPt,
+    desktopPr,
+    desktopPb,
+    desktopPl,
     ...props
 }: AppPaddingProps<T>) => {
     const Component = as ?? "div";
@@ -95,13 +110,20 @@ export const AppPadding = <T extends ElementType = "div">({
         "--app-pr": toValue(pr),
         "--app-pb": toValue(pb),
         "--app-pl": toValue(pl),
-        "--app-mobile-p": toValue(mobileP),
-        "--app-mobile-px": toValue(mobilePx),
-        "--app-mobile-py": toValue(mobilePy),
-        "--app-mobile-pt": toValue(mobilePt),
-        "--app-mobile-pr": toValue(mobilePr),
-        "--app-mobile-pb": toValue(mobilePb),
-        "--app-mobile-pl": toValue(mobilePl),
+        "--app-tablet-p": toValue(tabletP),
+        "--app-tablet-px": toValue(tabletPx),
+        "--app-tablet-py": toValue(tabletPy),
+        "--app-tablet-pt": toValue(tabletPt),
+        "--app-tablet-pr": toValue(tabletPr),
+        "--app-tablet-pb": toValue(tabletPb),
+        "--app-tablet-pl": toValue(tabletPl),
+        "--app-desktop-p": toValue(desktopP),
+        "--app-desktop-px": toValue(desktopPx),
+        "--app-desktop-py": toValue(desktopPy),
+        "--app-desktop-pt": toValue(desktopPt),
+        "--app-desktop-pr": toValue(desktopPr),
+        "--app-desktop-pb": toValue(desktopPb),
+        "--app-desktop-pl": toValue(desktopPl),
         ...style,
     } as CSSProperties;
 

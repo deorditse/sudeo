@@ -30,9 +30,10 @@ const HomePage = () => {
             <AppPadding
                 as="section"
                 className={cls.hero}
-                pt="180"
+                pt="140"
                 pb="78"
-                mobilePt="140"
+                tabletPt="180"
+                desktopPt="180"
             >
                 <Box className={cls.heroGlow} aria-hidden="true" />
                 <MainContent className={cls.heroContent}>
@@ -73,7 +74,7 @@ const HomePage = () => {
                         title="Не продаём технологии ради технологий"
                         text="Начинаем с бизнес-задачи и выбираем подходящий формат решения."
                     />
-                    <AppGrid columns={4} tabletColumns={2} mobileColumns={1} className={cls.taskGrid}>
+                    <AppGrid columns={1} tabletColumns={2} desktopColumns={4} className={cls.taskGrid}>
                         {model.tasks.map((task, index) => (
                             <Box as="article" className={cls.taskItem} key={task}>
                                 <span>0{index + 1}</span>
@@ -91,7 +92,7 @@ const HomePage = () => {
                         title="Одна команда — четыре компетенции"
                         text="Закажите отдельную услугу или соберите полный цикл под задачу."
                     />
-                    <AppGrid columns={2} mobileColumns={1} gap="18">
+                    <AppGrid columns={1} tabletColumns={2} desktopColumns={2} gap="18">
                         {model.services.map((service) => (
                             <ServiceCard key={service.slug} service={service} />
                         ))}
@@ -102,10 +103,10 @@ const HomePage = () => {
             <Section tone="feature">
                 <MainContent>
                     <AppGrid
-                        columns={2}
+                        columns={1}
                         tabletColumns={2}
+                        desktopColumns={2}
                         template="hero"
-                        mobileColumns={1}
                         gap="78"
                         align="center"
                     >
@@ -159,8 +160,9 @@ const HomePage = () => {
                             >
                                 <AppGrid
                                     className={cls.stageGrid}
-                                    columns={3}
-                                    mobileColumns={2}
+                                    columns={2}
+                                    tabletColumns={3}
+                                    desktopColumns={3}
                                     gap="30"
                                     align="start"
                                 >
@@ -176,7 +178,7 @@ const HomePage = () => {
 
             <Section tone="dark">
                 <MainContent>
-                    <AppGrid columns={2} mobileColumns={1} gap="90">
+                    <AppGrid columns={1} tabletColumns={2} desktopColumns={2} gap="90">
                         <SectionHeading
                             eyebrow="Команда"
                             title="Собираем роли вокруг результата"

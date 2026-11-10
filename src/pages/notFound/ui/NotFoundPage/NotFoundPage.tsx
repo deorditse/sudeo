@@ -14,10 +14,12 @@ const NotFoundPage = () => {
                 className={styles.stage}
                 align="stretch"
                 justify="center"
-                pt="190"
-                pb="105"
-                mobilePt="145"
-                mobilePb="75"
+                pt="145"
+                pb="75"
+                tabletPt="190"
+                tabletPb="105"
+                desktopPt="190"
+                desktopPb="105"
             >
                 <MainContent>
                     <VStack align="start">

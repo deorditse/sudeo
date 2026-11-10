@@ -1,4 +1,46 @@
-.document h2 { font-size: 35px; letter-spacing: -0.04em; }
-.document p, .document li { color: #73776d; line-height: 1.65; }
-.document ul { padding-left: 20px; }
-.document li { margin: 10px 0; list-style: disc; }
+.document h2 {
+    font-size: 28px;
+    line-height: 1.12;
+    letter-spacing: -0.035em;
+}
+
+.document p,
+.document li {
+    color: #73776d;
+    line-height: 1.6;
+}
+
+.document ul {
+    padding-left: 20px;
+}
+
+.document li {
+    margin: 7px 0;
+    list-style: disc;
+}
+
+@media (min-width: 451px) {
+    .document h2 {
+        font-size: 32px;
+        letter-spacing: -0.04em;
+    }
+
+    .document p,
+    .document li {
+        line-height: 1.65;
+    }
+
+    .document li {
+        margin-block: 9px;
+    }
+}
+
+@media (min-width: 960px) {
+    .document h2 {
+        font-size: 35px;
+    }
+
+    .document li {
+        margin-block: 10px;
+    }
+}

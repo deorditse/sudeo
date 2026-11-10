@@ -1,7 +1,66 @@
-.card { align-content: end; min-height: 430px; padding: 42px; color: #11130f; background: #b9ff66; border-radius: 8px; transition: transform 0.2s ease, box-shadow 0.2s ease; }
-.card:hover { color: #11130f; transform: translateY(-4px); box-shadow: 0 25px 70px rgba(17, 19, 15, 0.1); }
-.meta { align-self: start; font-size: 11px; font-weight: 800; text-transform: uppercase; }
-.title { max-width: 760px; margin: 25px 0; }
-.intro { max-width: 650px; color: rgba(17, 19, 15, 0.66); }
-.linkLabel { margin-top: 35px; }
-@media (max-width: 760px) { .card { min-height: 500px; padding: 26px; } }
+.card {
+    align-content: end;
+    min-height: 320px;
+    padding: 22px;
+    color: #11130f;
+    background: #b9ff66;
+    border-radius: 8px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+    color: #11130f;
+    box-shadow: 0 25px 70px rgba(17, 19, 15, 0.1);
+    transform: translateY(-4px);
+}
+
+.meta {
+    align-self: start;
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+.title {
+    max-width: 760px;
+    margin: 18px 0;
+}
+
+.intro {
+    max-width: 650px;
+    color: rgba(17, 19, 15, 0.66);
+}
+
+.linkLabel {
+    margin-top: 24px;
+}
+
+@media (min-width: 451px) {
+    .card {
+        min-height: 370px;
+        padding: 30px;
+    }
+
+    .title {
+        margin-block: 22px;
+    }
+
+    .linkLabel {
+        margin-top: 30px;
+    }
+}
+
+@media (min-width: 960px) {
+    .card {
+        min-height: 430px;
+        padding: 42px;
+    }
+
+    .title {
+        margin-block: 25px;
+    }
+
+    .linkLabel {
+        margin-top: 35px;
+    }
+}

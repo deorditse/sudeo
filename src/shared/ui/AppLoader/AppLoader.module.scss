@@ -1,6 +1,6 @@
 .loader {
     display: grid;
-    min-height: clamp(420px, 68svh, 760px);
+    min-height: 60svh;
     overflow: hidden;
     color: #ffffff;
     background:
@@ -28,7 +28,7 @@
 .stage {
     position: relative;
     display: grid;
-    width: min(72vw, 430px);
+    width: min(88vw, 360px);
     aspect-ratio: 1;
     place-items: center;
 }
@@ -79,9 +79,9 @@
     position: relative;
     z-index: 1;
     display: flex;
-    gap: 18px;
+    gap: 13px;
     align-items: center;
-    padding: 22px 27px;
+    padding: 18px 22px;
     background: rgba(17, 19, 15, 0.72);
     border: 1px solid rgba(255, 255, 255, 0.12);
     border-radius: 999px;
@@ -94,14 +94,14 @@
     display: flex;
     gap: 4px;
     align-items: end;
-    width: 36px;
-    height: 36px;
+    width: 30px;
+    height: 30px;
     transform: rotate(-12deg);
 }
 
 .logoMark i {
     display: block;
-    width: 8px;
+    width: 7px;
     background: #b9ff66;
     border-radius: 2px;
     transform-origin: bottom;
@@ -109,16 +109,16 @@
 }
 
 .logoMark i:nth-child(1) {
-    height: 16px;
+    height: 13px;
 }
 
 .logoMark i:nth-child(2) {
-    height: 27px;
+    height: 22px;
     animation-delay: 120ms;
 }
 
 .logoMark i:nth-child(3) {
-    height: 36px;
+    height: 30px;
     animation-delay: 240ms;
 }
 
@@ -179,16 +179,15 @@
     to { transform: translateX(350%); }
 }
 
-@media (max-width: 560px) {
-    .loader { min-height: 60svh; }
-    .viewport { min-height: 100dvh; }
-    .stage { width: min(88vw, 360px); }
-    .brand { gap: 13px; padding: 18px 22px; }
-    .logoMark { width: 30px; height: 30px; }
-    .logoMark i { width: 7px; }
-    .logoMark i:nth-child(1) { height: 13px; }
-    .logoMark i:nth-child(2) { height: 22px; }
-    .logoMark i:nth-child(3) { height: 30px; }
+@media (min-width: 451px) {
+    .loader { min-height: clamp(420px, 68svh, 760px); }
+    .stage { width: min(72vw, 430px); }
+    .brand { gap: 18px; padding: 22px 27px; }
+    .logoMark { width: 36px; height: 36px; }
+    .logoMark i { width: 8px; }
+    .logoMark i:nth-child(1) { height: 16px; }
+    .logoMark i:nth-child(2) { height: 27px; }
+    .logoMark i:nth-child(3) { height: 36px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

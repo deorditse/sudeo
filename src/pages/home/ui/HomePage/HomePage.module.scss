@@ -1,73 +1,103 @@
 .hero {
     position: relative;
-    min-height: 820px;
+    height: 700px;
+    min-height: 700px;
     overflow: hidden;
     color: white;
     background:
         linear-gradient(110deg, rgba(0, 0, 0, 0.15), transparent 52%), #11130f;
 }
+
 .heroGlow {
     position: absolute;
-    top: 50px;
-    right: -120px;
-    width: 760px;
-    height: 760px;
+    top: 240px;
+    right: -180px;
+    width: 420px;
+    height: 420px;
     border-radius: 50%;
     background: radial-gradient(
         circle,
-        rgba(185, 255, 102, 0.2),
-        rgba(80, 117, 49, 0.06) 42%,
+        rgba(185, 255, 102, 0.14),
+        rgba(80, 117, 49, 0.04) 42%,
         transparent 70%
     );
     filter: blur(8px);
 }
+
 .heroContent {
     position: relative;
     z-index: 2;
+    transform: translateY(-28px);
 }
+
 .heroContent h1 {
-    max-width: 900px;
+    max-width: 100%;
     margin: 0;
-    font-size: clamp(58px, 7vw, 106px);
+    font-size: clamp(35px, 10.5vw, 41px);
     font-weight: 500;
-    line-height: 0.96;
-    letter-spacing: -0.065em;
+    hyphens: none;
+    line-height: 1;
+    letter-spacing: -0.052em;
+    overflow-wrap: normal;
+    word-break: normal;
 }
+
 .heroContent h1 span {
     color: #b9ff66;
 }
+
 .eyebrow {
     display: flex;
-    gap: 9px;
+    gap: 8px;
     align-items: center;
     margin: 0;
-    font-size: 12px;
+    font-size: 10px;
     font-weight: 800;
-    letter-spacing: 0.17em;
+    letter-spacing: 0.13em;
     text-transform: uppercase;
 }
+
 .eyebrow::before {
     content: "";
+    flex: 0 0 auto;
     width: 7px;
     height: 7px;
     background: #b9ff66;
     border-radius: 50%;
 }
+
 .heroText {
-    max-width: 620px;
-    color: rgba(255, 255, 255, 0.7);
-    font-size: 19px;
-    line-height: 1.55;
+    max-width: 34rem;
+    color: rgba(255, 255, 255, 0.74);
+    font-size: 16px;
+    line-height: 1.5;
 }
+
+.heroContent > div:first-child {
+    gap: 16px;
+}
+
+.heroContent > div:last-child {
+    padding-top: 24px;
+}
+
 .heroActions {
     position: relative;
+    align-items: flex-start;
+    flex-direction: column;
 }
+
+.heroActions .textLink {
+    transform: translateY(-16px);
+}
+
 .textLink {
     display: inline-flex;
     gap: 12px;
     align-items: center;
-    color: inherit;
+    min-height: 44px;
     padding-bottom: 4px;
+    color: inherit;
     border-bottom: 1px solid currentColor;
     font-size: 14px;
     font-weight: 700;
@@ -75,6 +105,7 @@
         color 160ms ease,
         gap 160ms ease;
 }
+
 .textLink:hover,
 .textLink:focus-visible {
     gap: 18px;
@@ -84,50 +115,57 @@
 .taskGrid {
     border-top: 1px solid rgba(17, 19, 15, 0.16);
 }
-.taskItem {
-    min-height: 240px;
-    padding: 28px 28px 32px 0;
-    border-right: 1px solid rgba(17, 19, 15, 0.16);
+
+.taskItem,
+.taskItem:not(:first-child) {
+    min-height: 142px;
+    padding: 18px 0;
+    border-top: 1px solid rgba(17, 19, 15, 0.16);
+    border-right: 0;
     transition:
         background 180ms ease,
         padding 180ms ease;
 }
-.taskItem:not(:first-child) {
-    padding-left: 28px;
+
+.taskItem:first-child {
+    border-top: 0;
 }
-.taskItem:last-child {
-    border-right: 0;
-}
+
 .taskItem:hover {
     background: rgba(185, 255, 102, 0.2);
 }
+
 .taskItem span {
     color: #969a90;
     font-size: 12px;
     font-weight: 800;
 }
+
 .taskItem h3 {
-    max-width: 210px;
-    margin: 92px 0 0;
-    font-size: 24px;
+    max-width: 260px;
+    margin: 32px 0 0;
+    font-size: 22px;
     line-height: 1.15;
     letter-spacing: -0.035em;
 }
+
 .caseTitle {
     max-width: 650px;
     margin: 0;
-    font-size: clamp(42px, 5vw, 70px);
+    font-size: 34px;
     font-weight: 500;
-    line-height: 1.03;
-    letter-spacing: -0.055em;
+    line-height: 1.05;
+    letter-spacing: -0.045em;
 }
+
 .caseText {
     max-width: 600px;
     margin: 0;
-    color: rgba(255, 255, 255, 0.62);
-    font-size: 17px;
-    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.68);
+    font-size: 16px;
+    line-height: 1.55;
 }
+
 .tag {
     display: inline-flex;
     padding: 8px 12px;
@@ -139,9 +177,10 @@
     letter-spacing: 0.12em;
     text-transform: uppercase;
 }
+
 .demoVisual {
-    min-height: 500px;
-    padding: 68px 45px;
+    min-height: 320px;
+    padding: 28px 18px;
     background:
         radial-gradient(
             circle at 90% 10%,
@@ -150,157 +189,370 @@
         ),
         #30362b;
     border-radius: 9px;
-    box-shadow: 0 30px 100px rgba(0, 0, 0, 0.24);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.22);
     transition:
         transform 240ms ease,
         box-shadow 240ms ease;
 }
+
 .demoVisual:hover {
-    transform: translateY(-8px) rotate(0.5deg);
-    box-shadow: 0 38px 110px rgba(0, 0, 0, 0.32);
+    transform: translateY(-4px);
+    box-shadow: 0 26px 72px rgba(0, 0, 0, 0.28);
 }
+
 .chatBubble,
 .chatAnswer,
 .confidence {
     border-radius: 16px;
 }
+
 .chatBubble {
-    width: 72%;
+    width: 84%;
     margin-left: auto;
-    padding: 18px 22px;
+    padding: 14px 16px;
     color: #11130f;
     background: white;
 }
+
 .chatAnswer {
-    padding: 26px;
+    padding: 18px;
     color: #11130f;
     background: #b9ff66;
 }
+
 .chatAnswer span {
     display: block;
-    margin-bottom: 20px;
+    margin-bottom: 14px;
     font-size: 11px;
     opacity: 0.62;
 }
+
 .chatAnswer strong {
     display: block;
-    font-size: 21px;
+    font-size: 18px;
     line-height: 1.35;
 }
+
 .confidence {
     width: fit-content;
-    padding: 12px 16px;
+    padding: 10px 12px;
     background: rgba(255, 255, 255, 0.1);
-    font-size: 12px;
+    font-size: 11px;
 }
+
 .confidence i {
     width: 8px;
     height: 8px;
     background: #b9ff66;
     border-radius: 50%;
 }
+
 .stageList {
     border-top: 1px solid rgba(17, 19, 15, 0.16);
 }
+
 .stageItem {
     border-bottom: 1px solid rgba(17, 19, 15, 0.16);
     transition: background 180ms ease;
 }
+
 .stageItem:hover {
     background: rgba(185, 255, 102, 0.16);
 }
+
+.stageGrid p {
+    grid-column: 2;
+    margin-top: 0;
+}
+
 .stageList span {
     color: #92968c;
     font-size: 12px;
     font-weight: 800;
 }
+
 .stageList h3 {
     margin: 0;
-    font-size: 27px;
+    font-size: 22px;
     letter-spacing: -0.035em;
 }
+
 .stageList p {
     max-width: 520px;
     color: #73776d;
-    line-height: 1.55;
+    line-height: 1.5;
 }
+
 .competencyList {
     width: 100%;
 }
+
 .competencyItem {
     width: 100%;
-    padding: 22px 0;
+    padding: 18px 0;
     border-bottom: 1px solid rgba(255, 255, 255, 0.17);
-    font-size: 21px;
+    font-size: 18px;
     transition:
         color 160ms ease,
         padding 160ms ease;
 }
+
 .competencyItem:hover {
-    padding-left: 12px;
+    padding-left: 8px;
     color: #b9ff66;
 }
+
 .competencyItem span {
     color: #b9ff66;
 }
-@media (max-width: 1100px) {
-    .heroContent h1 {
-        max-width: 740px;
-    }
 
-    .taskItem:nth-child(2) {
-        border-right: 0;
-    }
-    .taskItem:nth-child(3),
-    .taskItem:nth-child(4) {
-        border-top: 1px solid rgba(17, 19, 15, 0.16);
-    }
-}
-@media (max-width: 760px) {
+@media (min-width: 451px) {
     .hero {
+        height: auto;
         min-height: 760px;
     }
+
+    .heroContent {
+        transform: none;
+    }
+
+    .heroGlow {
+        top: 120px;
+        right: -160px;
+        width: 620px;
+        height: 620px;
+        background: radial-gradient(
+            circle,
+            rgba(185, 255, 102, 0.18),
+            rgba(80, 117, 49, 0.05) 42%,
+            transparent 70%
+        );
+    }
+
     .heroContent h1 {
-        font-size: clamp(48px, 15vw, 68px);
+        max-width: 740px;
+        font-size: clamp(48px, 9vw, 68px);
+        line-height: 0.98;
+        letter-spacing: -0.06em;
     }
+
+    .eyebrow {
+        gap: 9px;
+        font-size: 12px;
+        letter-spacing: 0.17em;
+    }
+
     .heroText {
-        font-size: 16px;
+        font-size: 17px;
+        line-height: 1.55;
     }
+
+    .heroContent > div:first-child {
+        gap: 20px;
+    }
+
+    .heroContent > div:last-child {
+        padding-top: 32px;
+    }
+
     .heroActions {
-        align-items: flex-start;
-        flex-direction: column;
+        flex-direction: row;
+        align-items: center;
+    }
+
+    .heroActions .textLink {
+        transform: none;
     }
 
     .taskItem,
     .taskItem:not(:first-child) {
-        min-height: 180px;
-        padding: 22px 0;
+        min-height: 190px;
+        padding: 24px;
+        border-top: 0;
+        border-right: 1px solid rgba(17, 19, 15, 0.16);
+    }
+
+    .taskItem:nth-child(odd) {
+        padding-left: 0;
+    }
+
+    .taskItem:nth-child(even) {
         border-right: 0;
+    }
+
+    .taskItem:nth-child(n + 3) {
         border-top: 1px solid rgba(17, 19, 15, 0.16);
     }
-    .taskItem:first-child {
-        border-top: 0;
-    }
+
     .taskItem h3 {
-        margin-top: 55px;
+        margin-top: 58px;
+        font-size: 23px;
+    }
+
+    .caseTitle {
+        font-size: clamp(42px, 6vw, 58px);
+        line-height: 1.03;
+        letter-spacing: -0.055em;
+    }
+
+    .caseText {
+        font-size: 17px;
+        line-height: 1.6;
     }
 
     .demoVisual {
-        min-height: 390px;
-        padding: 45px 24px;
+        min-height: 410px;
+        padding: 46px 30px;
+        box-shadow: 0 26px 84px rgba(0, 0, 0, 0.23);
     }
+
+    .chatBubble {
+        width: 76%;
+        padding: 18px 22px;
+    }
+
+    .chatAnswer {
+        padding: 24px;
+    }
+
+    .chatAnswer strong {
+        font-size: 20px;
+    }
+
+    .confidence {
+        padding: 12px 16px;
+        font-size: 12px;
+    }
+
     .stageGrid p {
-        grid-column: 2;
+        grid-column: auto;
+    }
+
+    .stageList h3 {
+        font-size: 25px;
+    }
+
+    .competencyItem {
+        padding-block: 20px;
+        font-size: 20px;
     }
 }
-@media (max-width: 420px) {
+
+@media (min-width: 960px) {
+    .hero {
+        min-height: 820px;
+    }
+
+    .heroGlow {
+        top: 50px;
+        right: -120px;
+        width: 760px;
+        height: 760px;
+        background: radial-gradient(
+            circle,
+            rgba(185, 255, 102, 0.2),
+            rgba(80, 117, 49, 0.06) 42%,
+            transparent 70%
+        );
+    }
+
     .heroContent h1 {
-        font-size: 46px;
+        max-width: 900px;
+        font-size: clamp(58px, 7vw, 106px);
+        line-height: 0.96;
+        letter-spacing: -0.065em;
     }
+
+    .heroText {
+        max-width: 620px;
+        font-size: 19px;
+    }
+
+    .heroContent > div:first-child {
+        gap: 24px;
+    }
+
+    .heroContent > div:last-child {
+        padding-top: 42px;
+    }
+
+    .heroActions {
+        align-items: center;
+        flex-direction: row;
+    }
+
+    .taskItem,
+    .taskItem:not(:first-child) {
+        min-height: 240px;
+        padding: 28px 28px 32px 0;
+        border-top: 0;
+        border-right: 1px solid rgba(17, 19, 15, 0.16);
+    }
+
+    .taskItem:not(:first-child) {
+        padding-left: 28px;
+    }
+
+    .taskItem:last-child {
+        border-right: 0;
+    }
+
+    .taskItem h3 {
+        max-width: 210px;
+        margin-top: 92px;
+        font-size: 24px;
+    }
+
     .caseTitle {
-        font-size: 39px;
+        font-size: clamp(42px, 5vw, 70px);
+    }
+
+    .demoVisual {
+        min-height: 500px;
+        padding: 68px 45px;
+        box-shadow: 0 30px 100px rgba(0, 0, 0, 0.24);
+    }
+
+    .demoVisual:hover {
+        transform: translateY(-8px) rotate(0.5deg);
+        box-shadow: 0 38px 110px rgba(0, 0, 0, 0.32);
+    }
+
+    .chatBubble {
+        width: 72%;
+    }
+
+    .chatAnswer {
+        padding: 26px;
+    }
+
+    .chatAnswer span {
+        margin-bottom: 20px;
+    }
+
+    .chatAnswer strong {
+        font-size: 21px;
+    }
+
+
+    .stageList h3 {
+        font-size: 27px;
+    }
+
+    .stageList p {
+        line-height: 1.55;
+    }
+
+    .competencyItem {
+        padding-block: 22px;
+        font-size: 21px;
+    }
+
+    .competencyItem:hover {
+        padding-left: 12px;
     }
 }
+
 @media (prefers-reduced-motion: reduce) {
     .textLink,
     .taskItem,
@@ -309,6 +561,7 @@
     .competencyItem {
         transition: none;
     }
+
     .demoVisual:hover {
         transform: none;
     }

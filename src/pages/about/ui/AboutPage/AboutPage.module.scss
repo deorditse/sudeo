@@ -1,15 +1,134 @@
-.valueCard { min-height: 330px; padding: 34px; background: white; border-radius: 8px; transition: transform 200ms ease, box-shadow 200ms ease; }
-.valueCard:hover { transform: translateY(-7px); box-shadow: 0 25px 65px rgba(17, 19, 15, 0.11); }
-.valuesGrid span { color: #7a7e74; font-size: 12px; font-weight: 800; }
-.valuesGrid h2 { margin: 100px 0 18px; font-size: 35px; letter-spacing: -0.045em; }
-.valuesGrid p { color: #73776d; line-height: 1.55; }
-.roleGrid { background: rgba(255, 255, 255, 0.15); }
-.role { min-height: 130px; border: 1px solid rgba(255, 255, 255, 0.15); background: #161814; font-size: 19px; line-height: 1.4; transition: color 180ms ease, background 180ms ease; }
-.role:hover { color: #11130f; background: #b9ff66; }
-.stageList { border-top: 1px solid rgba(17, 19, 15, 0.16); }
-.stageItem { padding: 31px 0; border-bottom: 1px solid rgba(17, 19, 15, 0.16); transition: padding 180ms ease, background 180ms ease; }
-.stageItem:hover { padding-inline: 18px; background: rgba(185, 255, 102, 0.16); }
-.stageList span { color: #92968c; font-size: 12px; font-weight: 800; }
-.stageList h3 { letter-spacing: -0.035em; }
-.stageList p { color: #73776d; line-height: 1.55; }
-@media (prefers-reduced-motion: reduce) { .valueCard, .role, .stageItem { transition: none; } .valueCard:hover { transform: none; } }
+.valueCard {
+    min-height: 240px;
+    padding: 22px;
+    background: white;
+    border-radius: 8px;
+    transition: transform 200ms ease, box-shadow 200ms ease;
+}
+
+.valueCard:hover {
+    box-shadow: 0 25px 65px rgba(17, 19, 15, 0.11);
+    transform: translateY(-7px);
+}
+
+.valuesGrid span {
+    color: #7a7e74;
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.valuesGrid h2 {
+    margin: 52px 0 14px;
+    font-size: 28px;
+    line-height: 1.12;
+    letter-spacing: -0.035em;
+}
+
+.valuesGrid p {
+    color: #73776d;
+    line-height: 1.55;
+}
+
+.roleGrid {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.role {
+    min-height: 100px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    background: #161814;
+    font-size: 17px;
+    line-height: 1.4;
+    transition: color 180ms ease, background 180ms ease;
+}
+
+.role:hover {
+    color: #11130f;
+    background: #b9ff66;
+}
+
+.stageList {
+    border-top: 1px solid rgba(17, 19, 15, 0.16);
+}
+
+.stageItem {
+    padding: 22px 0;
+    border-bottom: 1px solid rgba(17, 19, 15, 0.16);
+    transition: padding 180ms ease, background 180ms ease;
+}
+
+.stageItem:hover {
+    padding-inline: 18px;
+    background: rgba(185, 255, 102, 0.16);
+}
+
+.stageList span {
+    color: #92968c;
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.stageList h3 {
+    letter-spacing: -0.035em;
+}
+
+.stageList p {
+    color: #73776d;
+    line-height: 1.55;
+}
+
+@media (min-width: 451px) {
+    .valueCard {
+        min-height: 280px;
+        padding: 28px;
+    }
+
+    .valuesGrid h2 {
+        margin: 72px 0 16px;
+        font-size: 32px;
+        letter-spacing: -0.04em;
+    }
+
+    .role {
+        min-height: 115px;
+        font-size: 18px;
+    }
+
+    .stageItem {
+        padding-block: 26px;
+    }
+}
+
+@media (min-width: 960px) {
+    .valueCard {
+        min-height: 330px;
+        padding: 34px;
+    }
+
+    .valuesGrid h2 {
+        margin: 100px 0 18px;
+        font-size: 35px;
+        letter-spacing: -0.045em;
+    }
+
+    .role {
+        min-height: 130px;
+        font-size: 19px;
+    }
+
+    .stageItem {
+        padding-block: 31px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .valueCard,
+    .role,
+    .stageItem {
+        transition: none;
+    }
+
+    .valueCard:hover {
+        transform: none;
+    }
+}

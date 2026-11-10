@@ -43,7 +43,7 @@ The site MUST distinguish real client cases from demonstrations and MUST NOT pre
 - **THEN** the item is visibly labelled as a demonstration and describes only factual outputs
 
 ### Requirement: Responsive and accessible interaction
-The public experience SHALL work without horizontal scrolling, clipped text, or obstructed primary actions at 360, 390, 768, 1024, and 1440 pixel viewport widths. Navigation, controls, accordions, and forms SHALL be operable with a keyboard, expose visible focus, and provide programmatic labels.
+The public experience SHALL use a mobile-first responsive cascade: unqualified styles SHALL target viewports through 450px, tablet enhancements SHALL begin at `451px`, and desktop enhancements SHALL begin at `960px`. It SHALL work without horizontal scrolling, clipped text, mid-word headline overflow, or obstructed primary actions at 360, 390, 430, 440, 450, 451, 768, 960, 1024, and 1440 pixel viewport widths. Navigation, controls, accordions, and forms SHALL be operable with a keyboard, expose visible focus, and provide programmatic labels. Phone section rhythm and decorative gaps SHALL be intentionally tighter than tablet and desktop spacing without reducing required touch targets or form clarity.
 
 #### Scenario: Keyboard visitor navigates the site
 - **WHEN** a visitor uses only keyboard controls
@@ -52,6 +52,18 @@ The public experience SHALL work without horizontal scrolling, clipped text, or 
 #### Scenario: Visitor uses a target viewport
 - **WHEN** the site is rendered at any required acceptance width
 - **THEN** content remains readable and primary controls do not overlap or leave the viewport
+
+#### Scenario: Visitor reads the home proposition on a phone
+- **WHEN** the home page is rendered at any required phone width from 360 through 450 pixels
+- **THEN** every headline word, including `Автоматизируем`, fits within the content viewport without clipping, horizontal scrolling, or forced mid-word breaking, and the supporting text and primary action remain unobstructed by decorative orbit content
+
+#### Scenario: Responsive styles progress from phone to desktop
+- **WHEN** the viewport crosses 451px and 960px
+- **THEN** typography, grids, gutters, and spacing progressively enhance from the phone baseline without relying on width-based `max-width` overrides or unapproved intermediate breakpoints
+
+#### Scenario: Visitor reviews phone section rhythm
+- **WHEN** a visitor scrolls between blocks at 360 or 390 pixels
+- **THEN** section and component gaps are smaller than their tablet and desktop equivalents while headings, controls, cards, forms, and focus indicators retain readable separation
 
 ### Requirement: Contact transparency
 The site SHALL display only verified communication channels and SHALL mark unresolved company identity, legal details, or service commitments as pending configuration rather than borrowing values from the copied landing page.

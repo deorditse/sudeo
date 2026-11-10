@@ -20,6 +20,7 @@ The first Sudeo implementation had working lazy routes, prerendering, and a dyna
 8. `scripts/check-architecture.mjs` enforces layer imports, page boundaries, async exports, exactly one route `Page`, an approved shared content shell, the absence of raw page layout containers, structural-spacing ownership, and discovery-route coverage. It runs in the production build.
 9. The home hero's orbit and service marquee remain page-owned components. The orbit cycles the `S`, `AI`, `WEB`, `APP`, and `GROW` identities and moves service markers with transform/opacity-only CSS animations. The marquee uses duplicated visual groups for a seamless right-to-left loop, keeps pointer autoscroll active while a label scales, stops and resets when a keyboard focus enters the ticker, and exposes only one semantic set of service links. Reduced-motion mode removes cycling, orbit travel, duplication, and automatic scrolling while preserving a static `S` and all service destinations.
 10. The shared header is fixed to the top of every route and uses the opaque `#11130f` shell surface on desktop and mobile. The route catalog and mobile navigation stay anchored beneath it, global scroll padding keeps targets visible, and the skip link remains above the shell in the stacking order.
+11. Responsive styling is mobile-first across the application. Unqualified declarations target phones through 450px; tablet enhancements use only `@media (min-width: 451px)` and desktop enhancements use only `@media (min-width: 960px)`. `AppPadding` base props define phone spacing with `tablet*` and `desktop*` overrides, while `AppGrid.columns` defines the phone grid with `tabletColumns` and `desktopColumns`. Named grids are one-column by default. Width-based `max-width` queries and other width breakpoints are rejected by the architecture checker.
 
 ## Alternatives considered
 
@@ -31,6 +32,7 @@ The first Sudeo implementation had working lazy routes, prerendering, and a dyna
 - **Let shared dynamic infrastructure import app store types:** rejected because `shared → app` violates the declared dependency direction.
 - **Use JavaScript timers or an animation dependency for the hero:** rejected because CSS keyframes provide deterministic decorative motion without hydration state, timer cleanup, or a larger runtime bundle.
 - **Keep a transparent absolute header:** rejected because it disappears while scrolling and has inconsistent contrast over light page sections.
+- **Keep desktop-first base styles with descending overrides:** rejected because gaps between thresholds caused wide-phone regressions, made shared primitive semantics misleading, and required later rules to undo larger layouts.
 
 ## Consequences
 
@@ -48,6 +50,7 @@ The first Sudeo implementation had working lazy routes, prerendering, and a dyna
 - Navigation and route metadata must remain synchronized through the shared route configuration.
 - New primitives and variants require restraint to avoid replacing clear semantic markup with unnecessary abstraction; polymorphic `as` output preserves the intended landmarks.
 - Fixed-header height and anchor offsets must remain synchronized at desktop and mobile breakpoints.
+- Existing responsive call sites must use explicit phone/tablet/desktop semantics when their layouts differ.
 
 ## Verification
 
@@ -56,4 +59,5 @@ The first Sudeo implementation had working lazy routes, prerendering, and a dyna
 - `npm run build`
 - Browser checks for desktop dropdown, mobile catalog, active-route state, Escape/focus restoration, complete footer sitemap, target viewports, reduced motion, and no-JavaScript prerendered content.
 - Cleanup-guaranteed negative architecture fixtures for raw page containers, missing shared shells, and page-owned structural spacing.
-- Browser checks for right-to-left marquee movement, uninterrupted hover scaling, keyboard focus scaling with a visible stationary label, cycling center identities, static reduced-motion fallback, semantic landmarks, and zero page-level overflow at 360, 390, 768, 1024, and 1440 pixels.
+- Browser checks for right-to-left marquee movement, uninterrupted hover scaling, keyboard focus scaling with a visible stationary label, cycling center identities, static reduced-motion fallback, semantic landmarks, and zero page-level overflow at 360, 390, 430, 440, 450, 451, 768, 960, 1024, and 1440 pixels.
+- Cleanup-guaranteed negative architecture fixtures for a width-based `max-width` query and an unapproved width breakpoint.

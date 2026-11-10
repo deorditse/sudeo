@@ -210,6 +210,22 @@ The fixed header will retain a stable desktop and mobile height, remain above ro
 - Change header colors per route: rejected because route-specific shell styling would duplicate logic and weaken the shared layout contract.
 - Use a translucent background that reveals page colors: rejected because the requested dark menu background should remain predictable and readable across all routes.
 
+### 15. Make responsive composition mobile-first at 451px and 960px
+
+All component and layout SCSS will define the phone experience as the unqualified base layer. Tablet enhancements will use only `@media (min-width: 451px)`, and desktop enhancements will use only `@media (min-width: 960px)`. Feature media queries such as `prefers-reduced-motion` remain independent. Existing `max-width: 420/560/760/1100/1240px` responsive overrides will be removed or translated into the two approved ascending breakpoints so the cascade starts from the constrained viewport rather than undoing desktop defaults.
+
+The shared primitives will encode the same direction. `Container`/`MainContent` will start with 18px phone gutters, increase at tablet, and reach the existing desktop width/gutter contract at 960px. `AppPadding` will treat its ordinary spacing props as the mobile baseline and add explicit `tablet*` and `desktop*` overrides; all existing page usages will migrate from desktop-first plus `mobile*` overrides. `AppGrid` will treat `columns` as the mobile baseline and expose `tabletColumns` and `desktopColumns`, with responsive named templates applied only when the relevant wider layout is active. `Section` and `Page` will start with tighter phone rhythm, use moderate tablet rhythm, and preserve the established desktop rhythm.
+
+Typography will also be mobile-first. Shared `AppText` sizes and page-owned headings will begin at phone-safe values, then grow at 451px and 960px. The home hero heading will use a phone size that fits the complete word `Автоматизируем` within a 360px viewport after shared gutters, with no emergency mid-word breaking; its line-height, letter spacing, orbit placement, text width, action spacing, and hero height will be tuned together. Phone body text and section headings will retain readable line-height while large decorative gaps and card padding are reduced.
+
+The architecture checker will reject width-based `max-width` media queries in application SCSS and reject unapproved width breakpoints, while allowing non-width capability queries. Browser validation will cover every public route at 360, 390, 430, 440, and 450px, tablet widths 451 and 768px, and desktop widths 960, 1024, and 1440px. It will check document overflow, clipped text/control geometry, long-word fit, header/menu behavior, section rhythm, and representative visual screenshots. The 430–450px checks reproduce the wide-phone CSS viewport shown in the supplied high-density iOS screenshot, where the previous `15vw` rule enlarged `Автоматизируем` beyond the content width. Browser chrome visible in screenshots is not treated as CSS viewport space.
+
+**Alternatives considered:**
+- Add another `max-width: 420px` patch only to the home H1: rejected because the screenshot exposes the broader desktop-first cascade and oversized mobile rhythm, not one isolated number.
+- Allow arbitrary component breakpoints: rejected because the owner explicitly selected one tablet and one desktop threshold and consistent ascending rules are easier to reason about and enforce.
+- Break `Автоматизируем` inside the word: rejected because Russian headline readability is better preserved by phone-safe type sizing and width composition.
+- Reduce every spacing value globally by the same factor: rejected because controls, readable card insets, and desktop rhythm have different responsibilities; the shared responsive primitives should own intentional values per tier.
+
 ## Risks / Trade-offs
 
 - **[No production contact/legal data is approved]** → Use clearly configurable content and omit copied values; block launch acceptance until verified values are supplied.
@@ -235,6 +251,8 @@ The fixed header will retain a stable desktop and mobile height, remain above ro
 - **[A bootstrap overlay can remain after hydration or cover usable controls]** → remove it from a post-commit readiness signal with idempotent cleanup, add a maximum safety-timeout cleanup path, and verify host removal and pointer restoration on direct mobile loads.
 - **[A second React root can duplicate announcements or leak resources]** → render exactly one status region in the temporary host, unmount that root before removing the host, and keep route-transition loading in the existing application `Suspense` boundary.
 - **[A fixed header can cover anchors, focus targets, or mobile content]** → define shared header-height tokens and document scroll offset, keep the mobile panel below the header, and verify anchors, keyboard focus, menus, and primary controls at all acceptance widths.
+- **[A global breakpoint inversion can silently alter every route]** → migrate shared primitives first, update all call sites mechanically, enforce the breakpoint contract, and compare every route at phone/tablet/desktop widths before delivery.
+- **[Smaller phone spacing can make controls cramped]** → reduce structural section rhythm and decorative gaps while retaining minimum touch targets, form label separation, card insets, and visible focus clearance.
 
 ## Migration Plan
 
@@ -253,6 +271,7 @@ The fixed header will retain a stable desktop and mobile height, remain above ro
 13. Add the canonical container/padding/grid primitives, migrate every route page and page-owned section to the strict shared composition contract, strengthen the architecture checker with a negative path, and verify responsive visual parity before deployment.
 14. Add the temporary client-bootstrap loader overlay, signal and clean it up after the first application commit, preserve generated route markup, and run a complete mobile direct-load audit before deployment.
 15. Make the shared header fixed with an opaque dark site surface, preserve desktop/mobile route navigation behavior, and verify content, anchors, and controls are not obscured at any acceptance viewport.
+16. Convert shared primitives and all component styles to the approved mobile-first 451/960 cascade, retune phone typography and spacing, enforce the breakpoint contract, and verify every route before deployment.
 
 Rollback is a revert or redeployment of the last verified commit. Because the deployment is static, no content database migration is involved in this change.
 

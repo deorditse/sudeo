@@ -12,14 +12,14 @@
 .track {
     width: max-content;
     will-change: transform;
-    animation: marqueeLeft 24s linear infinite;
+    animation: marqueeLeft 18s linear infinite;
 }
 
 .group {
-    min-width: 100vw;
+    min-width: max-content;
     flex: 0 0 auto;
     justify-content: space-around;
-    padding: 24px 2vw;
+    padding: 16px 0;
 }
 
 .item {
@@ -29,7 +29,7 @@
 .item i {
     width: 5px;
     height: 5px;
-    margin: 0 clamp(22px, 3vw, 54px);
+    margin: 0 20px;
     background: #11130f;
     border-radius: 50%;
 }
@@ -37,15 +37,19 @@
 .link {
     position: relative;
     display: inline-block;
-    padding: 8px 4px;
+    min-height: 40px;
+    padding: 14px 4px;
     border-radius: 4px;
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 900;
-    letter-spacing: 0.14em;
+    letter-spacing: 0.12em;
     line-height: 1;
     white-space: nowrap;
     transform-origin: center;
-    transition: color 180ms ease, background 180ms ease, transform 180ms ease;
+    transition:
+        color 180ms ease,
+        background 180ms ease,
+        transform 180ms ease;
 }
 
 .link:hover,
@@ -53,7 +57,7 @@
     color: #b9ff66;
     background: #11130f;
     outline: none;
-    transform: scale(1.22);
+    transform: scale(1.16);
 }
 
 .link:focus-visible {
@@ -75,18 +79,54 @@
     }
 }
 
-@media (max-width: 760px) {
+@media (min-width: 451px) {
     .track {
-        animation-duration: 18s;
+        animation-duration: 21s;
     }
 
     .group {
-        min-width: max-content;
-        padding-block: 20px;
+        padding: 20px 1vw;
     }
 
     .item i {
-        margin-inline: 24px;
+        margin-inline: 28px;
+    }
+
+    .link {
+        min-height: 42px;
+        padding-block: 15px;
+        font-size: 12px;
+        letter-spacing: 0.14em;
+    }
+
+    .link:hover,
+    .link:focus-visible {
+        transform: scale(1.2);
+    }
+}
+
+@media (min-width: 960px) {
+    .track {
+        animation-duration: 24s;
+    }
+
+    .group {
+        min-width: 100vw;
+        padding: 24px 2vw;
+    }
+
+    .item i {
+        margin: 0 clamp(22px, 3vw, 54px);
+    }
+
+    .link {
+        min-height: auto;
+        padding: 8px 4px;
+    }
+
+    .link:hover,
+    .link:focus-visible {
+        transform: scale(1.22);
     }
 }
 

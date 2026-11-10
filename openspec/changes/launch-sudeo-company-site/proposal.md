@@ -25,6 +25,7 @@ The repository contains a copied logistics landing page that does not represent 
 - Enforce strict reusable page composition: introduce shared `Container`, `AppPadding`, and `AppGrid` primitives alongside `VStack`, `HStack`, `Flex`, `Box`, `Section`, and `MainContent`; migrate all route pages away from raw layout containers and page-owned structural spacing; retain the separate `widgets` layer for reusable product sections; and make architecture validation reject regressions.
 - Extend the branded loading experience to the first browser bootstrap without replacing or removing prerendered route content: mount the existing `AppLoader` as a temporary viewport overlay outside the hydrated root, dismiss it only after the React application commits, preserve the static HTML/SEO contract, and re-audit every public route at the required mobile widths.
 - Keep the shared header visible while the visitor scrolls and give the desktop/mobile menu shell the same opaque dark surface as the site's dark sections, preserving readable contrast, route state, dropdown positioning, mobile navigation, and unobstructed content.
+- Rebuild responsive styling mobile-first across the application: make the unqualified styles target phones up to 450px, layer tablet enhancements from `451px`, layer desktop composition from `960px`, reduce phone section/block spacing, and resize long headings so complete Russian words—including `Автоматизируем`—fit without clipping or horizontal overflow.
 
 ## Capabilities
 

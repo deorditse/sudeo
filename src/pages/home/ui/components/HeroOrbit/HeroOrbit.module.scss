@@ -1,10 +1,11 @@
 .orbit {
     position: absolute;
     z-index: 1;
-    top: 155px;
-    right: max(3vw, calc((100vw - 1320px) / 2));
-    width: 520px;
-    height: 520px;
+    top: 360px;
+    right: -238px;
+    width: 330px;
+    height: 330px;
+    opacity: 0.2;
     border: 1px solid rgba(255, 255, 255, 0.14);
     border-radius: 50%;
     animation: orbitDrift 7s ease-in-out infinite;
@@ -19,15 +20,15 @@
 }
 
 .orbit::before {
-    inset: 58px;
+    inset: 40px;
     border: 1px dashed rgba(185, 255, 102, 0.32);
     animation: ringSpin 18s linear infinite;
 }
 
 .orbit::after {
-    inset: 128px;
+    inset: 84px;
     border: 1px solid rgba(185, 255, 102, 0.22);
-    box-shadow: 0 0 80px rgba(185, 255, 102, 0.08);
+    box-shadow: 0 0 54px rgba(185, 255, 102, 0.08);
     animation: ringBreathe 4.5s ease-in-out infinite;
 }
 
@@ -37,14 +38,14 @@
     top: 50%;
     left: 50%;
     display: grid;
-    width: 124px;
-    height: 124px;
+    width: 82px;
+    height: 82px;
     place-items: center;
     overflow: hidden;
     color: #11130f;
     background: #b9ff66;
     border-radius: 34% 66% 57% 43%;
-    box-shadow: 0 24px 80px rgba(185, 255, 102, 0.24);
+    box-shadow: 0 16px 50px rgba(185, 255, 102, 0.2);
     transform: translate(-50%, -50%) rotate(-8deg);
     animation: coreMorph 5s ease-in-out infinite;
 }
@@ -55,7 +56,7 @@
     inset: 0;
     place-items: center;
     opacity: 0;
-    font-size: 25px;
+    font-size: 16px;
     font-weight: 900;
     letter-spacing: 0.04em;
     transform: scale(0.55) rotate(18deg);
@@ -64,7 +65,7 @@
 }
 
 .identity:first-child {
-    font-size: 50px;
+    font-size: 34px;
 }
 
 .markerTrack {
@@ -82,7 +83,7 @@
 }
 
 .trackMiddle {
-    inset: 58px;
+    inset: 40px;
 }
 
 .marker {
@@ -90,18 +91,18 @@
     top: 0;
     left: 50%;
     display: grid;
-    width: 68px;
-    height: 68px;
+    width: 42px;
+    height: 42px;
     place-items: center;
     color: #11130f;
-    background: rgba(255, 255, 255, 0.95);
+    background: rgba(255, 255, 255, 0.9);
     border: 1px solid rgba(17, 19, 15, 0.08);
     border-radius: 50%;
-    box-shadow: 0 18px 60px rgba(0, 0, 0, 0.25);
-    font-size: 10px;
+    box-shadow: 0 10px 32px rgba(0, 0, 0, 0.2);
+    font-size: 7px;
     font-style: normal;
     font-weight: 900;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.06em;
     transform: translate(-50%, -50%);
     animation: markerCounterOrbit var(--orbit-duration) linear infinite;
     animation-delay: var(--orbit-delay);
@@ -142,20 +143,92 @@
     to { transform: translate(-50%, -50%) rotate(-360deg); }
 }
 
-@media (max-width: 1100px) {
+@media (min-width: 451px) {
     .orbit {
-        right: -210px;
-        opacity: 0.62;
+        top: 300px;
+        right: -250px;
+        width: 440px;
+        height: 440px;
+        opacity: 0.4;
+    }
+
+    .orbit::before {
+        inset: 50px;
+    }
+
+    .orbit::after {
+        inset: 108px;
+        box-shadow: 0 0 70px rgba(185, 255, 102, 0.08);
+    }
+
+    .orbitCore {
+        width: 106px;
+        height: 106px;
+        box-shadow: 0 20px 66px rgba(185, 255, 102, 0.22);
+    }
+
+    .identity {
+        font-size: 21px;
+    }
+
+    .identity:first-child {
+        font-size: 43px;
+    }
+
+    .trackMiddle {
+        inset: 50px;
+    }
+
+    .marker {
+        width: 56px;
+        height: 56px;
+        font-size: 9px;
     }
 }
 
-@media (max-width: 760px) {
+@media (min-width: 960px) {
     .orbit {
-        top: 330px;
-        right: -310px;
-        width: 470px;
-        height: 470px;
-        opacity: 0.42;
+        top: 155px;
+        right: max(3vw, calc((100vw - 1320px) / 2));
+        width: 520px;
+        height: 520px;
+        opacity: 1;
+    }
+
+    .orbit::before {
+        inset: 58px;
+    }
+
+    .orbit::after {
+        inset: 128px;
+        box-shadow: 0 0 80px rgba(185, 255, 102, 0.08);
+    }
+
+    .orbitCore {
+        width: 124px;
+        height: 124px;
+        box-shadow: 0 24px 80px rgba(185, 255, 102, 0.24);
+    }
+
+    .identity {
+        font-size: 25px;
+    }
+
+    .identity:first-child {
+        font-size: 50px;
+    }
+
+    .trackMiddle {
+        inset: 58px;
+    }
+
+    .marker {
+        width: 68px;
+        height: 68px;
+        background: rgba(255, 255, 255, 0.95);
+        box-shadow: 0 18px 60px rgba(0, 0, 0, 0.25);
+        font-size: 10px;
+        letter-spacing: 0.08em;
     }
 }
 

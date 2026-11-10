@@ -49,18 +49,20 @@ const ServicePage = () => {
                 as="section"
                 className={cls.serviceHero}
                 style={{ "--service-accent": service.accent } as CSSProperties}
-                pt="190"
-                pb="105"
-                mobilePt="145"
-                mobilePb="75"
+                pt="145"
+                pb="75"
+                tabletPt="190"
+                tabletPb="105"
+                desktopPt="190"
+                desktopPb="105"
             >
                 <MainContent>
                     <Breadcrumbs items={[["Услуги", "/services"], [service.title]]} />
                     <AppGrid
-                        columns={2}
+                        columns={1}
                         tabletColumns={2}
+                        desktopColumns={2}
                         template="serviceHero"
-                        mobileColumns={1}
                         gap="78"
                         align="center"
                     >
@@ -81,7 +83,7 @@ const ServicePage = () => {
 
             <Section>
                 <MainContent>
-                    <AppGrid columns={2} mobileColumns={1} gap="90" align="start">
+                    <AppGrid columns={1} tabletColumns={2} desktopColumns={2} gap="90" align="start">
                         <SectionHeading
                             eyebrow="Задача"
                             title="Когда это направление подходит"
@@ -98,7 +100,7 @@ const ServicePage = () => {
             <Section tone="dark">
                 <MainContent>
                     <SectionHeading eyebrow="Состав" title="Что входит в работу" />
-                    <AppGrid columns={5} tabletColumns={3} mobileColumns={1} gap="0" className={cls.stepsGrid}>
+                    <AppGrid columns={1} tabletColumns={3} desktopColumns={5} gap="0" className={cls.stepsGrid}>
                         {service.scope.map((item, index) => (
                             <Box as="article" className={cls.stepItem} key={item}>
                                 <span>0{index + 1}</span>
@@ -111,7 +113,7 @@ const ServicePage = () => {
 
             <Section>
                 <MainContent>
-                    <AppGrid columns={2} mobileColumns={1} gap="90" align="start">
+                    <AppGrid columns={1} tabletColumns={2} desktopColumns={2} gap="90" align="start">
                         <BulletPanel title="Что передаём" items={service.deliverables} />
                         <BulletPanel
                             title="Что потребуется от клиента"
@@ -128,7 +130,7 @@ const ServicePage = () => {
                             eyebrow="Контроль ИИ"
                             title="Автоматизация с ограничениями по умолчанию"
                         />
-                        <AppGrid columns={4} tabletColumns={2} mobileColumns={1} gap="20">
+                        <AppGrid columns={1} tabletColumns={2} desktopColumns={4} gap="20">
                             {service.aiControls.map((item, index) => (
                                 <Box as="article" className={cls.controlItem} key={item}>
                                     <span>{index + 1}</span>
@@ -142,7 +144,7 @@ const ServicePage = () => {
 
             <Section>
                 <MainContent>
-                    <AppGrid columns={2} mobileColumns={1} gap="90" align="start">
+                    <AppGrid columns={1} tabletColumns={2} desktopColumns={2} gap="90" align="start">
                         <SectionHeading
                             eyebrow="Оценка"
                             title="Что влияет на сроки и стоимость"
@@ -155,7 +157,7 @@ const ServicePage = () => {
 
             <Section tone="feature">
                 <MainContent>
-                    <AppGrid columns={2} mobileColumns={1} gap="40" align="end">
+                    <AppGrid columns={1} tabletColumns={2} desktopColumns={2} gap="40" align="end">
                         <VStack gap="24" align="start">
                             <p className={cls.tag}>Связанный материал</p>
                             <h2 className={cls.relatedCaseTitle}>{relatedCaseTitle}</h2>

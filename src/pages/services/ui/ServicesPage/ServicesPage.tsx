@@ -17,7 +17,7 @@ const ServicesPage = () => {
             />
             <Section>
                 <MainContent>
-                    <AppGrid columns={2} mobileColumns={1} gap="18">
+                    <AppGrid columns={1} tabletColumns={2} desktopColumns={2} gap="18">
                         {model.services.map((service) => (
                             <ServiceCard key={service.slug} service={service} />
                         ))}

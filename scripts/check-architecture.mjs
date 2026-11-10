@@ -23,7 +23,26 @@ const walk = async (directory, pattern = /\.(ts|tsx)$/) => {
 };
 
 const sourceFiles = await walk(srcRoot);
+const scssFiles = await walk(srcRoot, /\.scss$/);
 const importPattern = /from\s+["']([^"']+)["']/g;
+const widthMediaFeaturePattern = /\b(?:min-|max-)?(?:device-)?width\b/i;
+const approvedWidthMediaQueryPattern = /^\(\s*min-width\s*:\s*(?:451|960)px\s*\)$/i;
+
+for (const file of scssFiles) {
+    const rel = toRelativePath(file);
+    const rawContent = await readFile(file, "utf8");
+    const content = rawContent.replace(/\/\*[\s\S]*?\*\//g, (comment) => " ".repeat(comment.length));
+    for (const match of content.matchAll(/@media\b([^{}]*)\{/gi)) {
+        const query = match[1].replace(/\s+/g, " ").trim();
+        if (!widthMediaFeaturePattern.test(query) || approvedWidthMediaQueryPattern.test(query)) continue;
+        const line = content.slice(0, match.index).split("\n").length;
+        const reason = /\bmax-width\b/i.test(query)
+            ? "width-based max-width queries are forbidden; put phone styles in the unqualified base layer"
+            : "unapproved width breakpoint; use exactly (min-width: 451px) or (min-width: 960px)";
+        addFailure(`${rel}:${line}: @media ${query}: ${reason}`);
+    }
+}
+
 const rawLayoutTags = new Set(["div", "section", "article", "header", "aside"]);
 const approvedContentShells = new Set(["MainContent", "PageHero"]);
 const layoutPrimitiveCategories = new Map([
@@ -324,4 +343,4 @@ if (sortedFailures.length) {
     process.exit(1);
 }
 
-console.log(`Architecture check passed: ${pageEntries.length} page slices, layer imports, lazy exports, shared page composition, structural spacing and ${navigationPaths.length} discovery routes.`);
+console.log(`Architecture check passed: ${pageEntries.length} page slices, layer imports, lazy exports, shared page composition, structural spacing, approved SCSS breakpoints and ${navigationPaths.length} discovery routes.`);

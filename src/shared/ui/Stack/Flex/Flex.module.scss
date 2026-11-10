@@ -19,6 +19,18 @@
 .gap-12 { gap: 12px; }
 .gap-16 { gap: 16px; }
 .gap-24 { gap: 24px; }
-.gap-32 { gap: 32px; }
-.gap-48 { gap: 48px; }
-.gap-64 { gap: 64px; }
+.gap-32 { gap: 24px; }
+.gap-48 { gap: 32px; }
+.gap-64 { gap: 40px; }
+
+@media (min-width: 451px) {
+    .gap-32 { gap: 28px; }
+    .gap-48 { gap: 40px; }
+    .gap-64 { gap: 48px; }
+}
+
+@media (min-width: 960px) {
+    .gap-32 { gap: 32px; }
+    .gap-48 { gap: 48px; }
+    .gap-64 { gap: 64px; }
+}

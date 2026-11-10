@@ -5,11 +5,20 @@
     padding-left: var(--app-pl, var(--app-px, var(--app-p, 0px)));
 }
 
-@media (max-width: 760px) {
+@media (min-width: 451px) {
     .root {
-        padding-top: var(--app-mobile-pt, var(--app-mobile-py, var(--app-mobile-p, var(--app-pt, var(--app-py, var(--app-p, 0px))))));
-        padding-right: var(--app-mobile-pr, var(--app-mobile-px, var(--app-mobile-p, var(--app-pr, var(--app-px, var(--app-p, 0px))))));
-        padding-bottom: var(--app-mobile-pb, var(--app-mobile-py, var(--app-mobile-p, var(--app-pb, var(--app-py, var(--app-p, 0px))))));
-        padding-left: var(--app-mobile-pl, var(--app-mobile-px, var(--app-mobile-p, var(--app-pl, var(--app-px, var(--app-p, 0px))))));
+        padding-top: var(--app-tablet-pt, var(--app-tablet-py, var(--app-tablet-p, var(--app-pt, var(--app-py, var(--app-p, 0px))))));
+        padding-right: var(--app-tablet-pr, var(--app-tablet-px, var(--app-tablet-p, var(--app-pr, var(--app-px, var(--app-p, 0px))))));
+        padding-bottom: var(--app-tablet-pb, var(--app-tablet-py, var(--app-tablet-p, var(--app-pb, var(--app-py, var(--app-p, 0px))))));
+        padding-left: var(--app-tablet-pl, var(--app-tablet-px, var(--app-tablet-p, var(--app-pl, var(--app-px, var(--app-p, 0px))))));
+    }
+}
+
+@media (min-width: 960px) {
+    .root {
+        padding-top: var(--app-desktop-pt, var(--app-desktop-py, var(--app-desktop-p, var(--app-tablet-pt, var(--app-tablet-py, var(--app-tablet-p, var(--app-pt, var(--app-py, var(--app-p, 0px)))))))));
+        padding-right: var(--app-desktop-pr, var(--app-desktop-px, var(--app-desktop-p, var(--app-tablet-pr, var(--app-tablet-px, var(--app-tablet-p, var(--app-pr, var(--app-px, var(--app-p, 0px)))))))));
+        padding-bottom: var(--app-desktop-pb, var(--app-desktop-py, var(--app-desktop-p, var(--app-tablet-pb, var(--app-tablet-py, var(--app-tablet-p, var(--app-pb, var(--app-py, var(--app-p, 0px)))))))));
+        padding-left: var(--app-desktop-pl, var(--app-desktop-px, var(--app-desktop-p, var(--app-tablet-pl, var(--app-tablet-px, var(--app-tablet-p, var(--app-pl, var(--app-px, var(--app-p, 0px)))))))));
     }
 }
