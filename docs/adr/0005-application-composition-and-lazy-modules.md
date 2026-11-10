@@ -18,6 +18,7 @@ The first implementation placed routing, layouts, pages, reusable UI, analytics,
 - Keep duplicate network-request protection in a local ref because it guards an in-flight browser operation rather than serializable application state.
 - Create a fresh Redux store for each server render and use the browser store instance through `StoreProvider`.
 - Use React 19 `prerenderToNodeStream` as a build-time resolution pass for route-level lazy modules, consume its prelude, and then render the resolved tree with `renderToString`. This two-pass static build emits the page directly without a serialized Suspense fallback, hidden replacement segment, or browser-only swap script. Each pass creates a fresh Redux store.
+- During browser bootstrap, mount the shared `AppLoader` in a temporary React root outside the prerendered `#root`. `App` emits an idempotent readiness event from its first client effect; the browser entry waits for the committed application to paint, fades and unmounts the temporary loader, and removes its host. An eight-second maximum safety timeout performs the same cleanup if the readiness signal is lost. The initial route-level fallback suppresses its duplicate status announcement until the bootstrap overlay exits, while later client navigations retain the normal polite loading status. The route markup inside `#root` is never deleted or replaced.
 
 ## Alternatives
 
@@ -26,6 +27,7 @@ The first implementation placed routing, layouts, pages, reusable UI, analytics,
 - **Use `renderToPipeableStream` with `onAllReady`:** superseded after a branded fallback exposed that React still serializes the fallback plus hidden resolved content and an inline `$RC` replacement script. That output requires JavaScript to replace the fallback and therefore violates the static no-JavaScript content contract.
 - **Use a static Redux store without reducer injection:** rejected because it does not implement the required module lifecycle and would leave `DynamicModuleLoader` as unused infrastructure.
 - **Move request locks into Redux:** rejected because promises and request locks are ephemeral, non-serializable browser concerns.
+- **Serialize or inject the initial loader inside `#root`:** rejected because it would replace resolved route content, weaken no-JavaScript behavior, or create a hydration mismatch.
 
 ## Consequences
 
@@ -34,3 +36,4 @@ The first implementation placed routing, layouts, pages, reusable UI, analytics,
 - Features that need isolated state can add typed optional keys to `StateSchema` and mount them through `DynamicModuleLoader`.
 - Removing a dynamic feature removes its reducer state by default; long-lived state must explicitly set `removeAfterUnmount={false}` and document why.
 - New pages must follow the async entry-point convention and be added to the route configuration and route manifest where applicable.
+- The initial loader is a client-only overlay and must remain absent from generated route documents; route-level loading continues to use the same component through the existing `Suspense` boundary.

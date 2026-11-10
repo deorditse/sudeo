@@ -1,0 +1,1 @@
+import{j as t,f as n}from"./index-DaOKK1sw.js";const o="_page_16uie_1",c="_padded_16uie_22",a={page:o,padded:c},m=({children:e,className:s,padded:d=!1,...p})=>t.jsx("main",{id:"main-content",className:n(a.page,d&&a.padded,s),...p,children:e});export{m as P};

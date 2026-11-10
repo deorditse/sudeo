@@ -185,6 +185,31 @@ Reusable product sections that appear across routes remain in the separate `widg
 - Force every grid into `HStack`/`VStack`: rejected because responsive two- and four-column layouts are grid semantics and deserve a reusable `AppGrid` primitive.
 - Keep `MainContent` and add an unrelated `Container`: rejected because two independent gutter systems would drift; `MainContent` must delegate to the canonical container implementation.
 
+### 13. Show the branded loader during browser bootstrap without hiding prerendered content
+
+The browser entry will create a dedicated bootstrap overlay host outside `#root` and render the existing shared `AppLoader` into it before calling `hydrateRoot` or `createRoot`. The loader will gain a viewport-overlay presentation variant while retaining its existing content-stage variant for route-level `Suspense`. The prerendered route tree inside `#root` will remain present and unchanged behind the overlay, so search engines, no-JavaScript visitors, and hydration continue to receive the complete route document.
+
+A renderless client-readiness component in the shared application tree will signal from an effect after the first React commit. The browser entry will handle that signal idempotently, allow the committed application to paint, apply a short CSS exit transition, unmount the loader root, and remove the temporary host. The lifecycle will not use a fixed artificial minimum delay; visitors will not be blocked longer than application readiness requires. A maximum safety timeout will remove the overlay if the readiness signal is unexpectedly lost, while leaving the intact prerendered content available underneath. Reduced-motion mode will disable both continuous loader animation and the exit transition.
+
+The generated documents will continue to exclude the loader label, bootstrap host, hidden Suspense replacement segments, and inline `$RC` scripts. Browser verification will cover cold direct loads with cache disabled, hydrated content preservation, one loader status region, overlay cleanup, reduced motion, console/hydration errors, mobile navigation, primary controls, and page-level overflow for every declared route at 360, 390, and 768 pixels. Representative 1024 and 1440 checks remain part of the existing responsive contract.
+
+**Alternatives considered:**
+- Replace the prerendered `#root` content with a loader before hydration: rejected because it destroys the SEO/no-JavaScript contract and can create hydration mismatches.
+- Serialize the loader into generated HTML above the route content: rejected because the established static-artifact contract intentionally contains only resolved route content and no loading status.
+- Hide the application with `display: none` until an arbitrary timeout expires: rejected because it delays usable content, can trap visitors behind a loader, and does not represent actual readiness.
+- Build a second bootstrap-only logo animation: rejected because the existing accessible `AppLoader` is the canonical branded loading state and should be reused through an explicit presentation variant.
+
+### 14. Keep the global header fixed on an opaque dark surface
+
+`MainLayout` will make the shared header fixed to the top of the viewport on every route and viewport rather than positioning it only over the first page section. The header and its mobile navigation surface will use the site's established dark shell color instead of depending on the page underneath for contrast. The existing border, white navigation text, lime active/focus state, route catalog, and mobile menu controls will remain visible against that surface.
+
+The fixed header will retain a stable desktop and mobile height, remain above route content but below skip-link/focus escape affordances, and keep the desktop catalog and mobile panel anchored to the header. Global scroll offset will account for the header so hash targets and focused content are not hidden underneath it. The mobile panel will remain viewport-bounded and scrollable without introducing page-level horizontal overflow; opening and closing it will preserve the existing keyboard, touch, Escape, outside-activation, and focus-restoration behavior.
+
+**Alternatives considered:**
+- Keep the absolute transparent header only on hero pages: rejected because it disappears during scrolling and produces inconsistent contrast on light route sections.
+- Change header colors per route: rejected because route-specific shell styling would duplicate logic and weaken the shared layout contract.
+- Use a translucent background that reveals page colors: rejected because the requested dark menu background should remain predictable and readable across all routes.
+
 ## Risks / Trade-offs
 
 - **[No production contact/legal data is approved]** → Use clearly configurable content and omit copied values; block launch acceptance until verified values are supplied.
@@ -207,6 +232,9 @@ Reusable product sections that appear across routes remain in the separate `widg
 - **[Custom-domain Pages can be deployed while DNS still serves another host]** → Treat workflow success and domain launch as separate evidence; verify authoritative A records, HTTPS, home content, and a nested route before closing delivery.
 - **[Continuous orbit and marquee motion can distract or consume rendering resources]** → Animate only transforms/opacity, keep timing moderate, stop all continuous motion under reduced-motion preferences, and verify responsive overflow and hover/focus behavior in the browser.
 - **[A strict primitive migration can create abstraction noise or visual drift]** → distinguish structural spacing from component-internal styling, migrate route slices in verified batches, preserve semantic `as` output, and compare target viewports before removing old page layout rules.
+- **[A bootstrap overlay can remain after hydration or cover usable controls]** → remove it from a post-commit readiness signal with idempotent cleanup, add a maximum safety-timeout cleanup path, and verify host removal and pointer restoration on direct mobile loads.
+- **[A second React root can duplicate announcements or leak resources]** → render exactly one status region in the temporary host, unmount that root before removing the host, and keep route-transition loading in the existing application `Suspense` boundary.
+- **[A fixed header can cover anchors, focus targets, or mobile content]** → define shared header-height tokens and document scroll offset, keep the mobile panel below the header, and verify anchors, keyboard focus, menus, and primary controls at all acceptance widths.
 
 ## Migration Plan
 
@@ -223,6 +251,8 @@ Reusable product sections that appear across routes remain in the separate `widg
 11. Add the branded Suspense fallback, align the Pages workflow with the proven owner repository, migrate REG.RU apex DNS when authorized, and verify the deployed commit, HTTPS, home page, and a nested route on `sudeo.ru`.
 12. Enhance the home hero orbit and right-to-left service marquee, verify pointer/keyboard emphasis, reduced-motion behavior, responsive overflow, static prerender content, and production quality gates before deployment.
 13. Add the canonical container/padding/grid primitives, migrate every route page and page-owned section to the strict shared composition contract, strengthen the architecture checker with a negative path, and verify responsive visual parity before deployment.
+14. Add the temporary client-bootstrap loader overlay, signal and clean it up after the first application commit, preserve generated route markup, and run a complete mobile direct-load audit before deployment.
+15. Make the shared header fixed with an opaque dark site surface, preserve desktop/mobile route navigation behavior, and verify content, anchors, and controls are not obscured at any acceptance viewport.
 
 Rollback is a revert or redeployment of the last verified commit. Because the deployment is static, no content database migration is involved in this change.
 

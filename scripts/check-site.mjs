@@ -25,6 +25,7 @@ for (const route of requiredRoutes) {
     if (!html.includes(`<link rel="canonical" href="https://sudeo.ru${route}"`)) failures.push(`${route}: incorrect canonical`);
     if (!html.includes('<div id="root">') || html.includes('<div id="root"></div>')) failures.push(`${route}: missing pre-rendered markup`);
     if (html.includes("Загружаем страницу")) failures.push(`${route}: contains the client Suspense loader instead of static-only route markup`);
+    if (html.includes('id="app-bootstrap-loader"')) failures.push(`${route}: contains the client-only bootstrap loader host`);
     if (html.includes('id="S:') || html.includes("$RC(")) failures.push(`${route}: contains a browser-dependent Suspense replacement segment`);
 }
 

@@ -1,7 +1,7 @@
 .app { min-width: 320px; overflow: clip; color: #11130f; background: #f3f1ea; }
 .skipLink { position: fixed; top: 8px; left: 8px; z-index: 100; padding: 10px 16px; color: #11130f; background: #b9ff66; transform: translateY(-150%); transition: transform 160ms ease; }
 .skipLink:focus { transform: translateY(0); }
-.header { position: absolute; inset: 0 0 auto; z-index: 20; color: white; border-bottom: 1px solid rgba(255, 255, 255, 0.18); }
+.header { position: fixed; inset: 0 0 auto; z-index: 50; color: white; background: #11130f; border-bottom: 1px solid rgba(255, 255, 255, 0.18); }
 .headerInner { position: relative; display: grid; grid-template-columns: auto 1fr auto auto; gap: 28px; align-items: center; min-height: 84px; }
 .desktopNav { display: flex; justify-self: center; gap: 28px; }
 .desktopNav a { position: relative; padding: 31px 0; color: inherit; font-size: 14px; opacity: 0.72; transition: opacity 160ms ease, color 160ms ease; }
@@ -18,14 +18,14 @@
 .currentRouteLabel strong { color: #b9ff66; }
 .chevron { font-size: 18px; transition: transform 180ms ease; }
 .catalogButton[aria-expanded="true"] .chevron { transform: rotate(180deg); }
-.catalogPanel { position: absolute; top: calc(100% + 14px); right: 0; width: min(760px, calc(100vw - 64px)); padding: 28px; color: #11130f; background: #f7f6f0; border: 1px solid rgba(17, 19, 15, 0.16); border-radius: 12px; box-shadow: 0 28px 80px rgba(0, 0, 0, 0.28); opacity: 0; visibility: hidden; transform: translateY(-8px) scale(0.98); transform-origin: top right; pointer-events: none; transition: opacity 180ms ease, transform 180ms ease, visibility 180ms ease; }
+.catalogPanel { position: absolute; top: calc(100% + 14px); right: 0; width: min(760px, calc(100vw - 64px)); padding: 28px; color: white; background: #11130f; border: 1px solid rgba(255, 255, 255, 0.18); border-radius: 12px; box-shadow: 0 28px 80px rgba(0, 0, 0, 0.38); opacity: 0; visibility: hidden; transform: translateY(-8px) scale(0.98); transform-origin: top right; pointer-events: none; transition: opacity 180ms ease, transform 180ms ease, visibility 180ms ease; }
 .catalogPanelOpen { opacity: 1; visibility: visible; transform: translateY(0) scale(1); pointer-events: auto; }
 .catalogGrid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 26px; }
 .catalogGroup { min-width: 0; }
-.catalogLabel { margin-bottom: 14px; color: #777b72; }
+.catalogLabel { margin-bottom: 14px; color: #b9ff66; }
 .catalogLinks { display: grid; gap: 4px; }
-.catalogLinks a { display: flex; gap: 8px; align-items: center; justify-content: space-between; padding: 9px 10px; color: #11130f; border-radius: 7px; font-size: 13px; line-height: 1.35; transition: color 150ms ease, background 150ms ease, transform 150ms ease; }
-.catalogLinks a:hover, .catalogLinks a:focus-visible { color: #11130f; background: #e8ffcf; transform: translateX(3px); }
+.catalogLinks a { display: flex; gap: 8px; align-items: center; justify-content: space-between; padding: 9px 10px; color: rgba(255, 255, 255, 0.78); border-radius: 7px; font-size: 13px; line-height: 1.35; transition: color 150ms ease, background 150ms ease, transform 150ms ease; }
+.catalogLinks a:hover, .catalogLinks a:focus-visible { color: white; background: rgba(185, 255, 102, 0.13); transform: translateX(3px); }
 .catalogLinks .currentCatalogLink { color: #11130f; background: #b9ff66; font-weight: 700; }
 .catalogLinks .currentCatalogLink span { color: #4c7b1a; font-size: 8px; }
 .menuButton, .mobileNav { display: none; }
@@ -52,8 +52,8 @@
     .menuButton span { display: block; height: 1px; background: currentColor; transition: transform 180ms ease; }
     .menuButton[aria-expanded="true"] span:first-child { transform: translateY(4px) rotate(45deg); }
     .menuButton[aria-expanded="true"] span:last-child { transform: translateY(-4px) rotate(-45deg); }
-    .mobileNav { position: absolute; top: 84px; left: 0; width: 100%; max-height: 0; padding: 0 32px; overflow: hidden auto; color: white; background: #11130f; opacity: 0; transition: max-height 220ms ease, opacity 180ms ease, padding 220ms ease; }
-    .mobileNavOpen { display: grid; max-height: calc(100vh - 84px); padding-top: 20px; padding-bottom: 30px; opacity: 1; border-bottom: 1px solid rgba(255, 255, 255, 0.15); }
+    .mobileNav { position: absolute; top: 84px; left: 0; width: 100%; max-height: 0; padding: 0 32px; overflow: hidden auto; color: white; background: #11130f; overscroll-behavior: contain; opacity: 0; transition: max-height 220ms ease, opacity 180ms ease, padding 220ms ease; }
+    .mobileNavOpen { display: grid; max-height: calc(100dvh - 84px); padding-top: 20px; padding-bottom: 30px; opacity: 1; border-bottom: 1px solid rgba(255, 255, 255, 0.15); }
     .mobileNav .catalogGrid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px; padding-top: 24px; }
     .mobileNav .catalogLabel { color: #b9ff66; }
     .mobileNav .catalogLinks a { color: rgba(255, 255, 255, 0.78); }
@@ -63,7 +63,7 @@
 @media (max-width: 760px) {
     .headerInner { min-height: 72px; }
     .mobileNav { top: 72px; padding-left: 18px; padding-right: 18px; }
-    .mobileNavOpen { max-height: calc(100vh - 72px); }
+    .mobileNavOpen { max-height: calc(100dvh - 72px); }
     .mobileNav .catalogGrid { grid-template-columns: 1fr; }
     .footer { padding-top: 80px; }
     .footerSitemap { grid-template-columns: 1fr; gap: 36px; }

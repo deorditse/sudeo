@@ -19,6 +19,7 @@ The first Sudeo implementation had working lazy routes, prerendering, and a dyna
 7. Hover, focus-visible, active, pressed, card-elevation, and restrained entrance effects live with their owning primitive, widget, or page component. Primary content is visible before JavaScript and `prefers-reduced-motion: reduce` removes non-essential movement.
 8. `scripts/check-architecture.mjs` enforces layer imports, page boundaries, async exports, exactly one route `Page`, an approved shared content shell, the absence of raw page layout containers, structural-spacing ownership, and discovery-route coverage. It runs in the production build.
 9. The home hero's orbit and service marquee remain page-owned components. The orbit cycles the `S`, `AI`, `WEB`, `APP`, and `GROW` identities and moves service markers with transform/opacity-only CSS animations. The marquee uses duplicated visual groups for a seamless right-to-left loop, keeps pointer autoscroll active while a label scales, stops and resets when a keyboard focus enters the ticker, and exposes only one semantic set of service links. Reduced-motion mode removes cycling, orbit travel, duplication, and automatic scrolling while preserving a static `S` and all service destinations.
+10. The shared header is fixed to the top of every route and uses the opaque `#11130f` shell surface on desktop and mobile. The route catalog and mobile navigation stay anchored beneath it, global scroll padding keeps targets visible, and the skip link remains above the shell in the stacking order.
 
 ## Alternatives considered
 
@@ -29,6 +30,7 @@ The first Sudeo implementation had working lazy routes, prerendering, and a dyna
 - **Hide SSR content until an intersection observer runs:** rejected because no-JavaScript content, hydration, and accessibility would regress.
 - **Let shared dynamic infrastructure import app store types:** rejected because `shared → app` violates the declared dependency direction.
 - **Use JavaScript timers or an animation dependency for the hero:** rejected because CSS keyframes provide deterministic decorative motion without hydration state, timer cleanup, or a larger runtime bundle.
+- **Keep a transparent absolute header:** rejected because it disappears while scrolling and has inconsistent contrast over light page sections.
 
 ## Consequences
 
@@ -45,6 +47,7 @@ The first Sudeo implementation had working lazy routes, prerendering, and a dyna
 - The page tree contains more small files and public APIs than a monolithic landing page.
 - Navigation and route metadata must remain synchronized through the shared route configuration.
 - New primitives and variants require restraint to avoid replacing clear semantic markup with unnecessary abstraction; polymorphic `as` output preserves the intended landmarks.
+- Fixed-header height and anchor offsets must remain synchronized at desktop and mobile breakpoints.
 
 ## Verification
 

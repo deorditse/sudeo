@@ -75,6 +75,21 @@ The shared site shell SHALL visibly identify the current visitor-facing page, SH
 - **WHEN** a visitor reaches the shared footer on any public page
 - **THEN** links to every visitor-facing declared route are present with understandable group labels and the current route is not misrepresented
 
+### Requirement: Persistent dark global header
+The shared site header SHALL remain fixed at the top of the viewport while the visitor scrolls and SHALL use the site's established opaque dark surface on every route. Its logo, navigation, active-route state, catalog controls, and mobile menu control SHALL retain readable contrast and visible focus, while route content, anchors, focused elements, and primary actions SHALL NOT be obscured by the fixed shell.
+
+#### Scenario: Visitor scrolls a public route
+- **WHEN** a visitor scrolls beyond the first viewport on any declared route
+- **THEN** the dark header remains visible with the current-route navigation state intact and does not change according to the page section underneath
+
+#### Scenario: Visitor opens navigation on a mobile viewport
+- **WHEN** the fixed-header mobile menu is opened at 360, 390, or 768 pixels
+- **THEN** the dark menu begins below the header, remains operable and viewport-bounded, and does not introduce page-level horizontal overflow or cover its own close control
+
+#### Scenario: Visitor follows an in-page target
+- **WHEN** navigation or focus moves to an anchor or interactive target
+- **THEN** the target is positioned visibly below the fixed header rather than being hidden behind it
+
 ### Requirement: Progressive interaction and motion
 The public site SHALL provide consistent hover, focus-visible, active, and pressed feedback for reusable interactive controls and MAY provide restrained page or section entrance motion. Primary content MUST remain visible and usable without client JavaScript, motion MUST NOT cause material layout shift or block navigation, and non-essential movement MUST be disabled when the user requests reduced motion.
 
@@ -123,3 +138,22 @@ The application SHALL provide a reusable Sudeo-branded fallback for the shared r
 #### Scenario: Loader visitor requests reduced motion
 - **WHEN** `prefers-reduced-motion: reduce` is active while the fallback is visible
 - **THEN** continuous decorative movement stops while the Sudeo identity and loading status remain understandable
+
+### Requirement: Branded initial browser loading state
+The application SHALL reuse the Sudeo `AppLoader` during the first browser bootstrap. The initial loader SHALL appear as a temporary viewport overlay without deleting, replacing, or mutating the prerendered route content inside the hydration root; SHALL be dismissed after the first committed application render; SHALL leave no overlay host or pointer obstruction after cleanup; and SHALL preserve the generated-document contract that excludes loading fallback markup.
+
+#### Scenario: Visitor opens a generated route with client JavaScript
+- **WHEN** the browser starts hydrating a directly loaded generated route
+- **THEN** one branded loading status is displayed above the intact prerendered route until the application commits, after which the loader is unmounted and the route remains interactive without a hydration error
+
+#### Scenario: Visitor opens a generated route without client JavaScript
+- **WHEN** client JavaScript is unavailable or has not executed
+- **THEN** the complete prerendered route remains visible and usable and no serialized loader blocks the document
+
+#### Scenario: Initial loader visitor requests reduced motion
+- **WHEN** `prefers-reduced-motion: reduce` is active during browser bootstrap
+- **THEN** the brand and loading status remain visible while continuous loader movement and non-essential exit motion are disabled
+
+#### Scenario: Visitor opens a route on a mobile viewport
+- **WHEN** any declared route is loaded directly at 360, 390, or 768 pixels
+- **THEN** the loader and resolved route fit the viewport without page-level horizontal overflow, clipped primary controls, duplicate main landmarks, or an inaccessible mobile navigation state

@@ -1,0 +1,1 @@
+import{j as t,P as s}from"./index-DaOKK1sw.js";import{P as o}from"./Page-BR3jTd-E.js";const c=()=>({code:"ГОТОВО",title:"Заявка отправлена",description:"Мы получили запрос и вернёмся с ответом в течение одного рабочего дня."}),a=()=>{const e=c();return t.jsx(o,{children:t.jsx(s,{eyebrow:e.code,title:e.title,text:e.description})})};export{a as default};

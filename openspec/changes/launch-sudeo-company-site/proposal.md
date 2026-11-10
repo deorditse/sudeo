@@ -23,6 +23,8 @@ The repository contains a copied logistics landing page that does not represent 
 - Align the GitHub Pages workflow and custom-domain setup with the verified `deorditse/tec_drive` pattern: explicit Pages configuration, artifact upload/deploy actions, a `github-pages` environment targeting `sudeo.ru`, and the four apex A records required to replace the current REG.RU placeholder destination.
 - Make the home hero more active without adding a runtime animation dependency: cycle the central Sudeo orbit label through the service identities, animate the surrounding service markers more visibly, and replace the static service strip with a seamless right-to-left marquee whose individual labels enlarge on hover and keyboard focus.
 - Enforce strict reusable page composition: introduce shared `Container`, `AppPadding`, and `AppGrid` primitives alongside `VStack`, `HStack`, `Flex`, `Box`, `Section`, and `MainContent`; migrate all route pages away from raw layout containers and page-owned structural spacing; retain the separate `widgets` layer for reusable product sections; and make architecture validation reject regressions.
+- Extend the branded loading experience to the first browser bootstrap without replacing or removing prerendered route content: mount the existing `AppLoader` as a temporary viewport overlay outside the hydrated root, dismiss it only after the React application commits, preserve the static HTML/SEO contract, and re-audit every public route at the required mobile widths.
+- Keep the shared header visible while the visitor scrolls and give the desktop/mobile menu shell the same opaque dark surface as the site's dark sections, preserving readable contrast, route state, dropdown positioning, mobile navigation, and unobstructed content.
 
 ## Capabilities
 
@@ -40,7 +42,7 @@ None. The initialized OpenSpec project has no canonical capabilities yet.
 
 ## Impact
 
-- **Application:** React 19, TypeScript, React Router, Redux Toolkit/React Redux, SCSS modules, application providers/store, strict `app → pages → widgets → shared` dependency boundaries, shared spacing/container/grid/stack/UI primitives, widget-owned reusable product sections, page `model/ui` slices, route composition, branded Suspense fallback, lazy page modules, React static prerendering, dynamically injected form state, an animated home hero orbit/marquee, and static assets under `src/` and `public/`.
+- **Application:** React 19, TypeScript, React Router, Redux Toolkit/React Redux, SCSS modules, application providers/store, strict `app → pages → widgets → shared` dependency boundaries, shared spacing/container/grid/stack/UI primitives, widget-owned reusable product sections, page `model/ui` slices, route composition, branded Suspense and initial-bootstrap loading states, lazy page modules, React static prerendering, dynamically injected form state, an animated home hero orbit/marquee, and static assets under `src/` and `public/`.
 - **Build and hosting:** Vite production output, GitHub Actions workflows, GitHub Pages configuration, `CNAME`, `sudeo.ru` DNS prerequisites, and deployment documentation.
 - **Documentation:** `docs/adr/`, `rules.md`, consolidated `AGENTS.md`, and README setup/deployment instructions.
 - **External boundaries:** A production lead endpoint/CRM, CMS, analytics vendor, legal texts, verified company contacts, DNS records, and GitHub Pages settings require owner decisions or credentials and will be represented as explicit configuration or follow-up work rather than fabricated implementation.

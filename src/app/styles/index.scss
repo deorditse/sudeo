@@ -8,7 +8,7 @@
 }
 
 * { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
+html { scroll-behavior: smooth; scroll-padding-top: 100px; }
 body { margin: 0; min-width: 320px; min-height: 100vh; }
 button, input, select, textarea { font: inherit; }
 a { color: inherit; text-decoration: none; }
@@ -17,6 +17,9 @@ ul { margin: 0; padding: 0; }
 li { list-style: none; }
 button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible, summary:focus-visible { outline: 3px solid #b9ff66; outline-offset: 4px; }
 ::selection { color: #11130f; background: #b9ff66; }
+@media (max-width: 760px) {
+    html { scroll-padding-top: 84px; }
+}
 @media (prefers-reduced-motion: reduce) {
     html { scroll-behavior: auto; }
     *, *::before, *::after { scroll-behavior: auto !important; animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
