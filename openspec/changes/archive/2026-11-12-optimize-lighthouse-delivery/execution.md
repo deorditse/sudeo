@@ -73,4 +73,23 @@ The fail-closed review cycle reproduced and permanently fixed checker bypasses f
 
 Final independent acceptance returned `passed: true` with no security concerns, logic errors, or suggestions. It reran the complete build/lint/architecture/OpenSpec/diff gates, 39 malformed-manifest probes, physical path containment, Lighthouse provenance checks, and `npm audit --omit=dev --audit-level=high` with zero production vulnerabilities.
 
-Pending delivery evidence: 12 production Lighthouse runs, exact-SHA CI/deployment, production readback, and archive.
+## Delivery and production evidence
+
+- Implementation commit: `8d2e0b827574a49f7ca2a249186d13407af1ff64`.
+- Its first CI run exposed a Linux-only fixture-path defect: both negative suites assumed a repository-local `.tmp` directory when `TMPDIR` was absent. The defect was reproduced with `env -u TMPDIR`, corrected by using Node's `os.tmpdir()`, and rerun successfully with `TMPDIR` absent.
+- Delivery fix and deployed branch head: `f036444e969c4eb4dff0462f0581907c48792517`.
+- Exact-SHA GitHub Actions run `43203939047`: both `verify` and `deploy` completed successfully.
+- Production readback of home, AI service, case detail, and article returned `/assets/index-BpBZJoPf.js` plus `/assets/style-DWJbRXRL.css`, one `main`, one H1, and no bootstrap-loader marker on every route.
+
+Three accepted Lighthouse `13.5.0` mobile runs were preserved for each representative production route. Every report had no run-level error, passed the deterministic budgets, and scored Performance / Accessibility / Best Practices / SEO `100 / 100 / 100 / 100`:
+
+| Route | Eager transfer min / median / max | Unused JS min / median / max | Stylesheets |
+| --- | ---: | ---: | ---: |
+| `/` | `86257 / 86257 / 86281` B | `30190 / 30414 / 30414` B | `1` |
+| `/services/ai-agents/` | `86348 / 86369 / 86391` B | `28280 / 29214 / 29214` B | `1` |
+| `/cases/knowledge-agent-demo/` | `86268 / 86272 / 86281` B | `31530 / 32540 / 32540` B | `1` |
+| `/blog/how-to-start-ai-pilot/` | `86262 / 86349 / 86350` B | `31533 / 32543 / 32543` B | `1` |
+
+Preliminary harness probes were preserved outside the accepted twelve-report set. One home probe taken while Docker startup contended for local CPU scored Performance `82` because TBT reached `746.5 ms`; one AI-service probe scored `99`. After stopping the competing process and spacing runs, the required complete series passed. These probes had no extension resources or run-level error and are reported as measurement variability rather than hidden as production acceptance evidence. GitHub Pages cache policy remains hosting-controlled, and no `chrome-extension://` findings were included.
+
+All implementation, review, measurement, CI, deployment, and production-readback criteria are complete. Archive is the remaining workflow action.
