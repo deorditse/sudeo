@@ -1,0 +1,1 @@
+import{j as e,d as c}from"./index-CsKfrFGu.js";const r={eyebrow:"_eyebrow_140cm_1",default:"_default_140cm_23",inverse:"_inverse_140cm_27",accent:"_accent_140cm_31"},s=({as:s,children:a,className:_,ref:n,tone:t="default",...o})=>{const m=s??"p";return e.jsx(m,{className:c(r.eyebrow,r[t],_),ref:n,...o,children:a})};export{s as E};

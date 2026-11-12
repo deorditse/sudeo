@@ -124,9 +124,9 @@
 }
 
 @keyframes coreMorph {
-    0%, 100% { border-radius: 34% 66% 57% 43%; transform: translate(-50%, -50%) rotate(-8deg) scale(1); }
-    33% { border-radius: 58% 42% 35% 65%; transform: translate(-50%, -50%) rotate(7deg) scale(1.08); }
-    66% { border-radius: 43% 57% 68% 32%; transform: translate(-50%, -50%) rotate(-3deg) scale(0.96); }
+    0%, 100% { transform: translate(-50%, -50%) rotate(-8deg) scale(1); }
+    33% { transform: translate(-50%, -50%) rotate(7deg) scale(1.08); }
+    66% { transform: translate(-50%, -50%) rotate(-3deg) scale(0.96); }
 }
 
 @keyframes identityCycle {

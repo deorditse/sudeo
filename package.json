@@ -14,8 +14,10 @@
         "check:delivery:negative": "node scripts/check-delivery-regressions.mjs",
         "check:lighthouse-budgets": "node scripts/check-lighthouse-budgets.mjs",
         "check:lighthouse:negative": "node scripts/check-lighthouse-regressions.mjs",
+        "check:motion": "node scripts/check-motion.mjs",
+        "check:motion:negative": "node scripts/check-motion-regressions.mjs",
         "check:site": "node scripts/check-site.mjs",
-        "build": "npm run clean:site && tsc -b && npm run check:architecture && npm run build:client && npm run build:ssr && npm run prerender && npm run check:delivery && npm run check:site && npm run check:delivery:negative && npm run check:lighthouse:negative",
+        "build": "npm run clean:site && tsc -b && npm run check:architecture && npm run check:motion && npm run build:client && npm run build:ssr && npm run prerender && npm run check:delivery && npm run check:site && npm run check:delivery:negative && npm run check:lighthouse:negative && npm run check:motion:negative",
         "lint": "eslint .",
         "preview": "vite preview --outDir docs",
         "report:delivery": "node scripts/report-delivery.mjs"

@@ -1,0 +1,1 @@
+import{j as e}from"./index-CsKfrFGu.js";import{P as o}from"./Page-Dz6w45Wi.js";import{P as r}from"./PageHero-Dem2z4gp.js";import"./Eyebrow-q_oI52H8.js";const s=()=>e.jsx(o,{children:e.jsx(r,{eyebrow:"ГОТОВО",title:"Заявка отправлена",text:"Мы получили запрос и вернёмся с ответом в течение одного рабочего дня."})});export{s as default};

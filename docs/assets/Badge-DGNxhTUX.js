@@ -1,0 +1,1 @@
+import{j as e,d as a}from"./index-CsKfrFGu.js";const n={badge:"_badge_17d5e_1",neutral:"_neutral_17d5e_16",accent:"_accent_17d5e_22",inverse:"_inverse_17d5e_27"},s=({as:s,children:r,className:_,ref:d,tone:t="neutral",...c})=>{const l=s??"span";return e.jsx(l,{className:a(n.badge,n[t],_),ref:d,...c,children:r})};export{s as B};
