@@ -1,0 +1,220 @@
+# public-company-site Specification
+
+## Purpose
+Defines the public Russian-language website experience through which business visitors understand the company, evaluate its four service directions, and contact the team without misleading claims.
+
+## Requirements
+
+### Requirement: Public information architecture
+The site SHALL provide stable public routes for the home page, services overview, AI agents, web development, mobile applications, digital marketing, cases or demonstrations, an individual case template, company information, blog listing, article template, contacts, privacy/legal information, successful submission, and not-found content.
+
+#### Scenario: Visitor opens a public route
+- **WHEN** a visitor opens any declared public route directly
+- **THEN** the route returns the intended page content with site navigation and footer rather than an unrelated copied page or generic application shell
+
+#### Scenario: Unknown route
+- **WHEN** a visitor opens an undeclared route
+- **THEN** the site presents a branded not-found experience with a working path back to the home page
+
+### Requirement: Home page content order
+The home page SHALL present the company proposition and primary “Обсудить проект” action, client tasks, four service directions, published cases or explicitly marked demonstrations, work process, team/competencies, frequently asked questions, enquiry form, and verified contact section in that order.
+
+#### Scenario: Visitor reviews the home page
+- **WHEN** a visitor proceeds from the first screen through the home page
+- **THEN** the required sections appear in the specified order and each service direction links to its detail page
+
+### Requirement: Service detail content
+Each service detail page SHALL explain the client problem, suitable scenarios, included work, deliverables, stages, required client inputs, related evidence, frequently asked questions, enquiry action, and factors affecting cost and timing without publishing unapproved prices or guarantees.
+
+#### Scenario: Visitor evaluates a service
+- **WHEN** a visitor opens one of the four service detail pages
+- **THEN** the page contains every required decision-support section and avoids invented fixed prices, delivery dates, or results
+
+#### Scenario: Visitor evaluates AI automation
+- **WHEN** a visitor opens the AI agents page
+- **THEN** the page additionally explains permitted knowledge sources, integrations, action controls, human handoff, logging, testing, and support boundaries
+
+### Requirement: Honest evidence and company claims
+The site MUST distinguish real client cases from demonstrations and MUST NOT present personal team experience, placeholder content, fabricated metrics, or demo work as verified company results.
+
+#### Scenario: No approved client case is available
+- **WHEN** content authors publish example work without client publication rights or verified metrics
+- **THEN** the item is visibly labelled as a demonstration and describes only factual outputs
+
+### Requirement: Responsive and accessible interaction
+The public experience SHALL use a mobile-first responsive cascade: unqualified styles SHALL target viewports through 450px, tablet enhancements SHALL begin at `451px`, and desktop enhancements SHALL begin at `960px`. It SHALL work without horizontal scrolling, clipped text, mid-word headline overflow, or obstructed primary actions at 360, 390, 430, 440, 450, 451, 768, 960, 1024, and 1440 pixel viewport widths. Navigation, controls, accordions, and forms SHALL be operable with a keyboard, expose visible focus, and provide programmatic labels. Phone section rhythm and decorative gaps SHALL be intentionally tighter than tablet and desktop spacing without reducing required touch targets or form clarity.
+
+#### Scenario: Keyboard visitor navigates the site
+- **WHEN** a visitor uses only keyboard controls
+- **THEN** every interactive element is reachable in a logical order, focus remains visible, and mobile navigation can be opened and closed without trapping focus
+
+#### Scenario: Visitor uses a target viewport
+- **WHEN** the site is rendered at any required acceptance width
+- **THEN** content remains readable and primary controls do not overlap or leave the viewport
+
+#### Scenario: Visitor reads the home proposition on a phone
+- **WHEN** the home page is rendered at any required phone width from 360 through 450 pixels
+- **THEN** every headline word, including `Автоматизируем`, fits within the content viewport without clipping, horizontal scrolling, or forced mid-word breaking, and the supporting text and primary action remain unobstructed by decorative orbit content
+
+#### Scenario: Responsive styles progress from phone to desktop
+- **WHEN** the viewport crosses 451px and 960px
+- **THEN** typography, grids, gutters, and spacing progressively enhance from the phone baseline without relying on width-based `max-width` overrides or unapproved intermediate breakpoints
+
+#### Scenario: Visitor reviews phone section rhythm
+- **WHEN** a visitor scrolls between blocks at 360 or 390 pixels
+- **THEN** section and component gaps are smaller than their tablet and desktop equivalents while headings, controls, cards, forms, and focus indicators retain readable separation
+
+### Requirement: Contact transparency
+The site SHALL display only verified communication channels and SHALL mark unresolved company identity, legal details, or service commitments as pending configuration rather than borrowing values from the copied landing page.
+
+#### Scenario: Required contact data is not configured
+- **WHEN** a contact or legal value has not been approved
+- **THEN** the public site omits the false value and provides an explicit configuration-safe alternative without exposing copied logistics-company data
+
+### Requirement: Route-aware global navigation
+The shared site shell SHALL visibly identify the current visitor-facing page, SHALL provide an accessible route catalog in the header, and SHALL provide a grouped footer sitemap covering every visitor-facing declared route. Transactional success and not-found routes SHALL remain directly routable but SHALL NOT appear as ordinary discovery destinations.
+
+#### Scenario: Visitor identifies the current page
+- **WHEN** a visitor opens a top-level or nested declared route
+- **THEN** the header exposes the current location programmatically and visually, activates the appropriate parent group for nested routes, and identifies the exact destination in the route catalog
+
+#### Scenario: Visitor opens the route catalog
+- **WHEN** a keyboard, pointer, or touch visitor opens the header route catalog
+- **THEN** all visitor-facing destinations are grouped and reachable, focus order is logical, Escape and outside activation close the catalog, and navigation does not depend on hover alone
+
+#### Scenario: Visitor reviews the footer sitemap
+- **WHEN** a visitor reaches the shared footer on any public page
+- **THEN** links to every visitor-facing declared route are present with understandable group labels and the current route is not misrepresented
+
+### Requirement: Persistent dark global header
+The shared site header SHALL remain fixed at the top of the viewport while the visitor scrolls and SHALL use the site's established opaque dark surface on every route. Its logo, navigation, active-route state, catalog controls, and mobile menu control SHALL retain readable contrast and visible focus, while route content, anchors, focused elements, and primary actions SHALL NOT be obscured by the fixed shell.
+
+#### Scenario: Visitor scrolls a public route
+- **WHEN** a visitor scrolls beyond the first viewport on any declared route
+- **THEN** the dark header remains visible with the current-route navigation state intact and does not change according to the page section underneath
+
+#### Scenario: Visitor opens navigation on a mobile viewport
+- **WHEN** the fixed-header mobile menu is opened at 360, 390, or 768 pixels
+- **THEN** the dark menu begins below the header, remains operable and viewport-bounded, and does not introduce page-level horizontal overflow or cover its own close control
+
+#### Scenario: Visitor follows an in-page target
+- **WHEN** navigation or focus moves to an anchor or interactive target
+- **THEN** the target is positioned visibly below the fixed header rather than being hidden behind it
+
+### Requirement: Progressive interaction and motion
+The public site SHALL provide consistent hover, focus-visible, active, and pressed feedback for reusable interactive controls and MAY provide restrained page or section entrance motion. Primary content MUST remain visible and usable without client JavaScript, motion MUST NOT cause material layout shift or block navigation, and non-essential movement MUST be disabled when the user requests reduced motion.
+
+#### Scenario: Visitor interacts with a reusable surface
+- **WHEN** a visitor hovers, focuses, presses, or activates a navigation item, button, card, link, or accordion
+- **THEN** the state change is perceptible without removing the visible focus indicator or changing the control's accessible name
+
+#### Scenario: Visitor requests reduced motion
+- **WHEN** `prefers-reduced-motion: reduce` is active
+- **THEN** entrance, floating, and decorative movement is removed or reduced while current-page, hover-equivalent focus, expanded, and pressed states remain understandable
+
+#### Scenario: Client JavaScript is unavailable
+- **WHEN** a generated route is rendered without executing client JavaScript
+- **THEN** all primary text, links, navigation, and page sections remain visible and usable rather than waiting for an animation trigger
+
+### Requirement: Active home hero service composition
+The home hero SHALL present a continuously animated Sudeo orbit whose central label cycles through the brand and service identities `S`, `AI`, `WEB`, `APP`, and `GROW`, together with a seamless service marquee moving from right to left. The marquee SHALL include `AI AGENTS`, `WEB DEVELOPMENT`, `MOBILE APPS`, and `DIGITAL MARKETING`, SHALL keep moving while an individual label is hovered, and SHALL enlarge the hovered or keyboard-focused label without causing material layout shift or horizontal page overflow. All continuous decorative movement MUST stop or become a static usable alternative when reduced motion is requested.
+
+#### Scenario: Visitor observes the standard hero motion
+- **WHEN** the home page is viewed without a reduced-motion preference
+- **THEN** the center identity changes over time, the surrounding markers follow visibly active paths, and the service labels repeat seamlessly while travelling from right to left
+
+#### Scenario: Visitor emphasizes a service label
+- **WHEN** a visitor hovers or keyboard-focuses one service label in the marquee
+- **THEN** that label visibly enlarges without stopping the marquee, changing its accessible name, obscuring adjacent primary controls, or creating page-level horizontal overflow
+
+#### Scenario: Hero visitor requests reduced motion
+- **WHEN** `prefers-reduced-motion: reduce` is active on the home page
+- **THEN** the central `S`, service identities, and service destinations remain visible and usable while orbit, cycling, and automatic marquee movement stop
+
+#### Scenario: Hero is rendered without client JavaScript
+- **WHEN** the generated home page is opened without executing client JavaScript
+- **THEN** the hero proposition, a static central brand state, and readable service destinations are present in the prerendered document
+
+### Requirement: Branded lazy-route loading state
+The application SHALL provide a reusable Sudeo-branded fallback for the shared route-level `Suspense` boundary. The fallback SHALL combine the established logo mark and company name, SHALL expose a concise loading status to assistive technology, SHALL avoid introducing an additional page heading, and SHALL disable non-essential motion when reduced motion is requested.
+
+#### Scenario: A lazy route chunk is pending
+- **WHEN** client-side navigation suspends while a route module is loading
+- **THEN** a stable branded loader is visible within the content area until the route resolves, without replacing the global header/footer or exposing a blank page
+
+#### Scenario: A generated route is prerendered
+- **WHEN** the server render resolves a declared lazy route during build
+- **THEN** the generated HTML contains the route content rather than the loader fallback
+
+#### Scenario: Loader visitor requests reduced motion
+- **WHEN** `prefers-reduced-motion: reduce` is active while the fallback is visible
+- **THEN** continuous decorative movement stops while the Sudeo identity and loading status remain understandable
+
+### Requirement: Branded initial browser loading state
+The application SHALL reuse the Sudeo `AppLoader` during the first browser bootstrap. The initial loader SHALL appear as a temporary viewport overlay without deleting, replacing, or mutating the prerendered route content inside the hydration root; SHALL be dismissed after the first committed application render; SHALL leave no overlay host or pointer obstruction after cleanup; and SHALL preserve the generated-document contract that excludes loading fallback markup.
+
+#### Scenario: Visitor opens a generated route with client JavaScript
+- **WHEN** the browser starts hydrating a directly loaded generated route
+- **THEN** one branded loading status is displayed above the intact prerendered route until the application commits, after which the loader is unmounted and the route remains interactive without a hydration error
+
+#### Scenario: Visitor opens a generated route without client JavaScript
+- **WHEN** client JavaScript is unavailable or has not executed
+- **THEN** the complete prerendered route remains visible and usable and no serialized loader blocks the document
+
+#### Scenario: Initial loader visitor requests reduced motion
+- **WHEN** `prefers-reduced-motion: reduce` is active during browser bootstrap
+- **THEN** the brand and loading status remain visible while continuous loader movement and non-essential exit motion are disabled
+
+#### Scenario: Visitor opens a route on a mobile viewport
+- **WHEN** any declared route is loaded directly at 360, 390, or 768 pixels
+- **THEN** the loader and resolved route fit the viewport without page-level horizontal overflow, clipped primary controls, duplicate main landmarks, or an inaccessible mobile navigation state
+
+### Requirement: Semantic document structure
+Every public route SHALL expose one main landmark and one page H1, SHALL use heading levels that represent section hierarchy without skipping a required collection or top-level section heading, SHALL expose ordered processes and breadcrumbs as ordered lists, SHALL expose unordered role/competency collections as lists, and SHALL avoid unnamed sectioning regions. Semantic corrections MUST preserve the visible design, route content, keyboard behavior, and prerendered HTML contract.
+
+#### Scenario: Visitor reviews the services overview
+- **WHEN** the services route renders its service collection
+- **THEN** the collection has an H2-level heading and its card headings follow that hierarchy rather than skipping directly from H1 to H3
+
+#### Scenario: Visitor reviews a service detail section
+- **WHEN** deliverables and required-client-input content appears in a standalone section
+- **THEN** the section has an H2-level name and any nested panel headings are subordinate to it
+
+#### Scenario: Visitor uses breadcrumbs
+- **WHEN** a route displays a breadcrumb trail
+- **THEN** it is exposed as a labelled navigation landmark containing an ordered list whose current item is programmatically identified
+
+#### Scenario: Visitor reviews a numbered process
+- **WHEN** the home, company, or service route displays ordered stages or controls
+- **THEN** the items are exposed as an ordered list while retaining their existing visual numbering and responsive layout
+
+#### Scenario: Visitor reviews roles or competencies
+- **WHEN** a route displays a collection of roles or competencies
+- **THEN** the collection is exposed as an unordered list rather than unrelated generic containers
+
+#### Scenario: Visitor navigates grouped destinations
+- **WHEN** the header catalog or footer sitemap groups destination links
+- **THEN** each sectioning group has a semantic heading or uses a non-sectioning container so no unnamed section landmark is introduced
+
+### Requirement: Stable initial layout
+The prerendered route content SHALL remain in its final document position while browser bootstrap, hydration, loader dismissal, lazy-route resolution, and asynchronous media state complete. Primary content MUST NOT use load-time translation, scaling, delayed entrance, or geometry-changing animation that creates visible jumping after the loader exits. Shared shells and media SHALL reserve deterministic geometry, and loader exit MUST NOT alter document flow.
+
+#### Scenario: Visitor directly loads a generated route
+- **WHEN** the route hydrates and the initial branded loader is removed
+- **THEN** the fixed header, H1, primary action, and first content section retain their positions and dimensions without visible translation, resize, or change-owned layout shift
+
+#### Scenario: Visitor navigates to a lazy route
+- **WHEN** the route-level loader is shown while a page chunk resolves
+- **THEN** the content-stage geometry remains reserved and the resolved route replaces the fallback without moving the surrounding global shell
+
+#### Scenario: Asynchronous media is introduced
+- **WHEN** an image or equivalent media resource loads after the initial document
+- **THEN** intrinsic dimensions or an explicit aspect-ratio container reserve its final space before the resource becomes visible
+
+#### Scenario: Layout stability is measured
+- **WHEN** direct loads are tested with cache disabled at representative phone, tablet, and desktop widths
+- **THEN** `PerformanceObserver` reports no change-owned layout-shift entries and sampled primary element rectangles remain stable through loader cleanup
+
+#### Scenario: A prerendered lazy route paints before JavaScript
+- **WHEN** a generated route document is loaded with JavaScript disabled or before its client entry executes
+- **THEN** its head already links the complete deduplicated CSS graph for the route page and imported widgets/shared primitives so H1, hero, action, and first-section geometry matches the hydrated document

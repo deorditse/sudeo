@@ -43,7 +43,7 @@
 - [x] 6.2 Add a GitHub Actions verification workflow for pull requests and main-branch pushes using locked dependency installation, lint, build, and artifact smoke checks; verify the workflow YAML is syntactically valid and uses a pinned supported Node major.
 - [x] 6.3 Add the gated GitHub Pages deployment job with official Pages actions, least-privilege permissions, environment URL, and concurrency control; verify deployment depends on successful verification and only runs for the intended main-branch event.
 - [x] 6.4 Document required GitHub Pages settings and apex-domain DNS records, plus HTTPS and direct-route verification commands; verify current unresolved DNS or unauthenticated GitHub access is reported as an external blocker rather than deployment success.
-- [ ] 6.5 If authenticated repository access is available, configure/verify Pages and observe the first workflow run; verify the run conclusion, Pages API state, DNS resolution, HTTPS, homepage, and a nested direct route. Otherwise leave this task unchecked with the exact owner actions required.
+- [x] 6.5 If authenticated repository access is available, configure/verify Pages and observe the first workflow run; verify the run conclusion, Pages API state, DNS resolution, HTTPS, homepage, and a nested direct route. Otherwise leave this task unchecked with the exact owner actions required.
 
 ## 7. Quality and acceptance
 
