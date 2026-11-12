@@ -1,5 +1,5 @@
-.light { color: #11130f; background: #f5f3ed; }
-.dark { color: #f7f6f0; background: #161814; }
-.feature { color: #f7f6f0; background: #242820; }
-.form { color: #f7f6f0; background: #1b1e18; }
-.accent { color: #11130f; background: #b9ff66; }
+.light { --app-muted-color: #5f625a; color: #11130f; background: #f5f3ed; }
+.dark { --app-muted-color: #aeb3a8; color: #f7f6f0; background: #161814; }
+.feature { --app-muted-color: #aeb3a8; color: #f7f6f0; background: #242820; }
+.form { --app-muted-color: #aeb3a8; color: #f7f6f0; background: #1b1e18; }
+.accent { --app-muted-color: #3f4e31; color: #11130f; background: #b9ff66; }

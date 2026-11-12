@@ -1,0 +1,1 @@
+import{j as _,d as m}from"./index-Cy8Byy5_.js";const l="_eyebrow_140cm_1",y="_inverse_140cm_27",b="_accent_140cm_31",e={eyebrow:l,default:"_default_140cm_23",inverse:y,accent:b},p=({as:s,children:t,className:c,ref:o,tone:n="default",...r})=>{const a=s??"p";return _.jsx(a,{className:m(e.eyebrow,e[n],c),ref:o,...r,children:t})};export{p as E};

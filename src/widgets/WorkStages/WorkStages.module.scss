@@ -12,7 +12,7 @@
 }
 
 .number {
-    color: #92968c;
+    color: var(--app-muted-color, #5f625a);
     font-size: 12px;
     font-weight: 800;
 }

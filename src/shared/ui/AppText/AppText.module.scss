@@ -7,7 +7,7 @@
 .size-2xl { font-size: 2.1rem; line-height: 1; letter-spacing: -0.045em; }
 .size-hero { font-size: 2.25rem; line-height: 0.96; letter-spacing: -0.05em; }
 .tone-primary { color: inherit; }
-.tone-muted { color: #696c63; }
+.tone-muted { color: var(--app-muted-color, #5f625a); }
 .tone-accent { color: #78d924; }
 .tone-inverse { color: #f7f6f0; }
 .tone-error { color: #b3261e; }

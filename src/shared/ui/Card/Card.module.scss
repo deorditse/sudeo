@@ -1,4 +1,5 @@
 .card {
+    --app-muted-color: #5f625a;
     display: block;
     color: #11130f;
     border-radius: 8px;
@@ -9,10 +10,12 @@
 }
 
 .accent {
+    --app-muted-color: #3f4e31;
     background: #b9ff66;
 }
 
 .dark {
+    --app-muted-color: #aeb3a8;
     color: #f7f6f0;
     background: #161814;
 }

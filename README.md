@@ -43,6 +43,20 @@ npm run preview
 7. генерацию `sitemap.xml` и `robots.txt`;
 8. проверку маршрутов, H1, canonical, CNAME и отсутствия старого бренда.
 
+### Lighthouse
+
+Для воспроизводимого mobile-аудита используйте headless CLI, чтобы результат не зависел от того, находится ли окно DevTools на переднем плане:
+
+```bash
+npx --yes lighthouse@13.5.0 https://sudeo.ru/ \
+  --output=json \
+  --output-path=./lighthouse-home.json \
+  --chrome-flags="--headless=new --no-sandbox" \
+  --quiet
+```
+
+Отчёт с run-level ошибкой `runtimeError.code: "NO_FCP"` не является набором реальных красных аудитов сайта: Lighthouse переносит ошибку измерения во все карточки и не вычисляет категории. Такой запуск нужно повторить через CLI либо с окном Chrome на переднем плане.
+
 ## Контент
 
 Первая версия использует типизированный контент в `src/shared/content/siteContent.ts`. Маршруты и SEO-метаданные находятся в `src/shared/config/routes.ts`.
@@ -103,7 +117,7 @@ Workflow: `.github/workflows/deploy.yml`.
 5. при необходимости настроить `www` как CNAME на Pages-hostname репозитория;
 6. проверить DNS, HTTPS, главную и прямой вложенный маршрут.
 
-GitHub Pages для репозитория включён и custom domain `sudeo.ru` зарегистрирован. Авторитетная зона находится в REG.RU (`ns1.reg.ru`, `ns2.reg.ru`), но apex пока указывает на старый `95.163.244.138`. Для завершения публикации нужно удалить конфликтующую запись и установить четыре A-записи GitHub Pages: `185.199.108.153`, `185.199.109.153`, `185.199.110.153`, `185.199.111.153`, затем дождаться проверки домена и включить HTTPS.
+GitHub Pages для репозитория включён, custom domain `sudeo.ru` зарегистрирован, а авторитетная зона REG.RU (`ns1.reg.ru`, `ns2.reg.ru`) публикует четыре A-записи GitHub Pages: `185.199.108.153`, `185.199.109.153`, `185.199.110.153`, `185.199.111.153`. Сертификат содержит `sudeo.ru` и `www.sudeo.ru`; HTTPS нужно сохранять включённым в Pages и отдельно проверять HTTP→HTTPS redirect.
 
 Пример проверки после настройки:
 

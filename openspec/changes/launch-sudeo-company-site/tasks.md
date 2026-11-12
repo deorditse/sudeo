@@ -51,7 +51,7 @@
 - [x] 7.2 Run `npm run lint` and resolve change-owned lint errors; verify a zero exit code.
 - [x] 7.3 Run the production build and static artifact smoke checker; verify a zero exit code and inspect generated route count, CNAME, sitemap, and robots output.
 - [x] 7.4 Serve the generated artifact locally and smoke-test navigation, direct nested routes, mobile menu, FAQ controls, form validation, unavailable-endpoint behavior, and 404 handling; record observed results.
-- [ ] 7.5 Run available Lighthouse mobile measurements for the home page, one service page, one demonstration detail, and one article using documented settings; record three runs per page and resolve change-owned regressions or document measured blockers without inventing scores.
+- [x] 7.5 Run Lighthouse 13.5 mobile measurements for the home page, one service page, one demonstration detail, and one article using a foreground-independent headless CLI harness; record three runs per page, reject DevTools reports whose run-level `runtimeError` is `NO_FCP` rather than treating their inherited red audit cards as product failures, resolve measured change-owned accessibility regressions including context-dependent muted-text contrast, and document only valid scores and remaining hosting-controlled findings.
 - [x] 7.6 Re-run OpenSpec apply instructions, strict validation, status, git diff/status, lint, build, and artifact checks; mark only tasks backed by evidence complete and report external blockers separately before requesting archive approval.
 
 ## 8. `legal-gr`-style application architecture revision

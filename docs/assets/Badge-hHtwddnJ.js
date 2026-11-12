@@ -1,0 +1,1 @@
+import{j as _,d}from"./index-Cy8Byy5_.js";const l="_badge_17d5e_1",m="_neutral_17d5e_16",u="_accent_17d5e_22",g="_inverse_17d5e_27",e={badge:l,neutral:m,accent:u,inverse:g},p=({as:s,children:n,className:t,ref:a,tone:c="neutral",...o})=>{const r=s??"span";return _.jsx(r,{className:d(e.badge,e[c],t),ref:a,...o,children:n})};export{p as B};

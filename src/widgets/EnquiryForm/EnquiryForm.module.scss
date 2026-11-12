@@ -58,6 +58,7 @@
 }
 
 .form {
+    --app-muted-color: #5f625a;
     display: grid;
     gap: 18px;
     padding: 24px 20px;
@@ -123,7 +124,7 @@
 }
 
 .consent {
-    color: #6d7168;
+    color: var(--app-muted-color);
     font-size: 11px;
     line-height: 1.5;
 }
