@@ -1,12 +1,13 @@
 import { cp, mkdtemp, readFile, rm, symlink, writeFile } from "node:fs/promises";
 import { randomBytes } from "node:crypto";
+import { tmpdir } from "node:os";
 import path from "node:path";
 import { spawnSync } from "node:child_process";
 import { resolveOutputAsset, validateManifestEntry } from "./delivery-paths.mjs";
 
 const sourceRoot = path.resolve("docs");
 const serverEntry = path.resolve(".ssr/entry-server.js");
-const temporaryRoot = await mkdtemp(path.join(process.env.TMPDIR ?? path.resolve(".tmp"), "sudeo-delivery-regressions-"));
+const temporaryRoot = await mkdtemp(path.join(tmpdir(), "sudeo-delivery-regressions-"));
 
 const run = (script, fixtureRoot, args = []) => spawnSync(process.execPath, [path.resolve(script), ...args], {
     cwd: process.cwd(),

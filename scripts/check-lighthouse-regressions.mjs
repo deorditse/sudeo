@@ -1,8 +1,9 @@
 import { mkdtemp, rm, writeFile } from "node:fs/promises";
+import { tmpdir } from "node:os";
 import path from "node:path";
 import { spawnSync } from "node:child_process";
 
-const temporaryRoot = await mkdtemp(path.join(process.env.TMPDIR ?? path.resolve(".tmp"), "sudeo-lighthouse-regressions-"));
+const temporaryRoot = await mkdtemp(path.join(tmpdir(), "sudeo-lighthouse-regressions-"));
 const checker = path.resolve("scripts/check-lighthouse-budgets.mjs");
 
 const run = (reportPath, manifestPath) => spawnSync(process.execPath, [checker, reportPath], {
