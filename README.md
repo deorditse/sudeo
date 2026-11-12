@@ -28,6 +28,7 @@ Vite выводит адрес локального сервера. Публич
 npm run lint
 npm run check:architecture
 npm run build
+npm run report:delivery
 npm run check:site
 npm run preview
 ```
@@ -43,6 +44,8 @@ npm run preview
 7. генерацию `sitemap.xml` и `robots.txt`;
 8. проверку маршрутов, H1, canonical, CNAME и отсутствия старого бренда.
 
+Сборка дополнительно проверяет delivery-бюджеты: суммарный gzip-размер application entry и всех его рекурсивных eager imports не более 95 KiB и не более восьми pre-paint stylesheet requests на маршрут. `npm run report:delivery` печатает manifest-backed ownership report с raw/gzip/Brotli-размерами application entry, eager graph, route chunks и stylesheet graph. Отрицательные fixtures в `npm run check:delivery:negative` обязаны отклонять oversized entry, лишние stylesheet requests и неполный либо переставленный style graph.
+
 ### Lighthouse
 
 Для воспроизводимого mobile-аудита используйте headless CLI, чтобы результат не зависел от того, находится ли окно DevTools на переднем плане:
@@ -56,6 +59,14 @@ npx --yes lighthouse@13.5.0 https://sudeo.ru/ \
 ```
 
 Отчёт с run-level ошибкой `runtimeError.code: "NO_FCP"` не является набором реальных красных аудитов сайта: Lighthouse переносит ошибку измерения во все карточки и не вычисляет категории. Такой запуск нужно повторить через CLI либо с окном Chrome на переднем плане.
+
+Проверить delivery-бюджеты одного или нескольких валидных JSON-отчётов можно так:
+
+```bash
+npm run check:lighthouse-budgets -- ./lighthouse-home-1.json ./lighthouse-home-2.json
+```
+
+Проверка сопоставляет Lighthouse network records с eager graph текущего `docs/.vite/manifest.json`, поэтому JSON должен относиться к той же exact-SHA сборке. Она требует initial eager application transfer не более 95 KiB, Lighthouse-estimated unused application JavaScript не более 32 KiB и не более восьми application-owned render-blocking CSS requests. Ресурсы `chrome-extension://` относятся к загрязнению harness и не считаются дефектами приложения. Cache lifetime GitHub Pages управляется hosting platform: репозиторий не заявляет изменение этих заголовков без отдельной смены delivery platform.
 
 ## Контент
 
@@ -86,9 +97,9 @@ Hover/focus/pressed и entrance effects принадлежат соответс�
 
 Начальная загрузка сохраняет геометрию prerendered content: bootstrap loader находится поверх страницы вне потока и исчезает только через opacity/visibility, route sections не получают load-time translate/scale/stagger, а `AppImage` требует intrinsic width/height или явный aspect ratio. Стабильность проверяется при выключенном кеше через `PerformanceObserver` и сравнением координат header, H1, primary action и первой секции до/после hydration.
 
-Клиент загружает страницы отдельными lazy chunks. При медленной клиентской навигации общий `Suspense` показывает брендированный loader из логотипа и названия Sudeo; loader публикует status для assistive technologies и отключает движение при `prefers-reduced-motion: reduce`.
+Клиент загружает страницы отдельными lazy chunks. React и React DOM закреплены на 19.1.0, чтобы совместимый range update не менял начальный runtime без явного решения и повторной проверки budgets. Production JavaScript сжимается Terser в три прохода. При медленной клиентской навигации общий `Suspense` показывает брендированный loader из логотипа и названия Sudeo; loader публикует status для assistive technologies и отключает движение при `prefers-reduced-motion: reduce`.
 
-Build-time renderer сначала использует React 19 `prerenderToNodeStream` для разрешения lazy-модулей, затем формирует итоговый HTML через `renderToString`. Клиентская сборка также создаёт Vite manifest; `routeManifest.clientEntry` указывает lazy entry каждой страницы, а prerender рекурсивно добавляет в `<head>` CSS страницы и импортированных widgets/shared chunks. Поэтому generated documents содержат основной route content уже в финальной геометрии — без ожидания JavaScript, loader, скрытых replacement-сегментов и inline Suspense swap-script. Решение описано в `docs/adr/0005-application-composition-and-lazy-modules.md`.
+Build-time renderer сначала использует React 19 `prerenderToNodeStream` для разрешения lazy-модулей, затем формирует итоговый HTML через `renderToString`. Клиентская сборка также создаёт Vite manifest; `routeManifest.clientEntry` указывает lazy entry каждой страницы. Vite объединяет полный application CSS в один stylesheet примерно 10.5 kB gzip, а prerender сохраняет его в `<head>` до JavaScript; static checker сверяет точный document/route style graph. Поэтому generated documents содержат основной route content уже в финальной геометрии — без ожидания JavaScript, loader, скрытых replacement-сегментов и inline Suspense swap-script. Исходная lazy/static архитектура описана в `docs/adr/0005-application-composition-and-lazy-modules.md`, а superseding delivery-решение — в `docs/adr/0007-delivery-budgets-and-consolidated-css.md`.
 
 ## Форма обращения
 

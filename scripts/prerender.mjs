@@ -32,8 +32,8 @@ for (const route of routeManifest) {
     const routeStyleLinks = routeCss
         .map((asset) => `        <link rel="stylesheet" crossorigin href="/${asset}" data-route-style />`)
         .join("\n");
-    if (!routeStyleLinks) throw new Error(`No route CSS graph was resolved for ${route.path}`);
-    html = html.replace("    </head>", `${routeStyleLinks}\n    </head>`);
+    if (!templateCss.size && !routeStyleLinks) throw new Error(`No stylesheet graph was resolved for ${route.path}`);
+    if (routeStyleLinks) html = html.replace("    </head>", `${routeStyleLinks}\n    </head>`);
 
     const target = route.path === "/" ? path.join(output, "index.html") : path.join(output, route.path.slice(1), "index.html");
     await mkdir(path.dirname(target), { recursive: true });

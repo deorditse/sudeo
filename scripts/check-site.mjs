@@ -1,9 +1,10 @@
 import { readFile, readdir, stat } from "node:fs/promises";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
+import { resolveOutputAssetFile, validateManifestEntry } from "./delivery-paths.mjs";
 
-const root = path.resolve("docs");
-const serverEntry = path.resolve(".ssr/entry-server.js");
+const root = path.resolve(process.env.SUDEO_OUTPUT_ROOT ?? "docs");
+const serverEntry = path.resolve(process.env.SUDEO_SERVER_ENTRY ?? ".ssr/entry-server.js");
 const { routeManifest } = await import(pathToFileURL(serverEntry).href);
 const clientManifest = JSON.parse(await readFile(path.join(root, ".vite/manifest.json"), "utf8"));
 const requiredRoutes = routeManifest.map((route) => route.path);
@@ -14,9 +15,10 @@ const stripTags = (value) => value.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ")
 const collectCss = (entryKey, visited = new Set()) => {
     if (visited.has(entryKey)) return [];
     visited.add(entryKey);
-    const entry = clientManifest[entryKey];
-    if (!entry) {
-        failures.push(`Client manifest entry is missing: ${entryKey}`);
+    let entry;
+    try { entry = validateManifestEntry(clientManifest, entryKey); }
+    catch (error) {
+        failures.push(error instanceof Error ? error.message : `Client manifest entry is missing: ${entryKey}`);
         return [];
     }
     return [
@@ -25,6 +27,8 @@ const collectCss = (entryKey, visited = new Set()) => {
     ];
 };
 const globalCss = new Set(collectCss("index.html"));
+let consolidatedCss;
+if (clientManifest["style.css"]) consolidatedCss = validateManifestEntry(clientManifest, "style.css").file;
 
 const checkHeadingProgression = (route, html) => {
     const headings = [...html.matchAll(/<h([1-6])\b[^>]*>([\s\S]*?)<\/h\1\s*>/gi)]
@@ -90,14 +94,31 @@ for (const routeDefinition of routeManifest) {
             const href = match[1].match(/\bhref\s*=\s*(["'])\/([^"']+\.css)\1/i);
             return href?.[2] ?? `<invalid:${match[1].trim()}>`;
         });
+    const documentStyleAssets = [...html.matchAll(/<link\b([^>]*)>/gi)]
+        .filter((match) => /\brel\s*=\s*(["'])stylesheet\1/i.test(match[1]))
+        .map((match) => {
+            const href = match[1].match(/\bhref\s*=\s*(["'])\/([^"']+\.css)\1/i);
+            return href?.[2] ?? `<invalid:${match[1].trim()}>`;
+        });
+    if (!documentStyleAssets.length) failures.push(`${route}: no pre-paint stylesheet is linked`);
+    if (documentStyleAssets.length > 8) failures.push(`${route}: stylesheet request budget exceeded; expected at most 8, received ${documentStyleAssets.length}`);
     const expectedRouteStyles = [...new Set(collectCss(routeDefinition.clientEntry))]
-        .filter((asset) => !globalCss.has(asset));
+        .filter((asset) => !globalCss.has(asset) && asset !== consolidatedCss);
     if (JSON.stringify(routeStyleAssets) !== JSON.stringify(expectedRouteStyles)) {
         failures.push(`${route}: route stylesheet graph mismatch; expected [${expectedRouteStyles.join(", ")}], received [${routeStyleAssets.join(", ")}]`);
     }
-    for (const asset of routeStyleAssets) {
-        try { await stat(path.join(root, asset)); }
-        catch { failures.push(`${route}: route stylesheet does not exist: ${asset}`); }
+    const expectedDocumentStyles = [...new Set([
+        ...(consolidatedCss ? [consolidatedCss] : [...globalCss]),
+        ...expectedRouteStyles,
+    ])];
+    if (JSON.stringify(documentStyleAssets) !== JSON.stringify(expectedDocumentStyles)) {
+        failures.push(`${route}: document stylesheet graph mismatch; expected [${expectedDocumentStyles.join(", ")}], received [${documentStyleAssets.join(", ")}]`);
+    }
+    for (const asset of documentStyleAssets) {
+        try { await stat(await resolveOutputAssetFile(root, asset)); }
+        catch (error) {
+            failures.push(`${route}: ${error instanceof Error ? error.message : `stylesheet does not exist: ${asset}`}`);
+        }
     }
 }
 
@@ -132,4 +153,4 @@ if (failures.length) {
     process.exit(1);
 }
 
-console.log(`Static site check passed: ${requiredRoutes.length} resolved routes with one main/H1, logical headings, semantic breadcrumbs, manifest-derived route CSS, no loader/entry artifacts, CNAME, sitemap, robots and brand exclusions.`);
+console.log(`Static site check passed: ${requiredRoutes.length} resolved routes with one main/H1, logical headings, semantic breadcrumbs, complete pre-paint CSS within budget, no loader/entry artifacts, CNAME, sitemap, robots and brand exclusions.`);

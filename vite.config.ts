@@ -20,8 +20,16 @@ export default defineConfig({
     },
     build: {
         assetsInlineLimit: 0,
+        cssCodeSplit: false,
         manifest: true,
+        minify: "terser",
         outDir: "docs",
         emptyOutDir: false,
+        terserOptions: {
+            compress: {
+                passes: 3,
+            },
+            mangle: true,
+        },
     },
 });

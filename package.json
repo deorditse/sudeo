@@ -10,17 +10,22 @@
         "build:ssr": "vite build --ssr src/entry-server.tsx --outDir .ssr --mode=production",
         "prerender": "node scripts/prerender.mjs",
         "check:architecture": "node scripts/check-architecture.mjs",
+        "check:delivery": "node scripts/report-delivery.mjs --check",
+        "check:delivery:negative": "node scripts/check-delivery-regressions.mjs",
+        "check:lighthouse-budgets": "node scripts/check-lighthouse-budgets.mjs",
+        "check:lighthouse:negative": "node scripts/check-lighthouse-regressions.mjs",
         "check:site": "node scripts/check-site.mjs",
-        "build": "npm run clean:site && tsc -b && npm run check:architecture && npm run build:client && npm run build:ssr && npm run prerender && npm run check:site",
+        "build": "npm run clean:site && tsc -b && npm run check:architecture && npm run build:client && npm run build:ssr && npm run prerender && npm run check:delivery && npm run check:site && npm run check:delivery:negative && npm run check:lighthouse:negative",
         "lint": "eslint .",
-        "preview": "vite preview --outDir docs"
+        "preview": "vite preview --outDir docs",
+        "report:delivery": "node scripts/report-delivery.mjs"
     },
     "dependencies": {
         "@reduxjs/toolkit": "^2.14.0",
-        "react": "^19.1.0",
-        "react-dom": "^19.1.0",
+        "react": "19.1.0",
+        "react-dom": "19.1.0",
         "react-redux": "^9.3.1",
-        "react-router-dom": "^7.6.0"
+        "react-router-dom": "7.18.4"
     },
     "devDependencies": {
         "@eslint/js": "^9.25.0",
@@ -33,6 +38,7 @@
         "eslint-plugin-react-refresh": "^0.4.19",
         "globals": "^16.0.0",
         "sass": "^1.89.0",
+        "terser": "5.51.2",
         "typescript": "~5.8.3",
         "typescript-eslint": "^8.30.1",
         "vite": "^6.3.5"
