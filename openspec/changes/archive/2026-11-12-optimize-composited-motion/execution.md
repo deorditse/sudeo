@@ -79,4 +79,12 @@ The final independent acceptance review returned `passed: true` with no security
 
 Eight current-build clean local Lighthouse 13.5 mobile probes reported no non-composited animation items, CLS `0`, TBT `0`, and `100 / 100 / 100` for Accessibility, Best Practices, and SEO. Their Performance score was consistently `98` because local FCP/LCP remained approximately `1.66 s / 2.12 s`; these runs are retained as valid variable evidence and are not relabeled as accepted category evidence. They loaded the exact current asset graph (`index-CsKfrFGu.js` and `style-CXUIOiG2.css`). Final category acceptance therefore remains pending production measurement.
 
-Pending delivery evidence: accepted clean production Lighthouse category evidence, exact-SHA deployment, production readback, and archive.
+## Production acceptance
+
+- Implementation commit: `deae8f5e1df81471d021f1813e51d194d583746c`.
+- GitHub Actions run `43269950040` completed successfully for that exact SHA; jobs `verify` (`131363518992`) and `deploy` (`131364230204`) both passed.
+- Production readback returned HTTP `200` for `/` and `/services/ai-agents/`, with one `<main>`, one `<h1>`, the expected route title, and exact deployed assets `index-CsKfrFGu.js` and `style-CXUIOiG2.css`.
+- Clean production Lighthouse `13.5.0` at `2026-11-12T17:37:53.185Z` had no runtime error or warnings, category scores `100 / 100 / 100 / 100`, zero non-composited animation items, CLS `0`, TBT `0 ms`, eager application transfer `86249 / 97280`, unused application JavaScript `29838 / 32768`, and one stylesheet request.
+- Production browser QA observed unchanged H1 geometry before and after loader removal, no layout-shift entries or application errors, one main/H1, and no horizontal overflow. Reduced-motion emulation reported zero running animations and eventual loader removal.
+
+All acceptance evidence is complete; the change is ready to archive.

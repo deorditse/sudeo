@@ -15,6 +15,6 @@
 
 - [x] 3.1 Add ADR 0008 for compositor-safe decorative motion and update Lighthouse guidance if needed; verify it distinguishes extension contamination, hosting-controlled cache policy, intentional pre-paint CSS, and repository-owned motion.
 - [x] 3.2 Run architecture checks, lint, production build, static/delivery/negative checks, strict OpenSpec validation, and `git diff --check`; verify all commands pass and delivery budgets remain within 95 KiB, 32 KiB unused JavaScript, and eight stylesheet requests.
-- [ ] 3.3 Run clean Lighthouse 13.5 mobile evidence and browser interaction/geometry checks; verify no application-owned non-composited animation item remains, valid category evidence is recorded without hiding variable probes, and no loader/navigation regression occurs.
+- [x] 3.3 Run clean Lighthouse 13.5 mobile evidence and browser interaction/geometry checks; verify no application-owned non-composited animation item remains, valid category evidence is recorded without hiding variable probes, and no loader/navigation regression occurs.
 - [x] 3.4 Obtain independent review focused on provenance, CSS animation semantics, loader cleanup, deterministic check coverage, and acceptance accuracy; resolve reproducible blockers and rerun affected gates.
-- [ ] 3.5 Commit and push the verified change, wait for exact-SHA CI/deployment, read back production home and a nested route, and archive only after every acceptance criterion is evidenced.
+- [x] 3.5 Commit and push the verified change, wait for exact-SHA CI/deployment, read back production home and a nested route, and archive only after every acceptance criterion is evidenced.
